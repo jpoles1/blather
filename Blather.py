@@ -13,7 +13,8 @@ import shutil #used to copy plugins directory
 import psutil #used for reading process ID
 import time #used for keyword time option
 from optparse import OptionParser
-
+import serial;
+ser = serial.Serial('/dev/ttyUSB0', 9600)
 #keywords defined in the commands.conf file
 keywords = []
 PERCENT_MATCH_LIMIT = 75
@@ -50,7 +51,7 @@ class Blather:
 		self.recognizer.connect('finished',self.recognizer_finished)
 		self.matchTime = 0
 		self.keywordTimeLimit = opts.keytime #set to 0 to always speak the keyword
-	
+
 		self.commandFileTime = 0
 		#updates language file and commands on start
 		self.checkCommandFile()
@@ -126,7 +127,7 @@ class Blather:
 		biggestKey = ""
 		biggestKeySet = []
 		biggestKeyCount = 0
-		
+
 		ret = self.search_for_matches(textWords)
 		biggestKey = ret['biggestKey']
 		biggestKeySet = ret['biggestKeySet']
@@ -142,7 +143,7 @@ class Blather:
 			cmd = self.commands[biggestKey]
 			if cmd == "cancel" and hasattr(self, 'runningProcess'):
 				print("Cancelling previous command with PID "+str(self.runningProcess.pid))
-				
+
 				self.terminate_child_processes(self.runningProcess.pid)
 
 				#terminate parent process
@@ -174,6 +175,7 @@ class Blather:
 			blather.recognizer.listen()
 
 	def quit(self):
+		ser.close();
 		sys.exit(0)
 
 	def checkCommandFile(self):
@@ -215,7 +217,7 @@ class Blather:
 		ret = {'biggestKey':'', 'biggestKeySet':{}, 'biggestKeyCount':0}
 		currentTime = time.time()
 		matchLimit = 1
-		for key in self.commands.keys():	
+		for key in self.commands.keys():
 			if self.commands[key] == "keyword":
 				continue
 			#split the keys on each word
@@ -294,4 +296,3 @@ if __name__ == "__main__":
 		print "time to quit"
 		main_loop.quit()
 		sys.exit()
-
