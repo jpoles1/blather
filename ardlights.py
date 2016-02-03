@@ -1,9 +1,11 @@
-import serial, sys, time
+import os, thread, serial, sys, time
 def main(argv):
 	color = argv[0]
-	irsig={"on": "0xFF02FD", "red": "0xFF1AE5", "green": "0xFF9A65","blue": "0xFFA25D", "white": "0xFF22DD"}
+	thread.start_new_thread(os.system,("espeak 'Setting lights to "+color+"'",))
+	if(color in ["off", "toggle"]):
+		color="on"
+	irsig={"on": "0xFF02FD", "red": "0xFF1AE5", "blue": "0xFF9A65","green": "0xFFA25D", "white": "0xFF22DD"}
 	ser = serial.Serial('/dev/ttyUSB0', 9600)
-	time.sleep(.5);
 	print(ser.name)
 	ser.write(irsig[color])
 	ser.close();
