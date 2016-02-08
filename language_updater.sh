@@ -29,3 +29,4 @@ mv *.dic $langdir/dic
 mv *.lm $langdir/lm
 
 rm $tempfile
+cp $sourcefile $blatherdir/commands.bak.conf
