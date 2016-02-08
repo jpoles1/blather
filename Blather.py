@@ -17,7 +17,7 @@ import serial;
 ser = serial.Serial('/dev/ttyUSB0', 9600)
 #keywords defined in the commands.conf file
 keywords = []
-PERCENT_MATCH_LIMIT = 75
+PERCENT_MATCH_LIMIT = 50
 
 #where are the files?
 conf_dir = os.path.expanduser("~/.config/blather")
