@@ -1,0 +1,111 @@
+Language model created by QuickLM on Mon Feb  8 15:41:11 EST 2016
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 20 sentences and 21 words
+
+\data\
+ngram 1=21
+ngram 2=36
+ngram 3=31
+
+\1-grams:
+-0.9494 </s> -0.3010
+-0.9494 <s> -0.2209
+-1.9494 BLUE -0.2493
+-2.2504 CANCEL -0.2493
+-1.6484 CHANGE -0.2601
+-2.2504 COMMAND -0.2493
+-2.2504 DIM -0.2601
+-1.9494 DOMO -0.2493
+-2.2504 FADE -0.2601
+-2.2504 FLASH -0.2601
+-1.9494 GREEN -0.2493
+-1.0463 LIGHTS -0.2209
+-2.2504 OFF -0.2493
+-2.2504 ON -0.2493
+-2.2504 RAISE -0.2601
+-1.9494 RED -0.2493
+-2.2504 STOP -0.2986
+-2.2504 STROBE -0.2601
+-1.3473 TO -0.2811
+-2.2504 TOGGLE -0.2601
+-1.9494 WHITE -0.2493
+
+\2-grams:
+-1.6021 <s> CANCEL 0.0000
+-1.0000 <s> CHANGE 0.0000
+-1.6021 <s> DIM 0.0000
+-1.3010 <s> DOMO 0.0000
+-1.6021 <s> FADE 0.0000
+-1.6021 <s> FLASH 0.0000
+-0.8239 <s> LIGHTS -0.1383
+-1.6021 <s> RAISE 0.0000
+-1.6021 <s> STOP 0.0000
+-1.6021 <s> STROBE 0.0000
+-1.6021 <s> TOGGLE 0.0000
+-0.3010 BLUE </s> -0.3010
+-0.3010 CANCEL </s> -0.3010
+-0.3010 CHANGE LIGHTS -0.1761
+-0.3010 COMMAND </s> -0.3010
+-0.3010 DIM LIGHTS -0.2109
+-0.3010 DOMO </s> -0.3010
+-0.3010 FADE LIGHTS -0.2109
+-0.3010 FLASH LIGHTS -0.2109
+-0.3010 GREEN </s> -0.3010
+-0.7270 LIGHTS </s> -0.3010
+-1.5051 LIGHTS OFF 0.0000
+-1.5051 LIGHTS ON 0.0000
+-0.6021 LIGHTS TO 0.0000
+-0.3010 OFF </s> -0.3010
+-0.3010 ON </s> -0.3010
+-0.3010 RAISE LIGHTS -0.2109
+-0.3010 RED </s> -0.3010
+-0.3010 STOP COMMAND 0.0000
+-0.3010 STROBE LIGHTS -0.2109
+-0.9031 TO BLUE 0.0000
+-0.9031 TO GREEN 0.0000
+-0.9031 TO RED 0.0000
+-0.9031 TO WHITE 0.0000
+-0.3010 TOGGLE LIGHTS -0.2109
+-0.3010 WHITE </s> -0.3010
+
+\3-grams:
+-0.3010 <s> CANCEL </s>
+-0.3010 <s> CHANGE LIGHTS
+-0.3010 <s> DIM LIGHTS
+-0.3010 <s> DOMO </s>
+-0.3010 <s> FADE LIGHTS
+-0.3010 <s> FLASH LIGHTS
+-1.0792 <s> LIGHTS OFF
+-1.0792 <s> LIGHTS ON
+-0.4771 <s> LIGHTS TO
+-0.3010 <s> RAISE LIGHTS
+-0.3010 <s> STOP COMMAND
+-0.3010 <s> STROBE LIGHTS
+-0.3010 <s> TOGGLE LIGHTS
+-0.3010 CHANGE LIGHTS TO
+-0.3010 DIM LIGHTS </s>
+-0.3010 FADE LIGHTS </s>
+-0.3010 FLASH LIGHTS </s>
+-0.3010 LIGHTS OFF </s>
+-0.3010 LIGHTS ON </s>
+-0.9031 LIGHTS TO BLUE
+-0.9031 LIGHTS TO GREEN
+-0.9031 LIGHTS TO RED
+-0.9031 LIGHTS TO WHITE
+-0.3010 RAISE LIGHTS </s>
+-0.3010 STOP COMMAND </s>
+-0.3010 STROBE LIGHTS </s>
+-0.3010 TO BLUE </s>
+-0.3010 TO GREEN </s>
+-0.3010 TO RED </s>
+-0.3010 TO WHITE </s>
+-0.3010 TOGGLE LIGHTS </s>
+
+\end\

@@ -138,11 +138,8 @@ class Blather:
         #find the match percentage
         percentMatch = self.calculate_match_percentage(biggestKeySet, biggestKeyCount)
         print("\n")
-        if(biggestKey in keywords):
-            print("HEARD KEYWORD!")
         #call the process
         if biggestKeyCount > 0 and ((len(textWords) <= 2 and len(biggestKeySet) == len(textWords)) or percentMatch >= PERCENT_MATCH_LIMIT): #must be equal or a 60% match
-            self.matchTime = time.time()
             print("Best match: " + biggestKey, "Detected: " + text.lower(), "Percent match: " + str(percentMatch));
             cmd = self.commands[biggestKey]
             if cmd == "cancel" and hasattr(self, 'runningProcess'):
@@ -224,7 +221,8 @@ class Blather:
             words = set(key.split(" "))
             #append the keyword to the command if it's not there already
             ##only if the timed keyword activation is needed
-            if self.continuous_listen and (currentTime - self.matchTime) > self.keywordTimeLimit and len(set(keywords).intersection(set(words))) == 0:
+            print((currentTime - self.matchTime), self.keywordTimeLimit)
+            if self.continuous_listen and (currentTime - self.matchTime) < self.keywordTimeLimit and len(set(keywords).intersection(set(words))) == 0:
                 words.update(keywords)
             #find the matching words
             matches = words.intersection(set(textWords))

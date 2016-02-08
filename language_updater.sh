@@ -1,6 +1,6 @@
 #!/bin/bash
 
-blatherdir=~/.config/blather
+blatherdir=config
 sentences=$blatherdir/sentences.corpus
 sourcefile=$blatherdir/commands.conf
 langdir=$blatherdir/language
