@@ -4,23 +4,20 @@
 # Copyright 2013 Jezra
 # Modifications by: Jordan Poles - 2016
 
-import sys
-import signal
-import gobject
-import os.path
+import sys, signal, gobject,os.path
 import subprocess #used to execute commands
 import shutil #used to copy plugins directory
 import psutil #used for reading process ID
 import time #used for keyword time option
 from optparse import OptionParser
-import serial;
-import filecmp;
+import serial, filecmp
+import wit, json
 requiredPeripheral = 0;
 if(requiredPeripheral):
     ser = serial.Serial('/dev/ttyUSB0', 9600)
 #keywords defined in the commands.conf file
 keywords = []
-PERCENT_MATCH_LIMIT = 100
+confidence_lvl = .5
 
 #where are the files?
 conf_dir = os.path.expanduser("config")
@@ -51,6 +48,12 @@ class Blather:
         self.recognizer = Recognizer(lang_file, dic_file, opts.microphone )
         self.recognizer.connect('finished',self.recognizer_finished)
         self.matchTime = 0
+        try:
+            with open(os.path.join(conf_dir, "witapikey.conf"), "r") as apiconf:
+                self.witAPI = apiconf.read().strip()
+                print self.witAPI
+        except:
+            raise RuntimeError("Cannot Run Without a WIT_API_KEY")
         self.keywordTimeLimit = opts.keytime #set to 0 to always speak the keyword
         #updates language file and commands on start
         from DomoSound import DomoSound
@@ -86,9 +89,40 @@ class Blather:
         matches = set(keywords).intersection(set(textWords));
         if len(matches) > 0:
             print("HEARD KEYWORD!")
+            self.recognizer.pause()
             self.matchTime = time.time()
             self.domoSound.playSnd("beep_hi")
+            self.witRec()
+            self.domoSound.playSnd("beep_lo")
+            time.sleep(2)
+            self.recognizer.listen()
         #call the process
+    def witRec(self):
+        wit.init()
+        wit.voice_query_start(self.witAPI)
+        time.sleep(3)
+        resp = json.loads(wit.voice_query_stop())
+        print(type(resp))
+        for res in resp["outcomes"]:
+            if(res["confidence"] > confidence_lvl):
+                print("Response: {}".format(res))
+                self.handleWit(res);
+        wit.close()
+    def handleWit(self, res):
+        if res["intent"] == "Lights":
+            cmd = "python ardlights.py "+res["entities"]["color"][0]["value"]
+            print cmd
+            self.runningProcess = subprocess.Popen(cmd, shell=True)
+        elif res["intent"] == "Cancel":
+            try:
+                print("Cancelling previous command with PID "+str(self.runningProcess.pid))
+                self.terminate_child_processes(self.runningProcess.pid)
+                #terminate parent process
+                self.runningProcess.terminate();
+                cmd = "espeak 'cancelling previous command'"
+                self.runningProcess = subprocess.Popen(cmd, shell=True)
+            except:
+                print "No process to terminate"
     def run(self):
         blather.recognizer.listen()
 
