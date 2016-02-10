@@ -23,7 +23,7 @@ class Recognizer(gobject.GObject):
 			audio_src = 'alsasrc device="hw:%d,0"' % (src)
 		else:
 			audio_src = 'autoaudiosrc'
-
+		print audio_src
 		#build the pipeline
 		cmd = audio_src+' ! audioconvert ! audioresample ! vader name=vad ! pocketsphinx name=asr ! appsink sync=false'
 		self.pipeline=gst.parse_launch( cmd )
@@ -47,4 +47,3 @@ class Recognizer(gobject.GObject):
 	def result(self, asr, text, uttid):
 		#emit finished
 		self.emit("finished", text)
-

@@ -12,9 +12,7 @@ import time #used for keyword time option
 from optparse import OptionParser
 import serial, filecmp
 import wit, json
-requiredPeripheral = 0;
-if(requiredPeripheral):
-    ser = serial.Serial('/dev/ttyUSB0', 9600)
+ser = serial.Serial('/dev/ttyUSB0', 9600)
 #keywords defined in the commands.conf file
 keywords = []
 confidence_lvl = .5
@@ -90,8 +88,9 @@ class Blather:
         if len(matches) > 0:
             print("HEARD KEYWORD!")
             self.recognizer.pause()
-            self.matchTime = time.time()
+            self.matserchTime = time.time()
             self.domoSound.playSnd("beep_hi")
+            time.sleep(.2)
             self.witRec()
             self.domoSound.playSnd("beep_lo")
             time.sleep(2)
@@ -110,9 +109,13 @@ class Blather:
         wit.close()
     def handleWit(self, res):
         if res["intent"] == "Lights":
-            cmd = "python ardlights.py "+res["entities"]["color"][0]["value"]
-            print cmd
-            self.runningProcess = subprocess.Popen(cmd, shell=True)
+            try:
+                cmd = "python ardlights.py "+res["entities"]["color"][0]["value"]
+                self.runningProcess = subprocess.Popen(cmd, shell=True)
+                print cmd
+            except:
+                cmd = "espeak 'What about the lights? I'm confused.'"
+                self.runningProcess = subprocess.Popen(cmd, shell=True)
         elif res["intent"] == "Cancel":
             try:
                 print("Cancelling previous command with PID "+str(self.runningProcess.pid))
