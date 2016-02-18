@@ -73,8 +73,8 @@ class Blather:
                 (key,value) = line.split(":",1)
                 #print key, value
                 #get the keyword out of the commands file
-                if value == "keyword" and key.strip().lower() not in keywords:
-                    keywords.append(key.strip().lower())
+                if value == "keyword" and key.lower() not in keywords:
+                    keywords.append(key.lower())
                     print("KEYWORD: "+key, keywords)
                 self.commands[key.strip().lower()] = value.strip()
                 strings.write( key.strip()+"\n")
@@ -82,10 +82,7 @@ class Blather:
     def recognizer_finished(self, recognizer, text):
         #split the words spoken into an array
         t = text.lower()
-        textWords = t.split(" ")
-        print("\n")
-        matches = set(keywords).intersection(set(textWords));
-        if len(matches) > 0:
+        if t in keywords:
             print("HEARD KEYWORD!")
             self.recognizer.pause()
             self.matserchTime = time.time()
@@ -97,6 +94,18 @@ class Blather:
             self.recognizer.listen()
         #call the process
     def witRec(self):
+        wit.init()
+        resp = json.loads(wit.voice_query_auto(self.witAPI))
+        print(type(resp))
+        try:
+            for res in resp["outcomes"]:
+                if(res["confidence"] > confidence_lvl):
+                    print("Response: {}".format(res))
+                    self.handleWit(res);
+        except:
+            print("Merp")
+        wit.close()
+    def witRecOld(self):
         wit.init()
         wit.voice_query_start(self.witAPI)
         time.sleep(3)
@@ -115,7 +124,8 @@ class Blather:
                 print cmd
             except:
                 cmd = "espeak 'What about the lights? I'm confused.'"
-                self.runningProcess = subprocess.Popen(cmd, shell=True)
+                #self.runningProcess = subprocess.Popen(cmd, shell=True)
+                self.domoSound.speakBlock(cmd)
         elif res["intent"] == "Cancel":
             try:
                 print("Cancelling previous command with PID "+str(self.runningProcess.pid))

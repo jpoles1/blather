@@ -13,3 +13,5 @@ class DomoSound:
     def playSnd(self, soundName):
         wf = self.sounds[soundName]
         self.runningProcess = subprocess.Popen("aplay "+wf, shell=True)
+    def speakBlock(self, text):
+        os.system("espeak -ven+f3 -s80 '"+text+"'")

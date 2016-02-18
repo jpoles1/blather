@@ -121,6 +121,7 @@ class Blather:
             hfile.close()
 
     def recognizer_finished(self, recognizer, text):
+        self.recognizer.pause()
         openCom = 1; #Allows commands to be executed
         #split the words spoken into an array
         t = text.lower()
@@ -171,8 +172,9 @@ class Blather:
             print "Keyword not spoken in past "+str(self.keywordTimeLimit)+" secs"
         else:
             print("No matching command", "Percent match: " + str(percentMatch))
-            os.system("espeak 'I dont understand'")
-
+            os.system("espeak -ven+f3 --stdin 'I dont understand'")
+            print("Done")
+            self.recognizer.listen()
         #if there is a UI and we are not continuous listen
         if self.ui:
             if not self.continuous_listen:

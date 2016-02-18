@@ -1,4 +1,4 @@
-Language model created by QuickLM on Tue Feb  9 21:19:32 EST 2016
+Language model created by QuickLM on Wed Feb 10 18:19:58 EST 2016
 Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
 
 The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
@@ -7,43 +7,44 @@ The code that was used to produce this language model is available in Open Sourc
 Please visit http://www.speech.cs.cmu.edu/tools/ for more information
 
 The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
-This model based on a corpus of 20 sentences and 21 words
+This model based on a corpus of 20 sentences and 22 words
 
 \data\
-ngram 1=21
-ngram 2=36
-ngram 3=31
+ngram 1=22
+ngram 2=37
+ngram 3=32
 
 \1-grams:
--0.9494 </s> -0.3010
--0.9494 <s> -0.2209
--1.9494 BLUE -0.2493
--2.2504 CANCEL -0.2493
--1.6484 CHANGE -0.2601
--2.2504 COMMAND -0.2493
--2.2504 DIM -0.2601
--1.9494 DOMO -0.2493
--2.2504 FADE -0.2601
--2.2504 FLASH -0.2601
--1.9494 GREEN -0.2493
--1.0463 LIGHTS -0.2209
--2.2504 OFF -0.2493
--2.2504 ON -0.2493
--2.2504 RAISE -0.2601
--1.9494 RED -0.2493
--2.2504 STOP -0.2986
--2.2504 STROBE -0.2601
--1.3473 TO -0.2811
--2.2504 TOGGLE -0.2601
--1.9494 WHITE -0.2493
+-0.9590 </s> -0.3010
+-0.9590 <s> -0.2228
+-1.9590 BLUE -0.2505
+-2.2601 CANCEL -0.2505
+-1.6580 CHANGE -0.2611
+-2.2601 COMMAND -0.2505
+-2.2601 DIM -0.2611
+-1.9590 DOMO -0.2505
+-2.2601 FADE -0.2611
+-2.2601 FLASH -0.2611
+-1.9590 GREEN -0.2505
+-1.9590 HEY -0.2962
+-1.0560 LIGHTS -0.2228
+-2.2601 OFF -0.2505
+-2.2601 ON -0.2505
+-2.2601 RAISE -0.2611
+-1.9590 RED -0.2505
+-2.2601 STOP -0.2986
+-2.2601 STROBE -0.2611
+-1.3570 TO -0.2815
+-2.2601 TOGGLE -0.2611
+-1.9590 WHITE -0.2505
 
 \2-grams:
 -1.6021 <s> CANCEL 0.0000
 -1.0000 <s> CHANGE 0.0000
 -1.6021 <s> DIM 0.0000
--1.3010 <s> DOMO 0.0000
 -1.6021 <s> FADE 0.0000
 -1.6021 <s> FLASH 0.0000
+-1.3010 <s> HEY 0.0000
 -0.8239 <s> LIGHTS -0.1383
 -1.6021 <s> RAISE 0.0000
 -1.6021 <s> STOP 0.0000
@@ -58,6 +59,7 @@ ngram 3=31
 -0.3010 FADE LIGHTS -0.2109
 -0.3010 FLASH LIGHTS -0.2109
 -0.3010 GREEN </s> -0.3010
+-0.3010 HEY DOMO 0.0000
 -0.7270 LIGHTS </s> -0.3010
 -1.5051 LIGHTS OFF 0.0000
 -1.5051 LIGHTS ON 0.0000
@@ -79,9 +81,9 @@ ngram 3=31
 -0.3010 <s> CANCEL </s>
 -0.3010 <s> CHANGE LIGHTS
 -0.3010 <s> DIM LIGHTS
--0.3010 <s> DOMO </s>
 -0.3010 <s> FADE LIGHTS
 -0.3010 <s> FLASH LIGHTS
+-0.3010 <s> HEY DOMO
 -1.0792 <s> LIGHTS OFF
 -1.0792 <s> LIGHTS ON
 -0.4771 <s> LIGHTS TO
@@ -93,6 +95,7 @@ ngram 3=31
 -0.3010 DIM LIGHTS </s>
 -0.3010 FADE LIGHTS </s>
 -0.3010 FLASH LIGHTS </s>
+-0.3010 HEY DOMO </s>
 -0.3010 LIGHTS OFF </s>
 -0.3010 LIGHTS ON </s>
 -0.9031 LIGHTS TO BLUE
