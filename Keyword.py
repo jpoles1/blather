@@ -12,7 +12,10 @@ import time #used for keyword time option
 from optparse import OptionParser
 import serial, filecmp
 import wit, json
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+#Extensions
+from DomoSound import DomoSound
+from DomoWeather import DomoWeather
+#ser = serial.Serial('/dev/ttyUSB0', 9600)
 #keywords defined in the commands.conf file
 keywords = []
 confidence_lvl = .5
@@ -54,8 +57,8 @@ class Blather:
             raise RuntimeError("Cannot Run Without a WIT_API_KEY")
         self.keywordTimeLimit = opts.keytime #set to 0 to always speak the keyword
         #updates language file and commands on start
-        from DomoSound import DomoSound
         self.domoSound = DomoSound(os.path.join(file_dir, "assets"))
+        self.domoWeather = DomoWeather()
         self.checkCommandFile()
         #read options
     def read_commands(self):
@@ -102,8 +105,8 @@ class Blather:
                 if(res["confidence"] > confidence_lvl):
                     print("Response: {}".format(res))
                     self.handleWit(res);
-        except:
-            print("Merp")
+        except Exception as e:
+            print("Merp: ", e)
         wit.close()
     def witRecOld(self):
         wit.init()
@@ -126,6 +129,21 @@ class Blather:
                 cmd = "espeak 'What about the lights? I'm confused.'"
                 #self.runningProcess = subprocess.Popen(cmd, shell=True)
                 self.domoSound.speakBlock(cmd)
+        if res["intent"] == "weather":
+            try:
+                location = res["entities"]["location"][0]["value"]
+                print("Weather Location:", location)
+            except:
+                print("No location!")
+                location = "77005"
+            try:
+                we_time = res["entities"]["datetime"][0]["value"].split("T")[0]
+                print("Weather time:", we_time)
+            except:
+                print("No time!")
+                we_time = None
+            cmd = self.domoWeather.getWeather(location, we_time)
+            self.domoSound.speakBlock(cmd)
         elif res["intent"] == "Cancel":
             try:
                 print("Cancelling previous command with PID "+str(self.runningProcess.pid))
@@ -149,7 +167,6 @@ class Blather:
             subprocess.call(language_update_script)
             print("Language file updated")
         self.read_commands()
-
     def load_resource(self,string):
         local_data = os.path.join(os.path.dirname(__file__), 'data')
         paths = ["/usr/share/blather/","/usr/local/share/blather", local_data]
@@ -172,8 +189,6 @@ class Blather:
             print("Killing child with PID "+str(pid))
             p = psutil.Process(int(pid))
             p.terminate()
-
-
 if __name__ == "__main__":
     #create a bunch of commandline options
     parser = OptionParser()
