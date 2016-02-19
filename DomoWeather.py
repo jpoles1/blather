@@ -115,7 +115,7 @@ class DomoWeather():
         weekday = week[date.weekday()]
         if date.weekday() == datetime.datetime.now().weekday():
             date_keyword = "Today"
-            weekday = "current"
+            weekday = "tonight"
         elif date.weekday() == (
                 datetime.datetime.now().weekday() + 1) % 7:
             date_keyword = "Tomorrow"
@@ -126,8 +126,10 @@ class DomoWeather():
         for entry in forecast:
             try:
                 date_desc = entry['title'].split()[0].strip().lower()
-                if weekday == date_desc:
+                print date_desc
+                if date_desc == "current":
                     print entry
+                elif weekday == date_desc:
                     #output = date_keyword + ", the weather will be " + weather_desc + "."
                     output = entry["summary"]
                     break

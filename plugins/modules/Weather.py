@@ -9,8 +9,13 @@ import bs4
 from client.app_utils import getTimezone
 from semantic.dates import DateService
 
-WORDS = ["WEATHER", "TODAY", "TOMORROW"]
-
+week   = ['sunday',
+              'monday',
+              'tuesday',
+              'wednesday',
+              'thursday',
+              'friday',
+              'saturday']
 
 def replaceAcronyms(text):
     """
@@ -133,25 +138,23 @@ def handle(text, mic, profile):
     output = None
 
     for entry in forecast:
-        try:
-            date_desc = entry['title'].split()[0].strip().lower()
-            if date_desc == 'forecast':
-                # For global forecasts
-                date_desc = entry['title'].split()[2].strip().lower()
-                weather_desc = entry['summary']
-            elif date_desc == 'current':
-                # For first item of global forecasts
-                continue
-            else:
-                # US forecasts
-                weather_desc = entry['summary'].split('-')[1]
+    date_desc = entry['title'].split()[0].strip().lower()
+    if date_desc == 'forecast':
+        # For global forecasts
+        date_desc = entry['title'].split()[2].strip().lower()
+        weather_desc = entry['summary']
+    elif date_desc == 'current':
+        # For first item of global forecasts
+        continue
+    else:
+        # US forecasts
+        weather_desc = entry['summary'].split('-')[1]
 
-            if weekday == date_desc:
-                output = date_keyword + \
-                    ", the weather will be " + weather_desc + "."
-                break
-        except:
-            continue
+    if weekday == date_desc:
+        output = date_keyword + \
+            ", the weather will be " + weather_desc + "."
+        break
+
 
     if output:
         output = replaceAcronyms(output)
