@@ -20,7 +20,7 @@ class Recognizer(gobject.GObject):
 		gobject.GObject.__init__(self)
 		self.commands = {}
 		if src:
-			audio_src = 'alsasrc device="hw:%d,0"' % (src)
+			audio_src = 'alsasrc device="%s"' % (src)
 		else:
 			audio_src = 'autoaudiosrc'
 		print audio_src

@@ -10,12 +10,17 @@ import shutil #used to copy plugins directory
 import psutil #used for reading process ID
 import time #used for keyword time option
 from optparse import OptionParser
-import serial, filecmp
+import serial, filecmp,glob
 import wit, json
 #Extensions
 from DomoSound import DomoSound
 from DomoWeather import DomoWeather
-#ser = serial.Serial('/dev/ttyUSB0', 9600)
+'''usbser_list = glob.glob('/dev/ttyUSB*')
+if len(usbser_list) > 0:
+    ser = serial.Serial(usbser_list[0], 9600)
+else:
+    ser = None
+    print "Starting without IR peripheral"'''
 #keywords defined in the commands.conf file
 keywords = []
 confidence_lvl = .5
@@ -122,7 +127,7 @@ class Blather:
     def handleWit(self, res):
         if res["intent"] == "Lights":
             try:
-                cmd = "python ardlights.py "+res["entities"]["color"][0]["value"]
+                cmd = "sudo python ardlights.py "+res["entities"]["color"][0]["value"]
                 self.runningProcess = subprocess.Popen(cmd, shell=True)
                 print cmd
             except:
@@ -198,8 +203,8 @@ if __name__ == "__main__":
     parser.add_option("-c", "--continuous",
         action="store_true", dest="continuous", default=True,
         help="starts interface with 'continuous' listen enabled")
-    parser.add_option("-m", "--microphone", type="int",
-        action="store", dest="microphone", default=None,
+    parser.add_option("-m", "--microphone", type="string",
+        action="store", dest="microphone", default="hw:0,1",
         help="Audio input card to use (if other than system default)")
     parser.add_option("-k", "--keytime", type="int",
         action="store", dest="keytime", default=0,
