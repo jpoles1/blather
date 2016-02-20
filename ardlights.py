@@ -8,9 +8,9 @@ def main(argv):
 	usbser_list = glob.glob('/dev/ttyUSB*')
 	if len(usbser_list) > 0:
 		ser = serial.Serial(usbser_list[0], 9600);
-		ser.write("test");
+		ser.write(irsig[color]);
 		print ser.name
-		time.sleep(1)
+		time.sleep(.2)
 		ser.close();
 	else:
 		print "Cannot send command, no USB peripheral attached."
