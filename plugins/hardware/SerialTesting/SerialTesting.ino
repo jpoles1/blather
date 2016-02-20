@@ -20,14 +20,14 @@
 String serdat = "";
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(9600);
 }
 
 void loop() {
   // print the string when a newline arrives:
   if (serdat != "") {
-    Serial.println(serdat);
-    
+    unsigned long color = strtol(serdat.c_str(), NULL, 16);
+    Serial.println(color);
     serdat = "";
   }
 }

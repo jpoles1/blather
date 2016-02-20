@@ -24,6 +24,7 @@ IRsend irsend;
 void setup() {
   //Start serial comms
   Serial.begin(9600);
+  Serial.println("ready");
 }
 void blastIR(int code){
   irsend.sendNEC(code, 32);
@@ -31,12 +32,13 @@ void blastIR(int code){
 void loop() {
   // print the string when there is data:
   if (serdat != "") {
-    Serial.println(serdat);
-    int color = strtol(serdat.c_str(), NULL, 16);
+    //Serial.println(serdat);
+    unsigned long color = strtol(serdat.c_str(), NULL, 16);
+    Serial.println(color);
     blastIR(color);
     serdat = "";
+    delay(100);
   }
-  delay(100);
 }
 /*
   SerialEvent occurs whenever a new data comes in the
@@ -47,6 +49,7 @@ void loop() {
 void serialEvent() {
   if(Serial.available()) {
     serdat = Serial.readString();
+    //serdat.trim();
   }
 }
 
