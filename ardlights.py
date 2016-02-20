@@ -10,8 +10,10 @@ def main(argv):
 		ser = serial.Serial(usbser_list[0], 9600);
 		ser.write(irsig[color]);
 		print ser.name
-		time.sleep(1)
-		print ser.readline();
+		x=0;
+		while x==0:
+			print ser.readline();
+			x=1;
 		ser.close();
 	else:
 		print "Cannot send command, no USB peripheral attached."
