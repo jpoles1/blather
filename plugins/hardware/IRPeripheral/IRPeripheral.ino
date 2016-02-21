@@ -7,8 +7,8 @@
 #define	IR_BMinus 0xFFBA45	// 
 #define	IR_POW 	  0xFF02FD	// 
 #define	IR_R 	  0xFF1AE5	// 
-#define	IR_G 	  0xFF9A65	// 
-#define	IR_B  	  0xFFA25D	// 
+#define	IR_G 	  0xFFA25D	// 
+#define	IR_B  	  0xFF9A65	// 
 #define	IR_W 	  0xFF22DD	// 
 #define	IR_FLASH  0xFFD02F	// 
 #define	IR_JUMP3  0xFF20DF	// 
@@ -26,16 +26,13 @@ void setup() {
   Serial.begin(9600);
   Serial.println("ready");
 }
-void blastIR(int code){
-  irsend.sendNEC(code, 32);
-}
 void loop() {
   // print the string when there is data:
   if (serdat != "") {
     //Serial.println(serdat);
     unsigned long color = strtol(serdat.c_str(), NULL, 16);
-    Serial.println(color);
-    blastIR(color);
+    irsend.sendNEC(color, 32);
+    Serial.println("Blasting: "+serdat+"; "+color);     
     serdat = "";
     delay(100);
   }

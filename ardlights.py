@@ -7,8 +7,8 @@ def sendSerial(msg):
 		rec =  ser.readline().strip();
 		print "Received: "+rec
 		rec = "ready"
-		ser.write(msg);
 		while rec in ["ready", ""]:
+			ser.write(msg);
 			rec =  ser.readline().strip();
 			print "Received: "+rec
 		ser.close();
