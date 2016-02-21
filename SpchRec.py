@@ -12,6 +12,8 @@ import time #used for keyword time option
 from optparse import OptionParser
 import serial, filecmp,glob
 import wit, json
+import speech_recognition as sr
+r = sr.Recognizer()
 #Extensions
 from DomoSound import DomoSound
 from DomoWeather import DomoWeather
@@ -102,17 +104,18 @@ class Blather:
             self.recognizer.listen()
         #call the process
     def witRec(self):
-        wit.init()
-        resp = json.loads(wit.voice_query_auto(self.witAPI))
-        print(type(resp))
+        with sr.Microphone() as source:
+            print("Say something!")
+            audio = r.listen(source)
+        print "Fetching response"
+        WIT_AI_KEY = "E55CZ2FSFI7PHCBNKVC5QNQ4DXKHXRTJ" # Wit.ai keys are 32-character uppercase alphanumeric strings
         try:
-            for res in resp["outcomes"]:
-                if(res["confidence"] > confidence_lvl):
-                    print("Response: {}".format(res))
-                    self.handleWit(res);
-        except Exception as e:
-            print("Merp: ", e)
-        wit.close()
+            print("Wit.ai thinks you said ")
+            print(r.recognize_wit(audio, key=WIT_AI_KEY, show_all=1))
+        except sr.UnknownValueError:
+            print("Wit.ai could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Wit.ai service; {0}".format(e))
     def witRecOld(self):
         wit.init()
         wit.voice_query_start(self.witAPI)
