@@ -1,12 +1,15 @@
 //Setup Express (our web server) and other express reqs
 var express = require("express");
 var exphbs  = require('express-handlebars');
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser')
 //Create express server
 var app = express()
 //Sets the template engine to be handlebars
 app.engine('handlebars', exphbs({defaultLayout: 'main.hbs'}));
 app.set('view engine', 'handlebars');
+//Set server favicon
+app.use(favicon(__dirname + 'res/favicon.ico'));
 //Sets up the parser which can parse information out of HTTP POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
 //Serves all files in the res folder as static resources
