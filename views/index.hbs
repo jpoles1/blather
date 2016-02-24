@@ -2,25 +2,29 @@
   <head>
     <script type="text/javascript" src="res/js/jquery-2.2.1.min.js"></script>
     <script type="text/javascript" src="res/js/annyang.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
   </head>
   <body>
     <div id="notify" style="font-size: 52pt;">
     </div>
     <script>
     var commandReady = 0;
-    var ready_time = 10; //In seconds
+    var ready_time = 15; //In seconds
     $(function(){
       if (annyang) {
+        function allowRecognition(){
+          commandReady = 1;
+          setTimeout(function(){
+            commandReady = 0;
+            $("#notify").html("");
+          }, ready_time*1000);
+        }
         console.log("Starting to listen")
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
           'hey (domo)': function() {
             $("#notify").html("Heard Keyword!");
-            commandReady = 1;
-            setTimeout(function(){
-              commandReady = 0;
-              $("#notify").html("");
-            }, ready_time*1000);
+            allowRecognition();
           },
           'lights *tag': function(tag) {
             if(commandReady){
@@ -39,7 +43,26 @@
         annyang.addCommands(commands);
 
         // Start listening. You can call this here, or attach this call to an event, button, etc.
-        annyang.start();
+        SpeechKITT.annyang();
+
+        // Define a stylesheet for KITT to use
+        SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css');
+
+        SpeechKITT.startRecognition();
+
+        // Render KITT's interface
+        SpeechKITT.vroom();
+        $(window).keypress(function (e) {
+          if (e.keyCode === 0 || e.keyCode === 32) {
+            e.preventDefault()
+            console.log('Space pressed')
+            SpeechKITT.toggleRecognition();
+            if(SpeechKITT.isListening()){
+              $("#notify").html("Starting Listening!");
+            }
+            allowRecognition();
+          }
+        })
       }
     });
     </script>
