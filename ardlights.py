@@ -16,14 +16,14 @@ def sendSerial(msg):
 		print "Cannot send command, no USB peripheral attached."
 def main(argv):
 	color = argv[0]
-	if(color in ["off", "toggle"]):
-		color="on"
 	if color in ["read"]:
 		color = "red";
 	if color in ["blew"]:
 		color = "blue";
-	irsig={"on": "0xFF02FD", "red": "0xFF1AE5", "blue": "0xFF9A65","green": "0xFFA25D", "white": "0xFF22DD", "bright": "0xFF3AC5", "dim": "0xFFBA45", "strobe": "0xFFD02F", "fade": "0xFFE01F"}
 	thread.start_new_thread(os.system, ("espeak 'Setting lights to "+color+"'",))
+	if(color in ["off", "toggle"]):
+		color="on"
+	irsig={"on": "0xFF02FD", "red": "0xFF1AE5", "blue": "0xFF9A65","green": "0xFFA25D", "white": "0xFF22DD", "bright": "0xFF3AC5", "dim": "0xFFBA45", "strobe": "0xFFD02F", "fade": "0xFFE01F"}
 	sendSerial(irsig[color])
 if __name__ == "__main__":
     main(sys.argv[1:])
