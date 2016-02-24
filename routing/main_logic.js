@@ -17,9 +17,7 @@ module.exports = function(app){
     heard_command = req.query.command.toLowerCase().split(" ");
     console.log(heard_command);
     if(heard_command.contains("weather") || heard_command.contains("whether")){
-      runPyCommand("plugins/weather.py", {
-        args: []
-      });
+      weather = runPyCommand("plugins/weather.py");
       res.send("Got Weather")
     }
   });
@@ -42,6 +40,7 @@ function runPyCommand(command, opts){
       if (err) console.log("Lights error: ", err);
       console.log('results: %j', results);
       speaking_now = 0;
+      return results
     });
   }
 }

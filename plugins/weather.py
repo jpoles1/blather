@@ -43,7 +43,7 @@ def replaceAcronyms(text):
     return text
 def shortenForecast(clean_forecast, nsentence):
     sentences = clean_forecast.split(". ")[0:nsentence];
-    print sentences
+    #print sentences
     return ". ".join(sentences)+".";
 def get_locations():
     r = requests.get('http://www.wunderground.com/about/faq/' +
@@ -122,13 +122,12 @@ def cleanForecast(forecast, time):
     else:
         date_keyword = "On " + weekday
     output = None
-    print weekday
+    #print weekday
     for entry in forecast:
         try:
             date_desc = entry['title'].split()[0].strip().lower()
-            print date_desc
+            #print date_desc
             if date_desc == "current":
-                print "penis"
                 output = entry["summary"]
             elif weekday == date_desc:
                 #output = date_keyword + ", the weather will be " + weather_desc + "."
