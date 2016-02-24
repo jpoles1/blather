@@ -35,7 +35,7 @@ void loop() {
     unsigned long color = strtol(serdat.c_str(), NULL, 16);
     int sendct = 1;
     if(color==IR_DIM || color==IR_BRIGHT || color==IR_BRIGHT){
-      sendct = 5;
+      sendct = 10;
     }
     else if(color==IR_R || color==IR_G ||color==IR_B || color==IR_W){
       sendct = 3;
