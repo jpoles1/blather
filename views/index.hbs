@@ -67,18 +67,18 @@
               $("#notify").html("");
             }
           }
-          else if (e.keyCode === 38) {
-            //Up Arrow Key
+          else if (e.keyCode === 119) {
+            //W Key
             e.preventDefault()
-            console.log('Up Arrow pressed')
+            console.log('W pressed')
             $.get("lights", {"command": "bright"}, function(res){
               console.log(res)
             })
           }
-          else if (e.keyCode === 40) {
-            //Down Arrow Key
+          else if (e.keyCode === 115) {
+            //D Key
             e.preventDefault()
-            console.log('Down Arrow pressed')
+            console.log('D pressed')
             $.get("lights", {"command": "dim"}, function(res){
               console.log(res)
             })
