@@ -7,16 +7,27 @@
     <div id="notify" style="font-size: 52pt;">
     </div>
     <script>
+    var commandReady = 0;
+    var ready_time = 10; //In seconds
     $(function(){
       if (annyang) {
         console.log("Starting to listen")
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
           'hey (domo)': function() {
-            $("#notify").html("Heard Keyword!")
+            $("#notify").html("Heard Keyword!");
+            commandReady = 1;
+            setTimeout(function(){
+              commandReady = 0;
+              $("#notify").html("");
+            }, ready_time*1000);
           },
           'lights *tag': function(tag) {
-            $("#notify").html("Setting lights to: "+tag)
+            if(commandReady){
+              $("#notify").html("Setting lights to: "+tag)
+              commandReady = 0;
+              setTimeout(function(){$("#notify").html("");}, 3*1000);
+            }
           }
         };
         annyang.debug();
