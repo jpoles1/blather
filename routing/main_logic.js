@@ -16,7 +16,7 @@ module.exports = function(app){
   app.get("/voice", function(req, res){
     heard_command = req.query.command.toLowerCase().split(" ");
     console.log(heard_command);
-    if(heard_command.contains("weather")){
+    if(heard_command.contains("weather") || heard_command.contains("whether")){
       runPyCommand("plugins/weather.py", {
         args: []
       });
