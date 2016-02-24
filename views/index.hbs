@@ -26,6 +26,9 @@
             if(commandReady){
               $("#notify").html("Setting lights to: "+tag)
               commandReady = 0;
+              $.post("lights", {"command": tag}, function(res){
+                console.log(res)
+              })
               setTimeout(function(){$("#notify").html("");}, 3*1000);
             }
           }
