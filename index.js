@@ -9,7 +9,7 @@ var app = express()
 app.engine('handlebars', exphbs({defaultLayout: 'main.hbs'}));
 app.set('view engine', 'handlebars');
 //Set server favicon
-app.use(favicon(__dirname + 'res/favicon.ico'));
+app.use(favicon(__dirname + '/res/favicon.ico'));
 //Sets up the parser which can parse information out of HTTP POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
 //Serves all files in the res folder as static resources
