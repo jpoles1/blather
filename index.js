@@ -14,7 +14,7 @@ app.use('/res', express.static('res'));
 //Load .env file config (contains DB info)
 require("./routing/main_logic")(app)
 //Set the port for the server
-port = process.env.PORT || 8000;
+port = process.env.PORT || 3030;
 //Tell server to start listening on above port
 app.listen(port, function(){
   console.log("Web server started on port:",port)
