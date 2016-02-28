@@ -13,14 +13,19 @@ var ready_timer;
 $(function(){
   if (annyang) {
     var beep_hi = new Audio('res/sound/beep_hi.wav');
+    var beep_lo = new Audio('res/sound/beep_lo.wav');
     function allowRecognition(ready_time){
       beep_hi.play();
       commandReady = 1;
       clearTimeout(ready_timer);
       ready_timer = setTimeout(function(){
-        commandReady = 0;
-        $("#notify").html("");
+        endRecognition()
       }, ready_time*1000);
+    }
+    function endRecognition(){
+      commandReady = 0;
+      $("#notify").html("");
+      beep_lo.play();
     }
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
@@ -45,6 +50,9 @@ $(function(){
           SpeechKITT.toggleRecognition();
           SpeechKITT.toggleRecognition();
         }
+      },
+      '(stop)(off)(end)(kill)': function(){
+        endRecognition()
       }
     };
     annyang.debug();
