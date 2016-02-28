@@ -12,7 +12,9 @@
     var ready_time = 15; //In seconds
     $(function(){
       if (annyang) {
+        var beep_hi = new Audio('res/sound/beep_hi.wav');
         function allowRecognition(){
+          beep_hi.play();
           commandReady = 1;
           setTimeout(function(){
             commandReady = 0;
