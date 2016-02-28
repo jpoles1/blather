@@ -39,7 +39,7 @@ $(function(){
           $.get("lights", {"command": tag}, function(res){
             console.log(res)
           })
-          setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(5);}, 3*1000);
+          setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
         }
       }
     };
