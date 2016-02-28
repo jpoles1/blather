@@ -11,7 +11,7 @@ Array.prototype.contains = function(obj) {
 }
 module.exports = function(app){
   app.get("/", function(req, res){
-    res.render("index.hbs", {})
+    res.render("mic.hbs", {})
   })
   app.get("/voice", function(req, res){
     heard_command = req.query.command.toLowerCase().split(" ");
