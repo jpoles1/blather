@@ -22,6 +22,13 @@ def main(argv):
 		color = "red";
 	if color in ["blew"]:
 		color = "blue";
+	if color in ["right"]:
+		color = "bright";
+	if color in ["babe", "paid"]:
+		color = "fade";
+	if color in ["tim", "them"]:
+		color = "dim";
+	print color;
 	thread.start_new_thread(os.system, ("espeak 'Setting lights to "+color+"'",))
 	if(color in ["off", "toggle"]):
 		color="on"
