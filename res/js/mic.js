@@ -23,9 +23,11 @@ $(function(){
       }, ready_time*1000);
     }
     function endRecognition(){
+      if(commandReady == 1){
+        beep_lo.play();
+      }
       commandReady = 0;
       $("#notify").html("");
-      beep_lo.play();
     }
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
