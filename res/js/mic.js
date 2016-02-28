@@ -9,13 +9,15 @@ Array.prototype.contains = function(obj) {
 }
 var commandReady = 0;
 var ready_time = 15; //In seconds
+var ready_timer;
 $(function(){
   if (annyang) {
     var beep_hi = new Audio('res/sound/beep_hi.wav');
     function allowRecognition(ready_time){
       beep_hi.play();
       commandReady = 1;
-      setTimeout(function(){
+      clearTimeout(ready_timer);
+      ready_timer = setTimeout(function(){
         commandReady = 0;
         $("#notify").html("");
       }, ready_time*1000);
@@ -40,6 +42,8 @@ $(function(){
             console.log(res)
           })
           setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
+          SpeechKITT.toggleRecognition();
+          SpeechKITT.toggleRecognition();
         }
       }
     };
