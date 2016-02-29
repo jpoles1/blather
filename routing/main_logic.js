@@ -1,4 +1,11 @@
+//Setup Python Commands
 var PythonShell = require('python-shell');
+//Setup Unix Command
+var exec = require('child_process').exec;
+var child;
+//Setup Weater
+var Wunderground = require('wundergroundnode');
+var wunderground = new Wunderground(process.env.WUNDERGROUND_APIKEY);
 var speaking_now = 0;
 Array.prototype.contains = function(obj) {
     var i = this.length;
@@ -17,9 +24,11 @@ module.exports = function(app){
     heard_command = req.query.command.toLowerCase().split(" ");
     console.log(heard_command);
     if(heard_command.contains("weather") || heard_command.contains("whether")){
-      weather = runPyCommand("plugins/weather.py");
-      res.send("Got Weather")
+      getWeather(res, "77005");
     }
+  });
+  app.get("/weather", function(req, res){
+    getWeather(res, "77005")
   });
   app.get("/lights", function(req,res){
     command = req.query.command.toLowerCase();
@@ -30,6 +39,28 @@ module.exports = function(app){
     runPyCommand("plugins/ardlights.py", options);
     console.log("Sent command: "+ command)
     res.send("Sent command: "+ command)
+  });
+}
+function getWeather(res, loc){
+  wunderground.conditions().request(loc, function(err, response){
+    current_weather = response["current_observation"]
+    report = "It is currently "+String(current_weather["temp_f"]).split(".")[0]+" degrees and "+current_weather["weather"]+". ";
+    wunderground.forecast().request(loc, function(err, response){
+      //report+=response["forecast"]["txt_forecast"]["forecastday"][0]["fcttext"]
+      future_weather = response["forecast"]["simpleforecast"]["forecastday"][0]
+      report+="On "+future_weather["date"]["weekday"]+", high of "+future_weather["high"]["fahrenheit"]+". "+future_weather["conditions"]+"."
+      runSysCommand("espeak", "\""+report+"\" -s 200");
+      res.send("Got weather courtesy of Weather Underground:<br><br>"+report)
+    });
+  });
+}
+function runSysCommand(command, opts){
+  child = exec(command+" "+opts, function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
   });
 }
 function runPyCommand(command, opts){

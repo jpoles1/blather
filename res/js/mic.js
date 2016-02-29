@@ -56,8 +56,11 @@ $(function(){
       '(change) lights (to) *tag': function(tag) {
         handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
       },
-      '(what) (is) (the) weather': function(tag) {
-        handleCommand("/voice", {"command": "weather"}, "Fetching the weather", 10)
+      '(what) (is) (the) weather': function() {
+        handleCommand("/weather", {}, "Fetching the weather", 10)
+      },
+      '(what) (is) (the) weather in *location': function(location) {
+        handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 10)
       },
       '(stop)(off)(end)(kill)': function(){
         endRecognition()

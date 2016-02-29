@@ -1,3 +1,5 @@
+//Get config
+require('dotenv').config();
 //Setup Express (our web server) and other express reqs
 var fs = require("fs")
 var http = require("http")
