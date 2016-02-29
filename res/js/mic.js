@@ -46,7 +46,7 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["red", "brad", "rad"].contains(name)){name = "rrad";}
+        if(["red", "brad", "rad", "brother", "bro"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "demo"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
