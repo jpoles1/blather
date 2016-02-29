@@ -3,6 +3,8 @@ var PythonShell = require('python-shell');
 //Setup Unix Command
 var exec = require('child_process').exec;
 var child;
+//
+var moment = require("moment")
 //Setup Weater
 var Wunderground = require('wundergroundnode');
 var wunderground = new Wunderground(process.env.WUNDERGROUND_APIKEY);
@@ -27,6 +29,14 @@ module.exports = function(app){
       getWeather(res, "77005");
     }
   });
+  app.get("/time", function(req,res){
+    var datetime = new Date();
+    speak("It is "+datetime.toTimeString().substring(0,5))
+  })
+  app.get("/date", function(req,res){
+    var datetime = new Date();
+    speak("Today is "+moment().format('dddd MMMM Do YYYY'))
+  })
   app.get("/weather", function(req, res){
     getWeather(res, "77005")
   });
@@ -49,7 +59,7 @@ function getWeather(res, loc){
       //report+=response["forecast"]["txt_forecast"]["forecastday"][0]["fcttext"]
       future_weather = response["forecast"]["simpleforecast"]["forecastday"][0]
       report+="On "+future_weather["date"]["weekday"]+", high of "+future_weather["high"]["fahrenheit"]+". "+future_weather["conditions"]+"."
-      runSysCommand("espeak", "\""+report+"\" -s 200");
+      speak(report);
       res.send("Got weather courtesy of Weather Underground:<br><br>"+report)
     });
   });
@@ -62,6 +72,9 @@ function runSysCommand(command, opts){
       console.log('exec error: ' + error);
     }
   });
+}
+function speak(phrase){
+  runSysCommand("espeak", "\""+phrase+"\" -s 190");
 }
 function runPyCommand(command, opts){
   command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");

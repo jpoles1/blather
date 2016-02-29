@@ -27,11 +27,11 @@ $(function(){
         $("#notify").html(msg)
         commandReady = 0;
         $.get(url, req_opts, function(res){
-          console.log(res)
+          setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
+          SpeechKITT.toggleRecognition();
+          SpeechKITT.toggleRecognition();
+          return(res)
         })
-        setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
-        SpeechKITT.toggleRecognition();
-        SpeechKITT.toggleRecognition();
       }
     }
     function endRecognition(){
@@ -57,10 +57,12 @@ $(function(){
         handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
       },
       '(what) (is) (the) weather': function() {
-        handleCommand("/weather", {}, "Fetching the weather", 10)
+        report = handleCommand("/weather", {}, "Fetching the weather in"+location, 10)
+        $("#notify").html(report)
       },
       '(what) (is) (the) weather in *location': function(location) {
-        handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 10)
+        report = handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 10)
+        $("#notify").html(report)
       },
       '(stop)(off)(end)(kill)': function(){
         endRecognition()
