@@ -14,7 +14,7 @@ def sendSerial(msg):
 		ser.close();
 	else:
 		time.sleep(1.8);
-		thread.start_new_thread(os.system, ("espeak -vmb-en1 -p20 'USB Disconnected'",))
+		thread.start_new_thread(os.system, ("espeak -vmb-en1 -p40 -s160 -a180 'USB Disconnected'",))
 		print "Cannot send command, no USB peripheral attached."
 def main(argv):
 	color = argv[0]
