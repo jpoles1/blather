@@ -26,7 +26,7 @@ $(function(){
       if(commandReady){
         $("#notify").html(msg)
         commandReady = 0;
-        $.get("lights", req_opts, function(res){
+        $.get(url, req_opts, function(res){
           console.log(res)
         })
         setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
