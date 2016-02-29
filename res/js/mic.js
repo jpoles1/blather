@@ -22,14 +22,14 @@ $(function(){
         endRecognition()
       }, ready_time*1000);
     }
-    function handleCommand(url, req_opts, msg){
+    function handleCommand(url, req_opts, msg, delay){
       if(commandReady){
         $("#notify").html(msg)
         commandReady = 0;
         $.get(url, req_opts, function(res){
           console.log(res)
         })
-        setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
+        setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
         SpeechKITT.toggleRecognition();
         SpeechKITT.toggleRecognition();
       }
@@ -54,10 +54,10 @@ $(function(){
         }
       },
       '(change) lights (to) *tag': function(tag) {
-        handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag)
+        handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
       },
       '(what) (is) (the) weather': function(tag) {
-        handleCommand("/voice", {"command": "weather"}, "Fetching the weather")
+        handleCommand("/voice", {"command": "weather"}, "Fetching the weather", 10)
       },
       '(stop)(off)(end)(kill)': function(){
         endRecognition()
