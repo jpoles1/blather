@@ -22,6 +22,7 @@
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "hbs": "^4.0.0",
+    "moment": "^2.11.2",
     "python-shell": "^0.3.0",
     "serve-favicon": "^2.3.0",
     "wundergroundnode": "^0.9.0"
