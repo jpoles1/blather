@@ -42,14 +42,16 @@ module.exports = function(app){
     res.send(date_str);
   })
   app.get("/sexytime", function(req,res){
-    var options = {
-      args: ["fade"]
-    };
-    runPyCommand("plugins/ardlights.py", options);
     speak("Activating Love Mode... ... Have fun!");
     setTimeout(function(){
+      var options = {
+        args: ["fade"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 3*1000)
+    setTimeout(function(){
       runSysCommand("mplayer", __dirname+"/../res/sound/marvin_gaye.mp3")
-    }, 2*1000)
+    }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
   })
   app.get("/weather", function(req, res){
