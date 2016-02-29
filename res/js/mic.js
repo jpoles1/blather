@@ -46,7 +46,7 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["red", "brad", "rad", "ram", "fred"].contains(name)){name = "rrad";}
+        if(["red", "brad", "rad", "ram", "fred", "brother", "bro"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "demo"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
@@ -69,8 +69,12 @@ $(function(){
       "(what's) (what is) (the) (today's) date": function(){
         handleCommand("/date", {}, "Fetching date...", 4)
       },
-      '(stop)(off)(end)(kill)': function(){
+      '(stop) (end) (cancel)': function(){
         endRecognition()
+      },
+      '(off) (kill)': function(){
+        endRecognition()
+        SpeechKITT.abortRecognition()
       }
     };
     annyang.debug();
