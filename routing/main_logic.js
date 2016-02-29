@@ -96,7 +96,7 @@ function runSysCommand(command, opts){
   });
 }
 function speak(phrase){
-  runSysCommand("espeak", "\""+phrase+"\" -s 190");
+  runSysCommand("espeak -vmb-en1 -p20", "\""+phrase+"\" -s 140");
 }
 function runPyCommand(command, opts){
   command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");
