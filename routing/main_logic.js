@@ -31,14 +31,24 @@ module.exports = function(app){
   });
   app.get("/time", function(req,res){
     var datetime = new Date();
-    speak("It is "+datetime.toTimeString().substring(0,5))
+    var time_str = "It is "+datetime.toTimeString().substring(0,5);
+    speak(time_str);
+    res.send(time_str);
   })
   app.get("/date", function(req,res){
     var datetime = new Date();
-    speak("Today is "+moment().format('dddd MMMM Do YYYY'))
+    var date_str = "Today is "+moment().format('dddd MMMM Do YYYY');
+    speak(date_str);
+    res.send(date_str);
   })
   app.get("/weather", function(req, res){
-    getWeather(res, "77005")
+    try{
+      var loc = req.query.loc;
+      getWeather(res, loc)
+    }
+    catch(e){
+      getWeather(res, "77005")
+    }
   });
   app.get("/lights", function(req,res){
     command = req.query.command.toLowerCase();
@@ -47,7 +57,6 @@ module.exports = function(app){
       args: [command]
     };
     runPyCommand("plugins/ardlights.py", options);
-    console.log("Sent command: "+ command)
     res.send("Sent command: "+ command)
   });
 }

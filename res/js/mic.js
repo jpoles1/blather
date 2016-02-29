@@ -30,7 +30,7 @@ $(function(){
           setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
           SpeechKITT.toggleRecognition();
           SpeechKITT.toggleRecognition();
-          return(res)
+          $("#notify").html(res)
         })
       }
     }
@@ -46,23 +46,28 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["red", "brad", "rad"].contains(name)){name = "rrad";}
+        if(["red", "brad", "rad", "ram", "fred"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "demo"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
           allowRecognition(ready_time);
         }
       },
-      '(change) lights (to) *tag': function(tag) {
+      '(change) lights (to) :tag': function(tag) {
         handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
       },
-      '(what) (is) (the) weather': function() {
-        report = handleCommand("/weather", {}, "Fetching the weather in"+location, 10)
-        $("#notify").html(report)
+      /*Voice recognition cannot determine zip codes accurately, so this feature has been deactivated.
+      "(what's) (what) (is) (the) weather in *location": function(location) {
+        handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 8)
+      },*/
+      "(what's) (what) (is) (the) weather": function() {
+        handleCommand("/weather", {}, "Fetching the weather in"+location, 8)
       },
-      '(what) (is) (the) weather in *location': function(location) {
-        report = handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 10)
-        $("#notify").html(report)
+      "(what's) (what) (is) (the) time (is it)": function(){
+        handleCommand("/time", {}, "Fetching time...", 2.5)
+      },
+      "(what's) (what is) (the) (today's) date": function(){
+        handleCommand("/date", {}, "Fetching date...", 4)
       },
       '(stop)(off)(end)(kill)': function(){
         endRecognition()
