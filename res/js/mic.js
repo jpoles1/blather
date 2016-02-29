@@ -27,9 +27,11 @@ $(function(){
         $("#notify").html(msg)
         commandReady = 0;
         $.get(url, req_opts, function(res){
-          setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
-          SpeechKITT.toggleRecognition();
-          SpeechKITT.toggleRecognition();
+          if(delay!=-1){
+            setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
+            SpeechKITT.toggleRecognition();
+            SpeechKITT.toggleRecognition();
+          }
           $("#notify").html(res)
         })
       }
@@ -71,6 +73,11 @@ $(function(){
       },
       '(stop) (end) (cancel)': function(){
         endRecognition()
+      },
+      'start sexy time': function(){
+        handleCommand("/sexytime", {}, "Staring sexy time mode.", -1)
+        endRecognition()
+        SpeechKITT.abortRecognition()
       },
       '(off) (kill)': function(){
         endRecognition()
