@@ -74,7 +74,7 @@ $(function(){
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
-      'start sexy time': function(){
+      '(enter) (start) love mode': function(){
         handleCommand("/sexytime", {}, "Staring sexy time mode.", -1)
         endRecognition()
         SpeechKITT.abortRecognition()

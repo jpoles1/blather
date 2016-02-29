@@ -42,7 +42,7 @@ module.exports = function(app){
     res.send(date_str);
   })
   app.get("/sexytime", function(req,res){
-    speak("Activating Sex Mode... ... Have fun!");
+    speak("Activating Love Mode... ... Have fun!");
     setTimeout(function(){
       runSysCommand("mplayer", __dirname+"/../res/sound/marvin_gaye.mp3")
     }, 2*1000)
