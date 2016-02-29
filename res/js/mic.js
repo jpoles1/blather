@@ -22,6 +22,18 @@ $(function(){
         endRecognition()
       }, ready_time*1000);
     }
+    function handleCommand(url, req_opts, msg){
+      if(commandReady){
+        $("#notify").html(msg)
+        commandReady = 0;
+        $.get("lights", req_opts, function(res){
+          console.log(res)
+        })
+        setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
+        SpeechKITT.toggleRecognition();
+        SpeechKITT.toggleRecognition();
+      }
+    }
     function endRecognition(){
       if(commandReady == 1){
         beep_lo.play();
@@ -42,16 +54,10 @@ $(function(){
         }
       },
       '(change) lights (to) *tag': function(tag) {
-        if(commandReady){
-          $("#notify").html("Setting lights to: "+tag)
-          commandReady = 0;
-          $.get("lights", {"command": tag}, function(res){
-            console.log(res)
-          })
-          setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, 3*1000);
-          SpeechKITT.toggleRecognition();
-          SpeechKITT.toggleRecognition();
-        }
+        handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag)
+      },
+      '(what) (is) (the) weather': function(tag) {
+        handleCommand("/voice", {"command": "weather"}, "Fetching the weather")
       },
       '(stop)(off)(end)(kill)': function(){
         endRecognition()
