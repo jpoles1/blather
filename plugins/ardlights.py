@@ -32,7 +32,21 @@ def main(argv):
 	thread.start_new_thread(os.system, ("espeak -vmb-en1 -p40 -s160 -a180 'Setting lights to "+color+"'",))
 	if(color in ["off", "toggle"]):
 		color="on"
-	irsig={"on": "0xFF02FD", "red": "0xFF1AE5", "blue": "0xFF9A65","green": "0xFFA25D", "white": "0xFF22DD", "bright": "0xFF3AC5", "dim": "0xFFBA45", "strobe": "0xFFD02F", "fade": "0xFFE01F"}
+	irsig={
+		"on": "0xFF02FD",
+		"red": "0xFF1AE5",
+		"orange": "0xFF30CF",
+		"pink": "0xFF2AD5",
+		"blue": "0xFF9A65",
+		"aqua": "0xFFF807",
+		"purple": "0xFF38C7",
+		"green": "0xFFA25D",
+		"white": "0xFF22DD",
+		"bright": "0xFF3AC5",
+		"dim": "0xFFBA45",
+		"strobe": "0xFFD02F",
+		"fade": "0xFFE01F"
+	}
 	sendSerial(irsig[color])
 if __name__ == "__main__":
     main(sys.argv[1:])
