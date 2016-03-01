@@ -50,9 +50,7 @@ module.exports = function(app){
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     setTimeout(function(){
-      var songs = ["marvin_gaye.mp3", "bad_touch.mp3"]
-      var song = songs[Math.floor(Math.random()*songs.length)]
-      runSysCommand("mplayer", __dirname+"/../res/sound/"+song)
+      runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
     }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
   })
@@ -98,7 +96,7 @@ function runSysCommand(command, opts){
   });
 }
 function speak(phrase){
-  runSysCommand("espeak -vmb-en1 -p40", "\""+phrase+"\" -s160 -a180");
+  runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "\""+phrase+"\"");
 }
 function runPyCommand(command, opts){
   command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");
