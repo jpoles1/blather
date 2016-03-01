@@ -80,10 +80,6 @@ module.exports = function(app, speak){
       };
       runPyCommand("plugins/ardlights.py", options);
     }, 6*1000)
-    setTimeout(function(){
-      getWeather(res, zipcode)
-    }, 9*1000)
-    res.send("Good Morning. Starting wake mode!")
   });
   app.get("/weather", function(req, res){
     try{

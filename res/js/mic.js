@@ -90,21 +90,21 @@ $(function(){
       '(enter) (activate) (start) :tag mode': function(tag){
         tag = tag.toLowerCase();
         if(["love", "sex", "sexy", "sexytime"].contains(tag)){
-          handleCommand("/sexytime", {}, "Staring Love Mode&trade;.", -1)
+          handleCommand("/sexytime", {}, "Starting Love Mode&trade;.", -1)
           stopListening()
         }
         else if(["sleep"].contains(tag)){
           var sleeptime = 7; //hrs
-          handleCommand("/sleep", {}, "Staring Sleep Mode&trade;.", -1)
+          handleCommand("/sleep", {}, "Starting Sleep Mode&trade;.", -1)
           stopListening();
           setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
         }
         else if(["wake", "week"].contains(tag)){
-          handleCommand("/wake", {}, "Staring Wake Mode&trade;.", -1);
+          handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
           setTimeout(function(){
             commandReady = 1;
             handleCommand("/weather", {}, "Fetching the weather..", 8)
-          }, 9*1000)
+          }, 7*1000)
         }
         else{
           console.log("Could not activate the mode:", tag)
