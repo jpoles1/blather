@@ -64,6 +64,7 @@ $(function(){
       '(set) (change) lights (to) :tag': function(tag) {
         if(["read"].contains(tag)){tag = "red";}
         if(["blew"].contains(tag)){tag = "blue";}
+        if(["screen"].contains(tag)){tag = "green";}
         if(["right"].contains(tag)){tag = "bright";}
         if(["babe", "paid"].contains(tag)){tag = "fade";}
         if(["tim", "them"].contains(tag)){tag = "dim";}

@@ -120,7 +120,10 @@ module.exports = function(app, speak){
     if(speaking_now!=1){
       speaking_now = 1;
       PythonShell.run(command, opts, function (err, results) {
-        if (err) console.log("Lights error: ", err);
+        if (err){
+          console.log("Lights error: ", err);
+          speak(String(err).split(":")[2]);
+        }
         console.log('results: %j', results);
         speaking_now = 0;
         return results

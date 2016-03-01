@@ -1,4 +1,4 @@
-import os, thread, serial, sys, time, glob
+import sys, serial, time, glob
 def sendSerial(msg):
 	usbser_list = glob.glob('/dev/ttyUSB*')
 	if len(usbser_list) > 0:
@@ -13,9 +13,8 @@ def sendSerial(msg):
 			print "Received: "+rec
 		ser.close();
 	else:
-		time.sleep(1.8);
-		thread.start_new_thread(os.system, ("espeak -vmb-en1 -p40 -s160 -a180 'USB Disconnected'",))
-		print "Cannot send command, no USB peripheral attached."
+		time.sleep(1.5);
+		raise Exception("USB disconnected.");
 def main(argv):
 	color = argv[0]
 	if(color in ["off", "toggle"]):
