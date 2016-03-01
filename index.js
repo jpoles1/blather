@@ -1,5 +1,8 @@
 //Get config
 require('dotenv').config();
+//Setup Unix Command
+var exec = require('child_process').exec;
+var child;
 //Setup Express (our web server) and other express reqs
 var fs = require("fs")
 var http = require("http")
@@ -19,8 +22,22 @@ app.use(favicon(__dirname + '/res/favicon.ico'));
 app.use(bodyParser.urlencoded({ extended: true }));
 //Serves all files in the res folder as static resources
 app.use('/res', express.static('res'));
+//Universal Voice Command
+function runSysCommand(command, opts){
+  child = exec(command+" "+opts, function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+  });
+}
+function speak(phrase){
+  runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "\""+phrase+"\"");
+}
 //Load .env file config (contains DB info)
-require("./routing/main_logic")(app)
+require("./routing/main_logic")(app, speak)
+require("./routing/utility_logic")(app, speak)
 //Set the port for the server
 http_port = 3030;
 https_port = 4040;//Tell server to start listening on above port
