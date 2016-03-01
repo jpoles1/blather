@@ -54,6 +54,7 @@ module.exports = function(app, speak){
       var options = {
         args: ["red"]
       };
+      speak("Setting lights to red then dimming lights.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     setTimeout(function(){
@@ -70,6 +71,7 @@ module.exports = function(app, speak){
       var options = {
         args: ["green"]
       };
+      speak("Setting lights to green then raising lights.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     setTimeout(function(){
@@ -79,9 +81,9 @@ module.exports = function(app, speak){
       runPyCommand("plugins/ardlights.py", options);
     }, 6*1000)
     setTimeout(function(){
-      getWeather(res, zipcode);
+      getWeather(res, zipcode)
     }, 9*1000)
-    res.send("Good Morning! Starting wake mode!");
+    res.send("Good Morning. Starting wake mode!")
   });
   app.get("/weather", function(req, res){
     try{
@@ -117,17 +119,13 @@ module.exports = function(app, speak){
   }
   function runPyCommand(command, opts){
     command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");
-    if(speaking_now!=1){
-      speaking_now = 1;
-      PythonShell.run(command, opts, function (err, results) {
-        if (err){
-          console.log("Lights error: ", err);
-          speak(String(err).split(":")[2]);
-        }
-        console.log('results: %j', results);
-        speaking_now = 0;
-        return results
-      });
-    }
+    PythonShell.run(command, opts, function (err, results) {
+      if (err){
+        console.log("Lights error: ", err);
+        speak(String(err).split(":")[2]);
+      }
+      console.log('results: %j', results);
+      return results
+    });
   }
 }

@@ -13,7 +13,7 @@ def sendSerial(msg):
 			print "Received: "+rec
 		ser.close();
 	else:
-		time.sleep(1.5);
+		time.sleep(1.8);
 		raise Exception("USB disconnected.");
 def main(argv):
 	color = argv[0]

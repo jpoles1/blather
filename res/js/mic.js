@@ -99,7 +99,11 @@ $(function(){
           setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
         }
         else if(["wake", "week"].contains(tag)){
-          handleCommand("/wake", {}, "Staring Wake Mode&trade;.", -1)
+          handleCommand("/wake", {}, "Staring Wake Mode&trade;.", -1);
+          setTimeout(function(){
+            commandReady = 1;
+            handleCommand("/weather", {}, "Fetching the weather..", 8)
+          }, 9*1000)
         }
         else{
           console.log("Could not activate the mode:", tag)

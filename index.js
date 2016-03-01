@@ -23,17 +23,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Serves all files in the res folder as static resources
 app.use('/res', express.static('res'));
 //Universal Voice Command
-function runSysCommand(command, opts){
+var now_speaking = 0;
+function runSysCommand(command, opts, cb){
   child = exec(command+" "+opts, function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
       console.log('exec error: ' + error);
     }
+    cb();
   });
 }
 function speak(phrase){
-  runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "\""+phrase+"\"");
+  if(now_speaking==0){
+    now_speaking=1;
+    runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "'"+phrase+"'", function(){now_speaking=0;});
+  }
+  else{
+    console.log("Ignoring espeak command, don't want to talk over myself.")
+  }
 }
 //Load .env file config (contains DB info)
 require("./routing/main_logic")(app, speak)
