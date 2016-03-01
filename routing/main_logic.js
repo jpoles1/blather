@@ -9,6 +9,7 @@ var moment = require("moment")
 var Wunderground = require('wundergroundnode');
 var wunderground = new Wunderground(process.env.WUNDERGROUND_APIKEY);
 var speaking_now = 0;
+var zipcode = "77005"
 Array.prototype.contains = function(obj) {
     var i = this.length;
     while (i--) {
@@ -54,13 +55,61 @@ module.exports = function(app){
     }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
   })
+  app.get("/sexytime", function(req,res){
+    speak("Activating Love Mode... ... Have fun!");
+    setTimeout(function(){
+      var options = {
+        args: ["fade"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 3*1000)
+    setTimeout(function(){
+      runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
+    }, 6*1000)
+    res.send("LOVE MODE&trade; ACTIVATE");
+  })
+  app.get("/sleep", function(req,res){
+    speak("Good night. Entering sleep mode.");
+    setTimeout(function(){
+      var options = {
+        args: ["red"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 3*1000)
+    setTimeout(function(){
+      var options = {
+        args: ["dim"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 6*1000)
+    res.send("Good night. Entering sleep mode.");
+  });
+  app.get("/wake", function(req,res){
+    speak("Good Morning. Starting wake mode!");
+    setTimeout(function(){
+      var options = {
+        args: ["green"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 3*1000)
+    setTimeout(function(){
+      var options = {
+        args: ["bright"]
+      };
+      runPyCommand("plugins/ardlights.py", options);
+    }, 6*1000)
+    setTimeout(function(){
+      getWeather(res, zipcode);
+    }, 9*1000)
+    res.send("Good Morning! Starting wake mode!");
+  });
   app.get("/weather", function(req, res){
     try{
       var loc = req.query.loc;
       getWeather(res, loc)
     }
     catch(e){
-      getWeather(res, "77005")
+      getWeather(res, zipcode)
     }
   });
   app.get("/lights", function(req,res){

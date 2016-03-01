@@ -54,7 +54,7 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["red", "brad", "rad", "ram", "fred", "brother", "bro"].contains(name)){name = "rrad";}
+        if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "demo"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
@@ -80,9 +80,24 @@ $(function(){
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
-      '(enter) (activate) (start) love mode': function(){
-        handleCommand("/sexytime", {}, "Staring Love Mode&trade;.", -1)
-        stopListening()
+      '(enter) (activate) (start) :tag mode': function(tag){
+        tag = tag.toLowerCase();
+        if(["love", "sex", "sexy", "sexytime"].contains(tag)){
+          handleCommand("/sexytime", {}, "Staring Love Mode&trade;.", -1)
+          stopListening()
+        }
+        else if(["sleep"].contains(tag)){
+          var sleeptime = 7; //hrs
+          handleCommand("/sleep", {}, "Staring Sleep Mode&trade;.", -1)
+          stopListening();
+          setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
+        }
+        else if(["wake", "week"].contains(tag)){
+          handleCommand("/wake", {}, "Staring Wake Mode&trade;.", -1)
+        }
+        else{
+          console.log("Could not activate the mode:", tag)
+        }
       },
       '(off) (kill)': function(){
         stopListening()
