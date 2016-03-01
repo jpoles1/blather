@@ -37,11 +37,17 @@ $(function(){
       }
     }
     function endRecognition(){
-      if(commandReady == 1){
+      if(commandReady != 0){
         beep_lo.play();
       }
       commandReady = 0;
       $("#notify").html("");
+    }
+    function stopListening(){
+      beep_lo.play();
+      setTimeout(function(){beep_lo.play();}, 400);
+      endRecognition()
+      SpeechKITT.abortRecognition()
     }
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
@@ -63,7 +69,7 @@ $(function(){
         handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 8)
       },*/
       "(what's) (what) (is) (the) weather": function() {
-        handleCommand("/weather", {}, "Fetching the weather in"+location, 8)
+        handleCommand("/weather", {}, "Fetching the weather..", 8)
       },
       "(what's) (what) (is) (the) time (is it)": function(){
         handleCommand("/time", {}, "Fetching time...", 2.5)
@@ -76,12 +82,10 @@ $(function(){
       },
       '(enter) (activate) (start) love mode': function(){
         handleCommand("/sexytime", {}, "Staring Love Mode&trade;.", -1)
-        endRecognition()
-        SpeechKITT.abortRecognition()
+        stopListening()
       },
       '(off) (kill)': function(){
-        endRecognition()
-        SpeechKITT.abortRecognition()
+        stopListening()
       }
     };
     annyang.debug();

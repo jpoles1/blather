@@ -76,13 +76,13 @@ module.exports = function(app){
 function getWeather(res, loc){
   wunderground.conditions().request(loc, function(err, response){
     current_weather = response["current_observation"]
-    report = "It is currently "+String(current_weather["temp_f"]).split(".")[0]+" degrees and "+current_weather["weather"]+". ";
+    report1 = "It is currently "+String(current_weather["temp_f"]).split(".")[0]+" degrees and "+current_weather["weather"]+". ";
     wunderground.forecast().request(loc, function(err, response){
       //report+=response["forecast"]["txt_forecast"]["forecastday"][0]["fcttext"]
       future_weather = response["forecast"]["simpleforecast"]["forecastday"][0]
-      report+="On "+future_weather["date"]["weekday"]+", high of "+future_weather["high"]["fahrenheit"]+". "+future_weather["conditions"]+"."
-      speak(report);
-      res.send("Got weather courtesy of Weather Underground:<br><br>"+report)
+      report2 ="On "+future_weather["date"]["weekday"]+", high of "+future_weather["high"]["fahrenheit"]+". "+future_weather["conditions"]+"."
+      speak(report1+report2);
+      res.send("<div style='font-size: 32pt'>Weather courtesy of Wunderground:<br>"+report1+"<br>"+report2+"</div>")
     });
   });
 }
