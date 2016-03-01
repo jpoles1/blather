@@ -51,7 +51,7 @@ module.exports = function(app){
     }, 3*1000)
     setTimeout(function(){
       var songs = ["marvin_gaye.mp3", "bad_touch.mp3"]
-      var song = songs[Math.floor(Math.random()*songs.length]
+      var song = songs[Math.floor(Math.random()*songs.length)]
       runSysCommand("mplayer", __dirname+"/../res/sound/"+song)
     }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
