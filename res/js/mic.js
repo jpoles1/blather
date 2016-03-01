@@ -88,26 +88,29 @@ $(function(){
         endRecognition()
       },
       '(enter) (activate) (start) :tag mode': function(tag){
-        tag = tag.toLowerCase();
-        if(["love", "sex", "sexy", "sexytime"].contains(tag)){
-          handleCommand("/sexytime", {}, "Starting Love Mode&trade;.", -1)
-          stopListening()
-        }
-        else if(["sleep"].contains(tag)){
-          var sleeptime = 7; //hrs
-          handleCommand("/sleep", {}, "Starting Sleep Mode&trade;.", -1)
-          stopListening();
-          setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
-        }
-        else if(["wake", "week"].contains(tag)){
-          handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
-          setTimeout(function(){
-            commandReady = 1;
-            handleCommand("/weather", {}, "Fetching the weather..", 8)
-          }, 7*1000)
-        }
-        else{
-          console.log("Could not activate the mode:", tag)
+        if(commandReady){
+          commandReady = 0;
+          tag = tag.toLowerCase();
+          if(["love", "sex", "sexy", "sexytime"].contains(tag)){
+            handleCommand("/sexytime", {}, "Starting Love Mode&trade;.", -1)
+            stopListening()
+          }
+          else if(["sleep"].contains(tag)){
+            var sleeptime = 7; //hrs
+            handleCommand("/sleep", {}, "Starting Sleep Mode&trade;.", -1)
+            stopListening();
+            setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
+          }
+          else if(["wake", "week"].contains(tag)){
+            handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
+            setTimeout(function(){
+              commandReady = 1;
+              handleCommand("/weather", {}, "Fetching the weather..", 8)
+            }, 8*1000)
+          }
+          else{
+            console.log("Could not activate the mode:", tag)
+          }
         }
       },
       '(off) (kill)': function(){
