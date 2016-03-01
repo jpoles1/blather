@@ -66,6 +66,7 @@ $(function(){
         if(["blew"].contains(tag)){tag = "blue";}
         if(["screen"].contains(tag)){tag = "green";}
         if(["right"].contains(tag)){tag = "bright";}
+        if(["paint"].contains(tag)){tag = "pink";}
         if(["babe", "paid"].contains(tag)){tag = "fade";}
         if(["tim", "them"].contains(tag)){tag = "dim";}
         handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
