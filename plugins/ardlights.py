@@ -1,21 +1,22 @@
 import sys, serial, time, glob
-def sendSerial(msg):
+def sendSerial(comm_list):
 	usbser_list = glob.glob('/dev/ttyUSB*')
 	if len(usbser_list) > 0:
 		ser = serial.Serial(usbser_list[0], 9600, timeout=5);
-		print "Sending: "+msg
 		rec =  ser.readline().strip();
 		print "Received: "+rec
-		rec = "ready"
-		while rec in ["ready", ""]:
-			ser.write(msg);
-			rec =  ser.readline().strip();
-			print "Received: "+rec
+		for code in comm_list:
+			rec = "ready";
+			while rec in ["ready", ""]:
+				ser.write(code);
+				rec =  ser.readline().strip();
+				print "Received: "+rec
 		ser.close();
 	else:
-		time.sleep(1.8);
+		time.sleep(2);
 		raise Exception("USB disconnected.");
 def main(argv):
+	comm_list = []
 	for color in argv:
 		print color
 		if(color in ["off", "toggle"]):
@@ -39,6 +40,7 @@ def main(argv):
 			"strobe": "0xFFD02F",
 			"fade": "0xFFE01F"
 		}
-		sendSerial(irsig[color])
+		comm_list.append(irsig[color])
+	sendSerial(comm_list)
 if __name__ == "__main__":
     main(sys.argv[1:])
