@@ -61,16 +61,35 @@ $(function(){
           allowRecognition(ready_time);
         }
       },
-      '(set) (change) lights (to) :tag': function(tag) {
-        if(["read"].contains(tag)){tag = "red";}
-        if(["blew"].contains(tag)){tag = "blue";}
-        if(["screen"].contains(tag)){tag = "green";}
-        if(["right"].contains(tag)){tag = "bright";}
-        if(["paint"].contains(tag)){tag = "pink";}
-        if(["people"].contains(tag)){tag = "purple";}
-        if(["babe", "paid"].contains(tag)){tag = "fade";}
-        if(["tim", "them"].contains(tag)){tag = "dim";}
-        handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
+      '(set) (change) lights (to) *tag': function(tag) {
+        orig_tag = tag;
+        function correctLightCommand(tag){
+          if(["read"].contains(tag)){tag = "red";}
+          if(["blew"].contains(tag)){tag = "blue";}
+          if(["screen"].contains(tag)){tag = "green";}
+          if(["right"].contains(tag)){tag = "bright";}
+          if(["paint"].contains(tag)){tag = "pink";}
+          if(["people"].contains(tag)){tag = "purple";}
+          if(["babe", "paid"].contains(tag)){tag = "fade";}
+          if(["tim", "them"].contains(tag)){tag = "dim";}
+          return tag;
+        }
+        //I don't think there's any situation in which I would want more than two tags.
+        tagwords = tag.split(" ")
+        try{
+          if(tagwords.length == 1){
+            tag = correctLightCommand(tag);
+          }
+          //For descriptors like "dark blue" "bright red"
+          else if(tagwords.length == 2){
+            tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1]);
+          }
+          console.log(tag)
+          handleCommand("/lights", {"command": tag}, "Setting lights to: "+orig_tag, 3)
+        }
+        catch(e){
+          $("#notify").html("Did not recognize light command!");
+        }
       },
       /*Voice recognition cannot determine zip codes accurately, so this feature has been deactivated.
       "(what's) (what) (is) (the) weather in *location": function(location) {

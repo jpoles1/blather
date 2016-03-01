@@ -92,9 +92,8 @@ module.exports = function(app, speak){
   });
   app.get("/lights", function(req,res){
     command = req.query.command.toLowerCase();
-    console.log(command);
     var options = {
-      args: [command]
+      args: command.split(" ").reverse()
     };
     speak("Setting lights to "+command)
     runPyCommand("plugins/ardlights.py", options);
