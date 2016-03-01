@@ -89,7 +89,6 @@ $(function(){
       },
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady){
-          commandReady = 0;
           tag = tag.toLowerCase();
           if(["love", "sex", "sexy", "sexytime"].contains(tag)){
             handleCommand("/sexytime", {}, "Starting Love Mode&trade;.", -1)
