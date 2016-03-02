@@ -28,8 +28,11 @@ void loop() {
     //Serial.println(serdat);
     unsigned long color = strtol(serdat.c_str(), NULL, 16);
     int sendct = 1;
-    if(color==IR_DIM || color==IR_BRIGHT || color==IR_FAST || color==IR_SLOW){
+    if(color==IR_DIM || color==IR_BRIGHT){
       sendct = 15;
+    }
+    if(color==IR_FAST || color==IR_SLOW){
+      sendct = 7; 
     }
     else if(color==IR_R || color==IR_G ||color==IR_B || color==IR_W){
       sendct = 3;
