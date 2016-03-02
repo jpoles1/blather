@@ -81,9 +81,12 @@ $(function(){
           if(tagwords.length == 1){
             tag = correctLightCommand(tag);
           }
-          //For descriptors like "dark blue" "bright red"
+          //For descriptors like "dark blue" "bright red" "fast fade"
           else if(tagwords.length == 2){
             tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1]);
+          }
+          else if(tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")){
+            tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1])+" toggle";
           }
           console.log(tag)
           handleCommand("/lights", {"command": tag}, "Setting lights to: "+orig_tag, 3)

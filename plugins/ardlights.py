@@ -38,7 +38,10 @@ def main(argv):
 			"bright": "0xFF3AC5",
 			"dim": "0xFFBA45",
 			"strobe": "0xFFD02F",
-			"fade": "0xFFE01F"
+			"fade": "0xFFE01F",
+			"jump": "0xFF20DF",
+			"slow": "0xFFC837",
+			"fast": "0xFFE817"
 		}
 		comm_list.append(irsig[color])
 	sendSerial(comm_list)

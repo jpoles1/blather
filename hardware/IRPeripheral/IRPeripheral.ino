@@ -3,21 +3,15 @@
 #include <IRremote.h>
 
 //Define some rudimentary IR Codes (for reference)
-#define	IR_BPlus  0xFF3AC5	// 
-#define	IR_BMinus 0xFFBA45	// 
 #define	IR_POW 	  0xFF02FD	// 
 #define	IR_R 	  0xFF1AE5	// 
 #define	IR_G 	  0xFFA25D	// 
 #define	IR_B  	  0xFF9A65	// 
 #define	IR_W 	  0xFF22DD	// 
-#define	IR_FLASH  0xFFD02F	//
 #define	IR_DIM    0xFFBA45	// 
 #define	IR_BRIGHT 0xFF3AC5	// 
-#define	IR_JUMP3  0xFF20DF	// 
-#define	IR_JUMP7  0xFFA05F	// 
-#define	IR_FADE3  0xFF609F	// 
-#define	IR_FADE7  0xFFE01F	// 
-
+#define IR_FAST   0xFFE817
+#define IR_SLOW   0xFFC837
 //Where we store serial data
 String serdat = "";
 //Setup IR Blaster
@@ -34,8 +28,8 @@ void loop() {
     //Serial.println(serdat);
     unsigned long color = strtol(serdat.c_str(), NULL, 16);
     int sendct = 1;
-    if(color==IR_DIM || color==IR_BRIGHT || color==IR_BRIGHT){
-      sendct = 10;
+    if(color==IR_DIM || color==IR_BRIGHT || color==IR_FAST || color==IR_SLOW){
+      sendct = 15;
     }
     else if(color==IR_R || color==IR_G ||color==IR_B || color==IR_W){
       sendct = 3;
@@ -43,7 +37,7 @@ void loop() {
     int i=0;
     while(i<sendct){
       irsend.sendNEC(color, 32);
-      delay(50);
+      delay(100);
       i=i+1;
     }
     Serial.println("Blasting: "+serdat+"; "+color);     
