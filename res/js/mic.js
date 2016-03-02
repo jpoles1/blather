@@ -70,7 +70,7 @@ $(function(){
           if(["right"].contains(tag)){tag = "bright";}
           if(["paint"].contains(tag)){tag = "pink";}
           if(["people"].contains(tag)){tag = "purple";}
-          if(["babe", "paid", "peed"]).contains(tag)){tag = "fade";}
+          if(["babe", "paid", "peed"].contains(tag)){tag = "fade";}
           if(["tim", "them"].contains(tag)){tag = "dim";}
           if(["ggle"].contains(tag)){tag = "toggle";}
           return tag;
