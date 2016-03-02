@@ -49,6 +49,7 @@ module.exports = function(app, speak){
     res.send("LOVE MODE&trade; ACTIVATE");
   })
   app.get("/sleep", function(req,res){
+    res.send("Good night. Entering sleep mode.");
     speak("Good night. Entering sleep mode.");
     setTimeout(function(){
       var options = {
@@ -57,9 +58,9 @@ module.exports = function(app, speak){
       speak("Turning lights off.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
-    res.send("Good night. Entering sleep mode.");
   });
   app.get("/wake", function(req,res){
+    res.send("Good Morning. Starting wake mode!");
     speak("Good Morning. Starting wake mode!");
     setTimeout(function(){
       var options = {
