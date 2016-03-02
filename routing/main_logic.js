@@ -35,18 +35,15 @@ module.exports = function(app, speak){
     }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
   })
-  app.get("/sexytime", function(req,res){
-    speak("Activating Love Mode... ... Have fun!");
+  app.get("/party", function(req,res){
+    speak("Activating Party Mode... ... Have fun!");
     setTimeout(function(){
       var options = {
-        args: ["fade"]
+        args: ["strobe", "fast", "fast"]
       };
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
-    setTimeout(function(){
-      runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
-    }, 6*1000)
-    res.send("LOVE MODE&trade; ACTIVATE");
+    res.send("Party Mode&trade; ACTIVATE");
   })
   app.get("/sleep", function(req,res){
     res.send("Good night. Entering sleep mode.");

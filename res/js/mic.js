@@ -126,6 +126,10 @@ $(function(){
             stopListening();
             setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
           }
+          else if(["party"].contains(tag)){
+            handleCommand("/party", {}, "Starting Party Mode&trade;.", -1)
+            stopListening();
+          }
           else if(["wake", "week", "with"].contains(tag)){
             handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
             setTimeout(function(){
