@@ -39,7 +39,7 @@ module.exports = function(app, speak){
     speak("Activating Party Mode... ... Have fun!");
     setTimeout(function(){
       var options = {
-        args: ["strobe", "fast", "fast"]
+        args: ["fast", "fast", "strobe"]
       };
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
