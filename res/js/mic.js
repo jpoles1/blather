@@ -73,7 +73,7 @@ $(function(){
           if(["babe", "paid", "peed"].contains(tag)){tag = "fade";}
           if(["tim", "them"].contains(tag)){tag = "dim";}
           if(["ggle"].contains(tag)){tag = "toggle";}
-          if(["flow", "low"].contains(tag)){tag = "slow";}
+          if(["flow", "low", "slope"].contains(tag)){tag = "slow";}
           if(["past"].contains(tag)){tag = "fast";}
           return tag;
         }
