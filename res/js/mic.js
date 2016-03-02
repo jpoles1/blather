@@ -72,6 +72,7 @@ $(function(){
           if(["people"].contains(tag)){tag = "purple";}
           if(["babe", "paid"].contains(tag)){tag = "fade";}
           if(["tim", "them"].contains(tag)){tag = "dim";}
+          if(["ggle"].contains(tag)){tag = "toggle";}
           return tag;
         }
         //I don't think there's any situation in which I would want more than two tags.
