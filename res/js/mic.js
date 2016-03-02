@@ -120,7 +120,7 @@ $(function(){
             stopListening();
             setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
           }
-          else if(["wake", "week"].contains(tag)){
+          else if(["wake", "week", "with"].contains(tag)){
             handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
             setTimeout(function(){
               commandReady = 1;
