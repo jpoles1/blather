@@ -125,7 +125,7 @@ $(function(){
             setTimeout(function(){
               commandReady = 1;
               handleCommand("/weather", {}, "Fetching the weather..", 8)
-            }, 8*1000)
+            }, 6*1000)
           }
           else{
             console.log("Could not activate the mode:", tag)

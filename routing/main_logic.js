@@ -52,34 +52,22 @@ module.exports = function(app, speak){
     speak("Good night. Entering sleep mode.");
     setTimeout(function(){
       var options = {
-        args: ["red"]
+        args: ["off"]
       };
-      speak("Setting lights to red then dimming lights.")
+      speak("Turning lights off.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
-    setTimeout(function(){
-      var options = {
-        args: ["dim"]
-      };
-      runPyCommand("plugins/ardlights.py", options);
-    }, 6*1000)
     res.send("Good night. Entering sleep mode.");
   });
   app.get("/wake", function(req,res){
     speak("Good Morning. Starting wake mode!");
     setTimeout(function(){
       var options = {
-        args: ["green"]
+        args: ["on", "green", "bright"]
       };
-      speak("Setting lights to green then raising lights.")
+      speak("Turning lights on. Setting to bright green.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
-    setTimeout(function(){
-      var options = {
-        args: ["bright"]
-      };
-      runPyCommand("plugins/ardlights.py", options);
-    }, 6*1000)
   });
   app.get("/weather", function(req, res){
     try{
