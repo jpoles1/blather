@@ -70,7 +70,7 @@ $(function(){
           if(["right"].contains(tag)){tag = "bright";}
           if(["paint"].contains(tag)){tag = "pink";}
           if(["people"].contains(tag)){tag = "purple";}
-          if(["babe", "paid"].contains(tag)){tag = "fade";}
+          if(["babe", "paid", "peed"]).contains(tag)){tag = "fade";}
           if(["tim", "them"].contains(tag)){tag = "dim";}
           if(["ggle"].contains(tag)){tag = "toggle";}
           return tag;
@@ -85,7 +85,7 @@ $(function(){
           else if(tagwords.length == 2){
             tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1]);
           }
-          else if(tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")){
+          else if(tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle"))){
             tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1])+" toggle";
           }
           console.log(tag)
