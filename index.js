@@ -23,8 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Serves all files in the res folder as static resources
 app.use('/res', express.static('res'));
 //Universal Voice Command
-var now_speaking = 0;
-function runSysCommand(command, opts, cb){
+var domoActuate = {};
+domoActuate.now_speaking = 0;
+domoActuate.runSysCommand = function(command, opts, cb){
   child = exec(command+" "+opts, function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
@@ -34,18 +35,19 @@ function runSysCommand(command, opts, cb){
     cb();
   });
 }
-function speak(phrase){
-  if(now_speaking==0){
-    now_speaking=1;
-    runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "'"+phrase+"'", function(){now_speaking=0;});
+domoActuate.speak = function(phrase){
+  var actuate = this;
+  if(actuate.now_speaking==0){
+    actuate.now_speaking=1;
+    actuate.runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "'"+phrase+"'", function(){actuate.now_speaking=0;});
   }
   else{
     console.log("Ignoring espeak command, don't want to talk over myself.")
   }
 }
 //Load .env file config (contains DB info)
-require("./routing/main_logic")(app, speak)
-require("./routing/utility_logic")(app, speak)
+require("./routing/main_logic")(app, domoActuate)
+require("./routing/utility_logic")(app, domoActuate)
 //Set the port for the server
 http_port = 3030;
 https_port = 4040;//Tell server to start listening on above port

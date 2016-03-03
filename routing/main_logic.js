@@ -14,7 +14,7 @@ Array.prototype.contains = function(obj) {
     }
     return false;
 }
-module.exports = function(app, speak){
+module.exports = function(app, domoActuate){
   app.get("/voice", function(req, res){
     heard_command = req.query.command.toLowerCase().split(" ");
     console.log(heard_command);
@@ -23,7 +23,7 @@ module.exports = function(app, speak){
     }
   });
   app.get("/sexytime", function(req,res){
-    speak("Activating Love Mode... ... Have fun!");
+    domoActuate.speak("Activating Love Mode... ... Have fun!");
     setTimeout(function(){
       var options = {
         args: ["fade"]
@@ -31,12 +31,12 @@ module.exports = function(app, speak){
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     setTimeout(function(){
-      runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
+      domoActuate.runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
     }, 6*1000)
     res.send("LOVE MODE&trade; ACTIVATE");
   })
   app.get("/party", function(req,res){
-    speak("Activating Party Mode... ... Have fun!");
+    domoActuate.speak("Activating Party Mode... ... Have fun!");
     setTimeout(function(){
       var options = {
         args: ["jump", "fast"]
@@ -47,23 +47,23 @@ module.exports = function(app, speak){
   })
   app.get("/sleep", function(req,res){
     res.send("Good night. Entering sleep mode.");
-    speak("Good night. Entering sleep mode.");
+    domoActuate.speak("Good night. Entering sleep mode.");
     setTimeout(function(){
       var options = {
         args: ["off"]
       };
-      speak("Turning lights off.")
+      domoActuate.speak("Turning lights off.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
   });
   app.get("/wake", function(req,res){
     res.send("Good Morning. Starting wake mode!");
-    speak("Good Morning. Starting wake mode!");
+    domoActuate.speak("Good Morning. Starting wake mode!");
     setTimeout(function(){
       var options = {
         args: ["on", "green", "bright"]
       };
-      speak("Turning lights on. Setting to bright green.")
+      domoActuate.speak("Turning lights on. Setting to bright green.")
       runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
   });
@@ -81,7 +81,7 @@ module.exports = function(app, speak){
     var options = {
       args: command.split(" ").reverse()
     };
-    speak("Setting lights to "+command)
+    domoActuate.speak("Setting lights to "+command)
     runPyCommand("plugins/ardlights.py", options);
     res.send("Sent command: "+ command)
   });
@@ -93,7 +93,7 @@ module.exports = function(app, speak){
         //report+=response["forecast"]["txt_forecast"]["forecastday"][0]["fcttext"]
         future_weather = response["forecast"]["simpleforecast"]["forecastday"][0]
         report2 ="On "+future_weather["date"]["weekday"]+", high of "+future_weather["high"]["fahrenheit"]+". "+future_weather["conditions"]+"."
-        speak(report1+report2);
+        domoActuate.speak(report1+report2);
         res.send("<div style='font-size: 32pt'>Weather courtesy of Wunderground:<br>"+report1+"<br>"+report2+"</div>")
       });
     });
@@ -103,7 +103,7 @@ module.exports = function(app, speak){
     PythonShell.run(command, opts, function (err, results) {
       if (err){
         console.log("Lights error: ", err);
-        speak(String(err).split(":")[2]);
+        domoActuate.speak(String(err).split(":")[2]);
       }
       console.log('results: %j', results);
       return results
