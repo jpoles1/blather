@@ -55,13 +55,13 @@ $(function(){
       'hey *name': function(name) {
         name = name.toLowerCase();
         if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro"].contains(name)){name = "rrad";}
-        if(["dummy", "don't know", "dumbo", "don't", "demo"].contains(name)){name = "domo";}
+        if(["dummy", "don't know", "dumbo", "don't", "demo", "mama", "there", "number"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
           allowRecognition(ready_time);
         }
       },
-      '(set) (change) lights (to) *tag': function(tag) {
+      '(set) (change) light(s) (to) *tag': function(tag) {
         orig_tag = tag;
         function correctLightCommand(tag){
           if(["read"].contains(tag)){tag = "red";}
