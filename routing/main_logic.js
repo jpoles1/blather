@@ -1,5 +1,3 @@
-//Setup Python Commands
-var PythonShell = require('python-shell');
 //Setup Weater
 var Wunderground = require('wundergroundnode');
 var wunderground = new Wunderground(process.env.WUNDERGROUND_APIKEY);
@@ -28,7 +26,7 @@ module.exports = function(app, domoActuate){
       var options = {
         args: ["fade"]
       };
-      runPyCommand("plugins/ardlights.py", options);
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     setTimeout(function(){
       domoActuate.runSysCommand("mplayer -shuffle", __dirname+"/../res/music/*.mp3")
@@ -41,7 +39,7 @@ module.exports = function(app, domoActuate){
       var options = {
         args: ["jump", "fast"]
       };
-      runPyCommand("plugins/ardlights.py", options);
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
     res.send("Party Mode&trade; ACTIVATE");
   })
@@ -53,7 +51,7 @@ module.exports = function(app, domoActuate){
         args: ["off"]
       };
       domoActuate.speak("Turning lights off.")
-      runPyCommand("plugins/ardlights.py", options);
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
   });
   app.get("/wake", function(req,res){
@@ -64,7 +62,7 @@ module.exports = function(app, domoActuate){
         args: ["on", "green", "bright"]
       };
       domoActuate.speak("Turning lights on. Setting to bright green.")
-      runPyCommand("plugins/ardlights.py", options);
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
     }, 3*1000)
   });
   app.get("/weather", function(req, res){
@@ -82,7 +80,7 @@ module.exports = function(app, domoActuate){
       args: command.split(" ").reverse()
     };
     domoActuate.speak("Setting lights to "+command)
-    runPyCommand("plugins/ardlights.py", options);
+    domoActuate.runPyCommand("plugins/ardlights.py", options);
     res.send("Sent command: "+ command)
   });
   function getWeather(res, loc){
@@ -96,17 +94,6 @@ module.exports = function(app, domoActuate){
         domoActuate.speak(report1+report2);
         res.send("<div style='font-size: 32pt'>Weather courtesy of Wunderground:<br>"+report1+"<br>"+report2+"</div>")
       });
-    });
-  }
-  function runPyCommand(command, opts){
-    command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");
-    PythonShell.run(command, opts, function (err, results) {
-      if (err){
-        console.log("Lights error: ", err);
-        domoActuate.speak(String(err).split(":")[2]);
-      }
-      console.log('results: %j', results);
-      return results
     });
   }
 }

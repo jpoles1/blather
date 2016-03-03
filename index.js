@@ -1,8 +1,10 @@
 //Get config
 require('dotenv').config();
-//Setup Unix Command
+//Setup Unix Commands
 var exec = require('child_process').exec;
 var child;
+//Setup Python Commands
+var PythonShell = require('python-shell');
 //Setup Express (our web server) and other express reqs
 var fs = require("fs")
 var http = require("http")
@@ -44,6 +46,17 @@ domoActuate.speak = function(phrase){
   else{
     console.log("Ignoring espeak command, don't want to talk over myself.")
   }
+}
+domoActuate.runPyCommand = function(command, opts){
+  command = command.replace(/[,#!$%\^&\*;:{}=`~()]/g,"");
+  PythonShell.run(command, opts, function (err, results) {
+    if (err){
+      console.log("Lights error: ", err);
+      domoActuate.speak(String(err).split(":")[2]);
+    }
+    console.log('results: %j', results);
+    return results
+  });
 }
 //Load .env file config (contains DB info)
 require("./routing/main_logic")(app, domoActuate)
