@@ -12,13 +12,22 @@ Array.prototype.contains = function(obj) {
     }
     return false;
 }
-module.exports = function(app, domoActuate){
+module.exports = function(app, domoActuate, domoValidate){
   app.get("/voice", function(req, res){
     heard_command = req.query.command.toLowerCase().split(" ");
     console.log(heard_command);
     if(heard_command.contains("weather") || heard_command.contains("whether")){
       getWeather(res, "77005");
     }
+  });
+  var confused = function(res){
+    var phrase_list = ["Sorry, I don't understand", "I'm a bit confused", "Pardon? I didn't catch that."]
+    var phrase = phrase_list[Math.floor(Math.random() * phrase_list.length)]
+    domoActuate.speak(phrase);
+    res.send(phrase);
+  }
+  app.get("/confused", function(req, res){
+    confused(res);
   });
   app.get("/sexytime", function(req,res){
     domoActuate.speak("Activating Love Mode... ... Have fun!");
@@ -76,12 +85,20 @@ module.exports = function(app, domoActuate){
   });
   app.get("/lights", function(req,res){
     command = req.query.command.toLowerCase();
-    var options = {
-      args: command.split(" ").reverse()
-    };
-    domoActuate.speak("Setting lights to "+command)
-    domoActuate.runPyCommand("plugins/ardlights.py", options);
-    res.send("Sent command: "+ command)
+    var command_list = domoValidate.fixLEDTag(command);
+    if(command_list.length>0){
+      console.log(command_list)
+      var options = {
+        args: command_list
+      };
+      domoActuate.speak("Setting lights to "+command)
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      res.send("Sent command: "+ command)
+    }
+    else{
+      //res.send("Invalid command")
+      confused(res)
+    }
   });
   function getWeather(res, loc){
     wunderground.conditions().request(loc, function(err, response){

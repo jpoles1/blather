@@ -54,47 +54,25 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro"].contains(name)){name = "rrad";}
-        if(["dummy", "don't know", "dumbo", "don't", "demo", "mama", "there", "number"].contains(name)){name = "domo";}
+        if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread"].contains(name)){name = "rrad";}
+        if(["dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "domo";}
         if(["rrad", "domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
           allowRecognition(ready_time);
         }
       },
       '(set) (change) light(s) (to) *tag': function(tag) {
-        orig_tag = tag;
-        function correctLightCommand(tag){
-          if(["read"].contains(tag)){tag = "red";}
-          if(["blew"].contains(tag)){tag = "blue";}
-          if(["screen"].contains(tag)){tag = "green";}
-          if(["right"].contains(tag)){tag = "bright";}
-          if(["paint"].contains(tag)){tag = "pink";}
-          if(["people"].contains(tag)){tag = "purple";}
-          if(["babe", "paid", "peed"].contains(tag)){tag = "fade";}
-          if(["tim", "them"].contains(tag)){tag = "dim";}
-          if(["ggle"].contains(tag)){tag = "toggle";}
-          if(["flow", "low", "slope"].contains(tag)){tag = "slow";}
-          if(["past"].contains(tag)){tag = "fast";}
-          return tag;
-        }
         //I don't think there's any situation in which I would want more than two tags.
-        tagwords = tag.split(" ")
-        try{
-          if(tagwords.length == 1){
-            tag = correctLightCommand(tag);
-          }
-          //For descriptors like "dark blue" "bright red" "fast fade"
-          else if(tagwords.length == 2){
-            tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1]);
-          }
-          else if(tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle"))){
-            tag = correctLightCommand(tagwords[0])+" "+correctLightCommand(tagwords[1])+" toggle";
-          }
-          console.log(tag)
-          handleCommand("/lights", {"command": tag}, "Setting lights to: "+orig_tag, 3)
+        var tagwords = domoValidate.fixLEDTag(tag);
+        tag = tagwords.join(" ")
+        var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
+        if(valid_led_command){
+          handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
         }
-        catch(e){
+        else{
           $("#notify").html("Did not recognize light command!");
+          handleCommand("/confused", {}, "Did not recognize light command!", 3)
+          return false;
         }
       },
       /*Voice recognition cannot determine zip codes accurately, so this feature has been deactivated.
