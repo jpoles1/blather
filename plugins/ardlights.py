@@ -23,8 +23,6 @@ def main(argv):
 			color="on"
 		if(color in ["dark"]):
 			color="dim"
-		if(color in ["light"]):
-			color="bright"
 		irsig={
 			"on": "0xFF02FD",
 			"red": "0xFF1AE5",

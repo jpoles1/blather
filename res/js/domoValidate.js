@@ -14,7 +14,7 @@ exports.correctLEDCommand = function(tag){
   if(["read"].contains(tag)){tag = "red";}
   if(["blew"].contains(tag)){tag = "blue";}
   if(["screen", "creen"].contains(tag)){tag = "green";}
-  if(["right"].contains(tag)){tag = "bright";}
+  if(["right", "light"].contains(tag)){tag = "bright";}
   if(["paint"].contains(tag)){tag = "pink";}
   if(["people"].contains(tag)){tag = "purple";}
   if(["babe", "paid", "peed"].contains(tag)){tag = "fade";}
@@ -24,7 +24,7 @@ exports.correctLEDCommand = function(tag){
   if(["past"].contains(tag)){tag = "fast";}
   var led_power = ["toggle", "on", "off"];
   var led_colors = ["red","orange","pink","blue","aqua","purple","green","white"];
-  var led_settings = ["bright","dim","slow","fast"];
+  var led_settings = ["bright", "dark", "dim","slow","fast"];
   var led_modes = ["strobe","fade","jump"];
   var keywords = [].concat(led_power,led_colors,led_settings,led_modes)
   if(keywords.contains(tag)){
