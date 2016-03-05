@@ -125,17 +125,17 @@ module.exports = function(app, domoActuate){
         return;
       }
       var events = response.items;
-      var event_string = "";
+      var event_string = "On today's schedule you have...";
       console.log(events);
       if (events.length == 0) {
         domoActuate.speak('No events left today');
       } else {
         for (var i = 0; i < events.length; i++) {
-          if(i!=0){event_string +="; then "}
+          if(i!=0){event_string +="... then you have..."}
           var event = events[i];
           var start = event.start.dateTime || event.start.date;
           console.log('%s - %s', start, event.summary);
-          event_string += "At "+moment(start).format("HH:mm")+" you have "+event.summary
+          event_string += event.summary+" at "+moment(start).format("HH:mm")
         }
         domoActuate.speak(event_string);
       }

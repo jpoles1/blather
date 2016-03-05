@@ -19,7 +19,7 @@ domoActuate.speak = function(phrase){
   var actuate = this;
   if(actuate.now_speaking==0){
     actuate.now_speaking=1;
-    actuate.runSysCommand("espeak -vmb-en1 -p40 -s160 -a180", "\""+phrase+"\"", function(){actuate.now_speaking=0;});
+    actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){actuate.now_speaking=0;});
   }
   else{
     console.log("Ignoring espeak command, don't want to talk over myself.")

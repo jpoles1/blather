@@ -52,7 +52,7 @@ $(function(){
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
-      'hey *name': function(name) {
+      '*name': function(name) {
         name = name.toLowerCase();
         if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "domo";}
@@ -94,7 +94,7 @@ $(function(){
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
-      'thanks': function(){
+      /$(thanks | thank you)^/: function(){
         if(commandReady){
           handleCommand("/thanks", {}, "Thanking...", -1)
         }
@@ -121,8 +121,12 @@ $(function(){
             handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
             setTimeout(function(){
               commandReady = 1;
-              handleCommand("/weather", {}, "Fetching the weather..", 8)
+              handleCommand("/weather", {}, "Fetching the weather..", -1)
             }, 6*1000)
+            setTimeout(function(){
+              commandReady = 1;
+              handleCommand("/cal", {}, "Fetching today's schedule..", 8)
+            }, 14*1000)
           }
           else{
             console.log("Could not activate the mode:", tag)
