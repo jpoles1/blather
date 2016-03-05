@@ -96,7 +96,7 @@ $(function(){
       },
       'thanks': function(){
         if(commandReady){
-          handleCommand("/thanks", {}, "Thanking...", 4)
+          handleCommand("/thanks", {}, "Thanking...", -1)
         }
         endRecognition()
       },
