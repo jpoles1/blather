@@ -15,4 +15,8 @@ module.exports = function(app, domoActuate){
     domoActuate.speak(date_str);
     res.send(date_str);
   })
+  app.get("/thanks", function(req, res){
+    domoActuate.speak("You're welcome sir.");
+    res.send("You're welcome sir.")
+  });
 }

@@ -29,10 +29,6 @@ module.exports = function(app, domoActuate, domoValidate){
   app.get("/confused", function(req, res){
     confused(res);
   });
-  app.get("/thanks", function(req, res){
-    domoActuate.speak("You're welcome, sir.");
-    res.send("You're welcome, sir.")
-  });
   app.get("/sexytime", function(req,res){
     domoActuate.speak("Activating Love Mode... ... Have fun!");
     setTimeout(function(){
