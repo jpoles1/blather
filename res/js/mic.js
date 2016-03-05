@@ -79,6 +79,9 @@ $(function(){
       "(what's) (what) (is) (the) weather in *location": function(location) {
         handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 8)
       },*/
+      "(what's) (what) (is) (on) (my) (today's) schedule": function() {
+        handleCommand("/schedule", {}, "Fetching today's schedule..", 8)
+      },
       "(what's) (what) (is) (the) weather": function() {
         handleCommand("/weather", {}, "Fetching the weather..", 8)
       },
@@ -91,6 +94,12 @@ $(function(){
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
+      'thanks': function(){
+        if(commandReady){
+          handleCommand("/thanks", {}, "Thanking...", 4)
+        }
+        endRecognition()
+      }
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady){
           tag = tag.toLowerCase();
