@@ -30,7 +30,7 @@ module.exports = function(app, domoActuate, domoValidate){
     confused(res);
   });
   app.get("/thanks", function(req, res){
-    speak("You're welcome, sir.");
+    domoActuate.speak("You're welcome, sir.");
     res.send("You're welcome, sir.")
   });
   app.get("/sexytime", function(req,res){
