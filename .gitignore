@@ -1,3 +1,4 @@
 .env
 node_modules
 res/music
+client_secret.json

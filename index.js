@@ -25,6 +25,7 @@ var domoValidate = require("./res/js/domoValidate");
 //Load .env file config (contains DB info)
 require("./routing/main_logic")(app, domoActuate, domoValidate)
 require("./routing/utility_logic")(app, domoActuate)
+require("./routing/google_logic")(app, domoActuate)
 //Set the port for the server
 http_port = 3030;
 https_port = 4040;//Tell server to start listening on above port

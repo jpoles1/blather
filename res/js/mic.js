@@ -79,8 +79,8 @@ $(function(){
       "(what's) (what) (is) (the) weather in *location": function(location) {
         handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 8)
       },*/
-      "(what's) (what) (is) (on) (my) (today's) schedule": function() {
-        handleCommand("/schedule", {}, "Fetching today's schedule..", 8)
+      "(what's) (what) (is) (on) (my) (today's) schedule (for) (today)": function() {
+        handleCommand("/cal", {}, "Fetching today's schedule..", 8)
       },
       "(what's) (what) (is) (the) weather": function() {
         handleCommand("/weather", {}, "Fetching the weather..", 8)
