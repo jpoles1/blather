@@ -99,7 +99,7 @@ $(function(){
           handleCommand("/thanks", {}, "Thanking...", 4)
         }
         endRecognition()
-      }
+      },
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady){
           tag = tag.toLowerCase();
