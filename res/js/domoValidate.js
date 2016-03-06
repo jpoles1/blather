@@ -34,12 +34,15 @@ exports.correctLEDCommand = function(tag){
    return "";
   }
 }
-exports.fixLEDTag = function(tag){
+exports.checkLEDTag = function(tag){
   var tagwords = [];
   tag.split(" ").forEach(function(elem){
     var validated = exports.correctLEDCommand(elem);
     if(validated!=""){tagwords.push(validated)}
   });
   return tagwords;
+}
+exports.checkLampTag = function(tag){
+  return ["on", "off"].contains(tag);
 }
 })(typeof exports === 'undefined'? this['domoValidate']={}: exports);

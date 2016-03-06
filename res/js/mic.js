@@ -62,7 +62,6 @@ $(function(){
         }
       },
       '(set) (change) light(s) (to) *tag': function(tag) {
-        //I don't think there's any situation in which I would want more than two tags.
         var tagwords = domoValidate.fixLEDTag(tag);
         tag = tagwords.join(" ")
         var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
@@ -73,6 +72,27 @@ $(function(){
           $("#notify").html("Did not recognize light command!");
           handleCommand("/confused", {}, "Did not recognize light command!", 3)
           return false;
+        }
+      },
+      '(set) (change) light(s) (to) *tag': function(tag) {
+        var tagwords = domoValidate.checkLEDTag(tag);
+        tag = tagwords.join(" ")
+        var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
+        if(valid_led_command){
+          handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
+        }
+        else{
+          $("#notify").html("Did not recognize light command!");
+          handleCommand("/confused", {}, "Did not recognize light command!", 3)
+        }
+      },
+      '(set) (change) lamp (to) *tag': function(tag) {
+        if(domoValidate.checkLampTag(tag)){
+          handleCommand("/lamp", {"command": tag}, "Setting lamp to: "+tag, 3)
+        }
+        else{
+          $("#notify").html("Did not recognize lamp command!");
+          handleCommand("/confused", {}, "Did not recognize lamp command!", 3)
         }
       },
       /*Voice recognition cannot determine zip codes accurately, so this feature has been deactivated.

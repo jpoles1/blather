@@ -85,18 +85,32 @@ module.exports = function(app, domoActuate, domoValidate){
   });
   app.get("/lights", function(req,res){
     command = req.query.command.toLowerCase();
-    var command_list = domoValidate.fixLEDTag(command);
+    var command_list = domoValidate.checkLEDTag(command);
     if(command_list.length>0){
-      console.log(command_list)
       var options = {
         args: command_list
       };
       domoActuate.speak("Setting lights to "+command)
       domoActuate.runPyCommand("plugins/ardlights.py", options);
-      res.send("Sent command: "+ command)
+      res.send("Sent LED command: "+ command)
     }
     else{
       //res.send("Invalid command")
+      confused(res)
+    }
+  });
+  app.get("/lamp", function(req,res){
+    command = req.query.command.toLowerCase();
+    console.log(command)
+    if(domoValidate.checkLampTag(command)){
+      var options = {
+        args: [command]
+      };
+      domoActuate.speak("Setting lamp to "+command)
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      res.send("Sent Lamp command: "+ command)
+    }
+    else{
       confused(res)
     }
   });
