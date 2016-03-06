@@ -52,7 +52,7 @@ $(function(){
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
-      '*name': function(name) {
+      'hey *name': function(name) {
         name = name.toLowerCase();
         if(["red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread"].contains(name)){name = "rrad";}
         if(["dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "domo";}
@@ -94,11 +94,11 @@ $(function(){
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
-      /$(thanks | thank you)^/: function(){
+      'thank(s) (you)': function(){
         if(commandReady){
           handleCommand("/thanks", {}, "Thanking...", -1)
+          endRecognition()
         }
-        endRecognition()
       },
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady){
