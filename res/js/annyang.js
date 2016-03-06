@@ -35,6 +35,27 @@
   }
 
   var commandsList = [];
+  var checkCommands = function(commandText, results){
+    for (var j = 0, l = commandsList.length; j < l; j++) {
+      var currentCommand = commandsList[j];
+      var result = currentCommand.command.exec(commandText);
+      if (result) {
+        var parameters = result.slice(1);
+        if (debugState) {
+          root.console.log('command matched: %c'+currentCommand.originalPhrase, debugStyle);
+          if (parameters.length) {
+            root.console.log('with parameters', parameters);
+          }
+        }
+        // execute the matched command
+        currentCommand.callback.apply(this, parameters);
+        if(typeof results === 'undefined'){
+          invokeCallbacks(callbacks.resultMatch, commandText, currentCommand.originalPhrase, results);
+        }
+        return true;
+      }
+    }
+  }
   var recognition;
   var callbacks = { start: [], error: [], end: [], result: [], resultMatch: [], resultNoMatch: [], errorNetwork: [], errorPermissionBlocked: [], errorPermissionDenied: [] };
   var autoRestart;
@@ -202,22 +223,8 @@
           }
 
           // try and match recognized text to one of the commands on the list
-          for (var j = 0, l = commandsList.length; j < l; j++) {
-            var currentCommand = commandsList[j];
-            var result = currentCommand.command.exec(commandText);
-            if (result) {
-              var parameters = result.slice(1);
-              if (debugState) {
-                root.console.log('command matched: %c'+currentCommand.originalPhrase, debugStyle);
-                if (parameters.length) {
-                  root.console.log('with parameters', parameters);
-                }
-              }
-              // execute the matched command
-              currentCommand.callback.apply(this, parameters);
-              invokeCallbacks(callbacks.resultMatch, commandText, currentCommand.originalPhrase, results);
-              return true;
-            }
+          if(checkCommands(commandText, results)){
+            return true;
           }
         }
         invokeCallbacks(callbacks.resultNoMatch, results);
@@ -416,7 +423,16 @@
         return true;
       });
     },
-
+    /**
+     * Check existing commands for matches, and run
+     *
+     * annyang.checkCommands('test');
+     *
+     * ````
+     * @param {String} - Command to test
+     * @method checkCommands
+     */
+    checkCommands: checkCommands,
     /**
      * Add a callback function to be called in case one of the following events happens:
      *
