@@ -15,11 +15,16 @@ domoActuate.runSysCommand = function(command, opts, cb){
     cb();
   });
 }
-domoActuate.speak = function(phrase){
+domoActuate.speak = function(phrase, cb){
   var actuate = this;
   if(actuate.now_speaking==0){
     actuate.now_speaking=1;
-    actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){actuate.now_speaking=0;});
+    actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){
+      if (typeof cb === 'function') {
+        cb();
+      }
+      actuate.now_speaking=0;
+    });
   }
   else{
     console.log("Ignoring espeak command, don't want to talk over myself.")

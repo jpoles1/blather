@@ -12,9 +12,11 @@ var ready_time = 15; //In seconds
 var ready_timer;
 $(function(){
   if (annyang) {
+    var socket = io("https://127.0.0.1:4040/");
     var beep_hi = new Audio('res/sound/beep_hi.wav');
     var beep_lo = new Audio('res/sound/beep_lo.wav');
     function allowRecognition(ready_time){
+      $("#notify").html("Listening for Commands!");
       beep_hi.play();
       commandReady = 1;
       clearTimeout(ready_timer);
@@ -28,7 +30,7 @@ $(function(){
         commandReady = 0;
         $.get(url, req_opts, function(res){
           if(delay!=-1){
-            setTimeout(function(){$("#notify").html("Listening!"); allowRecognition(10);}, delay*1000);
+            setTimeout(function(){allowRecognition(10);}, delay*1000);
             SpeechKITT.toggleRecognition();
             SpeechKITT.toggleRecognition();
           }
@@ -49,6 +51,23 @@ $(function(){
       endRecognition()
       SpeechKITT.abortRecognition()
     }
+    socket.on("stop_listen", function(){
+      stopListening()
+    })
+    socket.on("start_listen", function(){
+      SpeechKITT.startRecognition()
+    })
+    socket.on("ready", function(){
+      setTimeout(function(){
+        allowRecognition(ready_time)
+      }, 200)
+    })
+    socket.on("unready", function(){
+      endRecognition()
+    })
+    socket.on("msg", function(msg){
+      $("#notify").html(msg);
+    })
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
@@ -102,22 +121,24 @@ $(function(){
       "(what's) (what) (is) (on) (my) (today's) schedule (for) (today)": function() {
         handleCommand("/cal", {}, "Fetching today's schedule..", 8)
       },
-      "(what's) (what) (is) (the) weather": function() {
-        handleCommand("/weather", {}, "Fetching the weather..", 8)
+      "(what's) (what) (is) (the) weather (today)": function() {
+        socket.emit("weather");
+        commandReady = 0;
       },
       "(what's) (what) (is) (the) time (is it)": function(){
-        handleCommand("/time", {}, "Fetching time...", 2.5)
+        socket.emit("time");
+        commandReady = 0;
       },
       "(what's) (what is) (the) (today's) date": function(){
-        handleCommand("/date", {}, "Fetching date...", 4)
+        socket.emit("date");
+        commandReady = 0;
       },
       '(stop) (end) (cancel)': function(){
         endRecognition()
       },
       'thank(s) (you)': function(){
         if(commandReady){
-          handleCommand("/thanks", {}, "Thanking...", -1)
-          endRecognition()
+          socket.emit("thanks");
         }
       },
       '(enter) (activate) (start) :tag mode': function(tag){
