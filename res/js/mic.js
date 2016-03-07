@@ -74,7 +74,7 @@ $(function(){
         name = name.toLowerCase();
         name = domoValidate.checkName(name)
         if(["RRAD", "Domo"].contains(name)){
-          $("#notify").html("Heard Keyword: "+name+"!");
+          displayMsg("Heard Keyword: "+name+"!")
           allowRecognition(ready_time);
         }
       },
