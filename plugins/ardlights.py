@@ -44,8 +44,8 @@ def main(command_type, argv):
 				"slow": "70xFFC837",
 				"fast": "70xFFE817"
 			}
-			comm_list.append(irsig[color])
-		sendSerial("a"+comm_list)
+			comm_list.append("a"+irsig[color])
+		sendSerial(comm_list)
 	elif(command_type=="outlet"):
 		outlet_commands = {
 			"on": {
