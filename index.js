@@ -61,10 +61,7 @@ io.on('connection', function(socket){
   console.log('a user connected');
 });
 //Used to send commands from pebble (legacy), will eventually try and convert to https
-var http_server = http.createServer(app).listen(http_port, function(){
-  console.log("HTTPS server started on port:",http_port)
-  console.log("https://127.0.0.1:"+http_port)
-});
+var http_server = http.createServer(app).listen(http_port);
 //Load in my routing modules.
 require("./logic/main_logic")(app, domoActuate, domoValidate)
 
