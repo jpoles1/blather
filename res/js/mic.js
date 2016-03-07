@@ -13,7 +13,7 @@ var keyword_active = 0;
 var ready_timer;
 $(function(){
   if (annyang) {
-    var socket = io("https://127.0.0.1:4040/");
+    var socket = io(location.origin);
     var beep_hi = new Audio('res/sound/beep_hi.wav');
     var beep_lo = new Audio('res/sound/beep_lo.wav');
     function allowRecognition(ready_time){
