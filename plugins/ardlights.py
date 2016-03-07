@@ -46,7 +46,7 @@ def main(command_type, argv):
 			}
 			comm_list.append(irsig[color])
 		sendSerial("a"+comm_list)
-	elif(command_type=="lamp"):
+	elif(command_type=="outlet"):
 		outlet_commands = {
 			"on": {
 				"1": "0100000000010101001100110",

@@ -3,8 +3,9 @@ module.exports = function(domoValidate, domoActuate){
   domoLights.setLamp = function(command, socket){
     if(domoValidate.checkLampTag(command)){
       var options = {
-        args: [command]
+        args: ["outlet", "1", command]
       };
+      domoActuate.runPyCommand("plugins/ardlights.py", options);
       domoActuate.speak("Setting lamp to "+command, function(){
         socket.emit("ready")
       })
@@ -24,7 +25,7 @@ module.exports = function(domoValidate, domoActuate){
       domoActuate.speak("Setting Lights to "+command, function(){
         socket.emit("ready")
       })
-      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      domoActuate.runPyCommand("plugins/ardlights.py strip", options);
       socket.emit("msg", "Sent LED Strip command: "+ command)
     }
     else{
