@@ -25,7 +25,7 @@ $(function(){
       }, ready_time*1000);
     }
     function handleCommand(url, req_opts, msg, delay){
-      if(commandReady){
+      if(commandReady || !keyword_active){
         $("#notify").html(msg)
         commandReady = 0;
         $.get(url, req_opts, function(res){
@@ -85,7 +85,7 @@ $(function(){
         }
       },
       '(set) (change) light(s) (to) *tag': function(tag) {
-        var tagwords = domoValidate.fixLEDTag(tag);
+        var tagwords = domoValidate.checkLEDTag(tag);
         tag = tagwords.join(" ")
         var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
         if(valid_led_command){
