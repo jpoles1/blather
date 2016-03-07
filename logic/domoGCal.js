@@ -121,6 +121,7 @@ module.exports = function(domoActuate){
         var events = response.items;
         var breakphrase = "... then you have...";
         var event_string = "On "+time+"'s schedule you have...";
+        var msg_string = "On "+time+"'s schedule you have:<div style='margin: 15px 0 15px ; display: flex; justify-content: space-around; align-items: center;'>";
         if (events.length == 0) {
           domoActuate.speak('No events left for '+time);
         } else {
@@ -130,8 +131,9 @@ module.exports = function(domoActuate){
             var start = event.start.dateTime || event.start.date;
             console.log('%s - %s', start, event.summary);
             event_string += event.summary+" at "+moment(start).format("HH:mm")
+            msg_string += "<div style='border: 1px solid #555; padding: 10px;'>"+event.summary+" at "+moment(start).format("HH:mm")+"</div>"
           }
-          socket.emit("msg", event_string.replace("...", "<br>"))
+          socket.emit("msg", msg_string+"</div>")
           domoActuate.speak(event_string, function(){
             socket.emit("ready")
           });

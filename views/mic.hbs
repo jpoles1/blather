@@ -23,18 +23,20 @@
         left: 38% !important;
       }
       #notify{
-        font-size: 48pt;
+        font-size: 42pt;
         width: 80%;
-        height: 300px;
+        height: 250px;
         border-bottom: 1px solid #444444;
         margin: auto;
         text-align: center;
         padding-top: 50px;
+        overflow-y: hidden;
       }
       #loglist{
         font-size: 30pt;
         text-align: left;
         list-style: none;
+        overflow-y: scroll;
       }
       #listening{
         position: fixed;
@@ -43,11 +45,16 @@
       }
       #loglist li{
         position: relative;
+        border: 1px solid #333333;
+        width: 94%;
+        margin: auto;
+        padding: 10px !important;
+        margin-bottom: 10px;
       }
       .log_time{
         position: absolute;
         right: 10px;
-        top: 5px;
+        top: 10px;
       }
     </style>
   </head>

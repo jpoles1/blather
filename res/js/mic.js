@@ -9,7 +9,7 @@ Array.prototype.contains = function(obj) {
 }
 var commandReady = 0;
 var ready_time = 15; //In seconds
-var keyword_active = 1;
+var keyword_active = 0;
 var ready_timer;
 $(function(){
   if (annyang) {
@@ -20,22 +20,10 @@ $(function(){
       beep_hi.play();
       commandReady = 1;
       clearTimeout(ready_timer);
-      ready_timer = setTimeout(function(){
-        endRecognition()
-      }, ready_time*1000);
-    }
-    function handleCommand(url, req_opts, msg, delay){
-      if(commandReady || !keyword_active){
-        $("#notify").html(msg)
-        commandReady = 0;
-        $.get(url, req_opts, function(res){
-          if(delay!=-1){
-            setTimeout(function(){allowRecognition(10);}, delay*1000);
-            SpeechKITT.toggleRecognition();
-            SpeechKITT.toggleRecognition();
-          }
-          $("#notify").html(res)
-        })
+      if(ready_time!=-1){
+        ready_timer = setTimeout(function(){
+          endRecognition()
+        }, ready_time*1000);
       }
     }
     function endRecognition(){
@@ -60,10 +48,16 @@ $(function(){
     socket.on("ready", function(){
       SpeechKITT.toggleRecognition();
       SpeechKITT.toggleRecognition();
-      setTimeout(function(){
+      if(keyword_active){
         $("#notify").html("Listening for Commands!");
         allowRecognition(ready_time)
-      }, 400)
+      }
+      else{
+        allowRecognition(-1)
+        setTimeout(function(){
+          $("#notify").html("");
+        }, 5000)
+      }
     })
     socket.on("unready", function(){
       endRecognition()
@@ -84,24 +78,28 @@ $(function(){
         }
       },
       '(set) (change) light(s) (to) *tag': function(tag) {
-        var tagwords = domoValidate.checkLEDTag(tag);
-        tag = tagwords.join(" ")
-        var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
-        if(valid_led_command){
-          socket.emit("lights", tag)
-        }
-        else{
-          socket.emit(msg, "Did not recognize light command!");
-          socket.emit("confused");
+        if(commandReady || !keyword_active){
+          var tagwords = domoValidate.checkLEDTag(tag);
+          tag = tagwords.join(" ")
+          var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
+          if(valid_led_command){
+            socket.emit("lights", tag)
+          }
+          else{
+            socket.emit(msg, "Did not recognize light command!");
+            socket.emit("confused");
+          }
         }
       },
       '(set) (change) lamp (to) *tag': function(tag) {
-        if(domoValidate.checkLampTag(tag)){
-          socket.emit("lamp", tag)
-        }
-        else{
-          $("#notify").html("Did not recognize lamp command!");
-          socket.emit("confused");
+        if(commandReady || !keyword_active){
+          if(domoValidate.checkLampTag(tag)){
+            socket.emit("lamp", tag)
+          }
+          else{
+            $("#notify").html("Did not recognize lamp command!");
+            socket.emit("confused");
+          }
         }
       },
       '(enter) (activate) (start) :tag mode': function(tag){
@@ -149,7 +147,14 @@ $(function(){
           commandReady = 0;
         }
       },
+      "(what's) (what) (is) (the) weather": function(){
+        if(commandReady || !keyword_active){
+          socket.emit("weather", "today");
+          commandReady = 0;
+        }
+      },
       "(what's) (what) (is) (the) weather (on) :day": function(day) {
+        if(day == "in"){day="today"}
         if(commandReady || !keyword_active){
           socket.emit("weather", day);
           commandReady = 0;
