@@ -26,6 +26,10 @@ $(function(){
         }, ready_time*1000);
       }
     }
+    function displayMsg(msg){
+      $("#notify").html(msg);
+      $("#loglist").prepend("<li class='log-item'>"+msg+"<div class='log_time'>"+moment().format("HH:MM")+"</div></li>")
+    }
     function endRecognition(){
       if(commandReady != 0){
         beep_lo.play();
@@ -62,10 +66,7 @@ $(function(){
     socket.on("unready", function(){
       endRecognition()
     })
-    socket.on("msg", function(msg){
-      $("#notify").html(msg);
-      $("#loglist").prepend("<li class='log-item'>"+msg+"<div class='log_time'>"+moment().format("HH:MM")+"</div></li>")
-    })
+    socket.on("msg", displayMsg)
     console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
@@ -187,11 +188,13 @@ $(function(){
         if(commandReady || !keyword_active){
           keyword_active = 0;
         }
+        displayMsg("Keyword Disabled")
       },
       'enable keyword': function(name) {
         if(commandReady || !keyword_active){
           keyword_active = 1;
         }
+        displayMsg("Keyword Enabled")
       },
       'kill music': function(){
         socket.emit("kill music")
