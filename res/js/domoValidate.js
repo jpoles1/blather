@@ -10,6 +10,11 @@ Array.prototype.contains = function(obj) {
   }
   return false;
 }
+exports.checkName = function(name){
+  if(["rrad", "red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread", "grab"].contains(name)){name = "RRAD";}
+  if(["domo", "dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "Domo";}
+  return name;
+}
 exports.correctLEDCommand = function(tag){
   if(["read"].contains(tag)){tag = "red";}
   if(["blew"].contains(tag)){tag = "blue";}

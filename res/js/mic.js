@@ -9,7 +9,7 @@ Array.prototype.contains = function(obj) {
 }
 var commandReady = 0;
 var ready_time = 15; //In seconds
-var keyword_active = 0;
+var keyword_active = 1;
 var ready_timer;
 $(function(){
   if (annyang) {
@@ -77,8 +77,7 @@ $(function(){
     var commands = {
       'hey *name': function(name) {
         name = name.toLowerCase();
-        if(["rrad", "red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread", "grab"].contains(name)){name = "RRAD";}
-        if(["domo", "dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "Domo";}
+        name = domoValidate.checkName(name)
         if(["RRAD", "Domo"].contains(name)){
           $("#notify").html("Heard Keyword: "+name+"!");
           allowRecognition(ready_time);
@@ -180,10 +179,14 @@ $(function(){
         stopListening()
       },
       'disable keyword': function(name) {
-        keyword_active = 0;
+        if(commandReady || !keyword_active){
+          keyword_active = 0;
+        }
       },
       'enable keyword': function(name) {
-        keyword_active = 1;
+        if(commandReady || !keyword_active){
+          keyword_active = 1;
+        }
       },
       'kill music': function(){
         socket.emit("kill music")
