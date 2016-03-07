@@ -51,8 +51,8 @@ io.on('connection', function(socket){
   socket.on("thanks", function(){
     domoUtility.thanks(socket)
   })
-  socket.on("weather", function(){
-    domoWeather(socket);
+  socket.on("weather", function(day){
+    domoWeather(day, socket);
   })
   socket.on("cal", function(time){
     console.log(time)

@@ -2,13 +2,63 @@
   <head>
     <script type="text/javascript" src="res/js/jquery-2.2.1.min.js"></script>
     <script type="text/javascript" src="res/js/annyang.js"></script>
+    <script type="text/javascript" src="res/js/moment.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script type="text/javascript" src="res/js/domoValidate.js"></script>
     <script type="text/javascript" src="res/js/mic.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
+    <style>
+      body{
+        background-color: #bbbbbb;
+        margin: 0px;
+      }
+      #container{
+        height: 100%;
+        width: 86%;
+        margin: auto;
+        background-color: #888888;
+        box-shadow: 1px 1px 10px #000;
+      }
+      #skitt-ui{
+        left: 70% !important;
+      }
+      #notify{
+        font-size: 48pt;
+        width: 80%;
+        height: 300px;
+        border-bottom: 1px solid #444444;
+        margin: auto;
+        text-align: center;
+        padding-top: 50px;
+      }
+      #loglist{
+        font-size: 30pt;
+        text-align: left;
+        list-style: none;
+      }
+      #listening{
+        position: fixed;
+        left: 15% !important;
+        bottom: 20px;
+      }
+      #loglist li{
+        position: relative;
+      }
+      .log_time{
+        position: absolute;
+        right: 10px;
+        top: 5px;
+      }
+    </style>
   </head>
   <body>
-    <div id="notify" style="font-size: 48pt;">
+    <div id="container">
+      <div id="notify">
+      </div>
+      <div id="log">
+        <ul id="loglist">
+        </ul>
+      </div>
     </div>
   </body>
 </html>
