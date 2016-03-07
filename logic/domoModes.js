@@ -1,7 +1,8 @@
 module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUtility){
   domoModes = {};
-  domoModes.wakeMode = function(io){
+  domoModes.wakeMode = function(io, socket){
     io.emit("msg", "Good Morning. Starting wake mode!");
+    io.emit("start_listen")
     domoActuate.speak("Good Morning. Starting wake mode!", function(){
       var options = {
         args: ["on", "green", "bright"]

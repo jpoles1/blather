@@ -81,7 +81,7 @@ io.on('connection', function(socket){
     domoModes.partyMode(io);
   })
   socket.on("wake mode", function(){
-    domoModes.wakeMode(io);
+    domoModes.wakeMode(io, socket);
   })
   socket.on("sleep mode", function(){
     domoModes.sleepMode(io);
