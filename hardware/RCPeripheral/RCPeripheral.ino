@@ -7,8 +7,8 @@
 
 #include <RCSwitch.h>
 
-
 RCSwitch mySwitch = RCSwitch();
+String serdat = "";
 
 void setup() {
 
@@ -18,23 +18,33 @@ void setup() {
   mySwitch.enableTransmit(10);
 
   // Optional set pulse length.
-  mySwitch.setPulseLength(91);
+  mySwitch.setPulseLength(140);
   
   // Optional set protocol (default is 1, will work for most outlets)
   // mySwitch.setProtocol(2);
   
   // Optional set number of transmission repetitions.
-  mySwitch.setRepeatTransmit(15);
+  mySwitch.setRepeatTransmit(5);
   
 }
 
 void loop() {
-  char* on = "0100000000010101001100110";
-  char*  off = "0100000000010101001111000";
-  Serial.println("TEST");
-  /* See Example: TypeA_WithDIPSwitches */
-  mySwitch.switchOn(on, 25);
-  delay(1000);
-  mySwitch.switchOn(off, 25);
-  delay(1000);
+  if(serdat != "") {
+    char* com;
+    serdat.toCharArray(com, 25);
+    char* on = "0100000000010101001100110";
+    char* off = "0100000000010101001111000";
+    mySwitch.send(on);
+    delay(500);  
+    mySwitch.send(off);
+    delay(500);
+    serdat = "";
+  }
 }
+void serialEvent() {
+  if(Serial.available()) {
+    serdat = Serial.readString();
+    //serdat.trim();
+  }
+}
+

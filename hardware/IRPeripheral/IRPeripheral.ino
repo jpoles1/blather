@@ -35,7 +35,7 @@ void loop() {
       sendct = 7; 
     }
     else if(color==IR_R || color==IR_G ||color==IR_B || color==IR_W){
-      sendct = 3;
+      sendct = 4;
     }
     int i=0;
     while(i<sendct){
