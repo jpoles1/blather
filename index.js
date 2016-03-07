@@ -87,7 +87,7 @@ io.on('connection', function(socket){
     domoModes.sleepMode(io);
   })
   socket.on("kill music", function(){
-    domoModes.killMusic();
+    domoModes.killMusic(socket);
   })
   console.log('A user connected!');
 });

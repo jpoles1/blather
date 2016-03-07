@@ -49,8 +49,9 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     });
     io.emit("msg", "PARTY MODE&trade; ACTIVATE");
   }
-  domoModes.killMusic = function(){
+  domoModes.killMusic = function(socket){
     domoActuate.runSysCommand("pkill", "mplayer")
+    socket.emit("msg", "Killed Music")
   }
   return domoModes;
 }

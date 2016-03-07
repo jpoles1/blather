@@ -42,6 +42,7 @@ $(function(){
       setTimeout(function(){beep_lo.play();}, 100);
       endRecognition()
       SpeechKITT.abortRecognition()
+      displayMsg("Stopping Listening")
     }
     socket.on("stop_listen", function(){
       stopListening()
@@ -67,7 +68,6 @@ $(function(){
       endRecognition()
     })
     socket.on("msg", displayMsg)
-    console.log("Starting to listen")
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
       'hey *name': function(name) {
@@ -174,6 +174,7 @@ $(function(){
         }
       },
       '(stop) (end) (cancel)': function(){
+        displayMsg("Ending Command Recognition")
         endRecognition()
       },
       'thank(s) (you)': function(){
