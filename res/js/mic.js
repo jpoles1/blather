@@ -118,8 +118,18 @@ $(function(){
       "(what's) (what) (is) (the) weather in *location": function(location) {
         handleCommand("/weather", {"loc": location}, "Fetching the weather in"+location, 8)
       },*/
+      "(what's) (what) (is) (on) (my) schedule for :time": function(time) {
+        socket.emit("cal", time);
+        commandReady = 0;
+      },
+      "(what's) (what) (is) (on) :time schedule": function(time) {
+        time = time.split("'")[0]
+        socket.emit("cal", time);
+        commandReady = 0;
+      },
       "(what's) (what) (is) (on) (my) (today's) schedule (for) (today)": function() {
-        handleCommand("/cal", {}, "Fetching today's schedule..", 8)
+        socket.emit("cal", "today");
+        commandReady = 0;
       },
       "(what's) (what) (is) (the) weather (today)": function() {
         socket.emit("weather");

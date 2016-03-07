@@ -9,24 +9,7 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'domo_gcal_cred.json';
-module.exports = function(app, domoActuate){
-  app.get("/cal", function(req, res){
-    res.send(getAgenda());
-  });
-  function getAgenda(){
-    // Load client secrets from a local file.
-    fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-      if (err) {
-        console.log('Error loading client secret file: ' + err);
-        return;
-      }
-      // Authorize a client with the loaded credentials, then call the
-      // Google Calendar API.
-      console.log(JSON.parse(content))
-      return authorize(JSON.parse(content), listEvents);
-    });
-  }
-
+module.exports = function(domoActuate){
   /**
    * Create an OAuth2 client with the given credentials, and then execute the
    * given callback function.
@@ -106,39 +89,69 @@ module.exports = function(app, domoActuate){
    *
    * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
    */
-  function listEvents(auth) {
-    var calendar = google.calendar('v3');
-    var req_conf = {
-      auth: auth,
-      calendarId: 'primary',
-      timeMin: moment().toISOString(),
-      timeMax: moment().endOf("day").toISOString(),
-      maxResults: 10,
-      singleEvents: true,
-      orderBy: 'startTime'
-    };
-    console.log(req_conf)
-    calendar.events.list(req_conf, function(err, response) {
+  function listEvents(time, socket) {
+    return function(auth){
+      var calendar = google.calendar('v3');
+      var tm;
+      if(time=="today"){
+        tm = moment()
+      }
+      else if(time=="tomorrow"){
+        tm = moment().startOf("day").add(1, "day")
+      }
+      else{
+        tm = moment().day(time).startOf("day")
+      }
+      var req_conf = {
+        auth: auth,
+        calendarId: 'primary',
+        timeMin: tm.format("YYYY-MM-DDTHH:mm:ssZ"),
+        timeMax: tm.endOf("day").format("YYYY-MM-DDTHH:mm:ssZ"),
+        maxResults: 10,
+        singleEvents: true,
+        orderBy: 'startTime'
+      };
+      console.log(req_conf["timeMin"], req_conf["timeMax"])
+      calendar.events.list(req_conf, function(err, response) {
+        if (err) {
+          console.log('The API returned an error: ' + err);
+          domoActuate.speak("Sorry could not fetch "+time+"'s schedule")
+          return;
+        }
+        var events = response.items;
+        var breakphrase = "... then you have...";
+        var event_string = "On "+time+"'s schedule you have...";
+        if (events.length == 0) {
+          domoActuate.speak('No events left for '+time);
+        } else {
+          for (var i = 0; i < events.length; i++) {
+            if(i!=0){event_string +=breakphrase}
+            var event = events[i];
+            var start = event.start.dateTime || event.start.date;
+            console.log('%s - %s', start, event.summary);
+            event_string += event.summary+" at "+moment(start).format("HH:mm")
+          }
+          socket.emit("msg", event_string.replace("...", "<br>"))
+          domoActuate.speak(event_string, function(){
+            socket.emit("ready")
+          });
+        }
+      });
+    }
+  }
+  return function getAgenda(time, socket){
+    if(typeof time === 'undefined'){
+      time = "today"
+    }
+    // Load client secrets from a local file.
+    fs.readFile('client_secret.json', function processClientSecrets(err, content) {
       if (err) {
-        console.log('The API returned an error: ' + err);
-        domoActuate.speak("Sorry could not fetch today's schedule")
+        console.log('Error loading client secret file: ' + err);
         return;
       }
-      var events = response.items;
-      var event_string = "On today's schedule you have...";
-      console.log(events);
-      if (events.length == 0) {
-        domoActuate.speak('No events left today');
-      } else {
-        for (var i = 0; i < events.length; i++) {
-          if(i!=0){event_string +="... then you have..."}
-          var event = events[i];
-          var start = event.start.dateTime || event.start.date;
-          console.log('%s - %s', start, event.summary);
-          event_string += event.summary+" at "+moment(start).format("HH:mm")
-        }
-        domoActuate.speak(event_string);
-      }
+      // Authorize a client with the loaded credentials, then call the
+      // Google Calendar API.
+      return authorize(JSON.parse(content), listEvents(time, socket));
     });
   }
 }

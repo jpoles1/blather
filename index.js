@@ -22,9 +22,9 @@ app.use('/res', express.static('res'));
 //Load Domo Libraries
 var domoActuate = require("./logic/domoActuate");
 var domoValidate = require("./res/js/domoValidate");
-var domoUtility = require("./logic/domoUtility")(app, domoActuate);
 var domoWeather = require("./logic/domoWeather")(domoActuate);
-
+var domoGCal = require("./logic/domoGCal.js")(domoActuate)
+var domoUtility = require("./logic/domoUtility")(app, domoActuate);
 //Set the port for the server
 http_port = 3030;
 https_port = 4040;
@@ -54,6 +54,10 @@ io.on('connection', function(socket){
   socket.on("weather", function(){
     domoWeather(socket);
   })
+  socket.on("cal", function(time){
+    console.log(time)
+    domoGCal(time, socket);
+  })
   console.log('a user connected');
 });
 //Used to send commands from pebble (legacy), will eventually try and convert to https
@@ -63,7 +67,6 @@ var http_server = http.createServer(app).listen(http_port, function(){
 });
 //Load in my routing modules.
 require("./logic/main_logic")(app, domoActuate, domoValidate)
-require("./logic/google_logic")(app, domoActuate)
 
 /*app.listen(port, function(){
   console.log("HTTP server started on port:",port)
