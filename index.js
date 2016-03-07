@@ -22,9 +22,17 @@ app.use('/res', express.static('res'));
 //Load Domo Libraries
 var domoActuate = require("./logic/domoActuate");
 var domoValidate = require("./res/js/domoValidate");
+var domoLights = require("./logic/domoLights")(domoValidate, domoActuate);
 var domoWeather = require("./logic/domoWeather")(domoActuate);
-var domoGCal = require("./logic/domoGCal.js")(domoActuate)
+var domoGCal = require("./logic/domoGCal")(domoActuate)
 var domoUtility = require("./logic/domoUtility")(app, domoActuate);
+var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
+var confused = function(socket){
+  var phrase_list = ["Sorry, I don't understand", "I'm a bit confused", "Pardon? I didn't catch that."]
+  var phrase = phrase_list[Math.floor(Math.random() * phrase_list.length)]
+  domoActuate.speak(phrase);
+  socket.emit("msg", phrase);
+}
 //Set the port for the server
 http_port = 3030;
 https_port = 4040;
@@ -51,20 +59,37 @@ io.on('connection', function(socket){
   socket.on("thanks", function(){
     domoUtility.thanks(socket)
   })
+  socket.on("confused", function(){
+    confused(socket)
+  })
   socket.on("weather", function(day){
     domoWeather(day, socket);
   })
   socket.on("cal", function(time){
-    console.log(time)
     domoGCal(time, socket);
   })
-  console.log('a user connected');
+  socket.on("lights", function(command){
+    domoLights.setStrip(command, socket)
+  })
+  socket.on("lamp", function(command){
+    domoLights.setLamp(command, socket)
+  })
+  socket.on("love mode", function(){
+    domoModes.loveMode(io);
+  })
+  socket.on("party mode", function(){
+    domoModes.partyMode(io);
+  })
+  socket.on("wake mode", function(){
+    domoModes.wakeMode(io);
+  })
+  socket.on("sleep mode", function(){
+    domoModes.sleepMode(io);
+  })
+  console.log('A user connected!');
 });
 //Used to send commands from pebble (legacy), will eventually try and convert to https
 var http_server = http.createServer(app).listen(http_port);
-//Load in my routing modules.
-require("./logic/main_logic")(app, domoActuate, domoValidate)
-
 /*app.listen(port, function(){
   console.log("HTTP server started on port:",port)
   console.log("http://127.0.0.1:"+port)

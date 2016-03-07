@@ -47,7 +47,7 @@ $(function(){
     }
     function stopListening(){
       beep_lo.play();
-      setTimeout(function(){beep_lo.play();}, 400);
+      setTimeout(function(){beep_lo.play();}, 100);
       endRecognition()
       SpeechKITT.abortRecognition()
     }
@@ -89,50 +89,38 @@ $(function(){
         tag = tagwords.join(" ")
         var valid_led_command = (tagwords.length == 1) || (tagwords.length == 2) || (tagwords.length == 3 && (tagwords.contains("on") || tagwords.contains("off") || tagwords.contains("toggle")))
         if(valid_led_command){
-          handleCommand("/lights", {"command": tag}, "Setting lights to: "+tag, 3)
+          socket.emit("lights", tag)
         }
         else{
-          $("#notify").html("Did not recognize light command!");
-          handleCommand("/confused", {}, "Did not recognize light command!", 3)
-          return false;
+          socket.emit(msg, "Did not recognize light command!");
+          socket.emit("confused");
         }
       },
       '(set) (change) lamp (to) *tag': function(tag) {
         if(domoValidate.checkLampTag(tag)){
-          handleCommand("/lamp", {"command": tag}, "Setting lamp to: "+tag, 3)
+          socket.emit("lamp", tag)
         }
         else{
           $("#notify").html("Did not recognize lamp command!");
-          handleCommand("/confused", {}, "Did not recognize lamp command!", 3)
+          socket.emit("confused");
         }
       },
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady || !keyword_active){
           tag = tag.toLowerCase();
           if(["love", "sex", "sexy", "sexytime"].contains(tag)){
-            handleCommand("/sexytime", {}, "Starting Love Mode&trade;.", -1)
-            stopListening()
+            socket.emit("love mode")
           }
           else if(["sleep"].contains(tag)){
+            socket.emit("sleep mode")
             var sleeptime = 7; //hrs
-            handleCommand("/sleep", {}, "Starting Sleep Mode&trade;.", -1)
-            stopListening();
             setTimeout(function(){SpeechKITT.startRecognition()}, sleeptime*60*60*1000)
           }
           else if(["party"].contains(tag)){
-            handleCommand("/party", {}, "Starting Party Mode&trade;.", -1)
-            stopListening();
+            socket.emit("party mode")
           }
           else if(["wake", "week", "with"].contains(tag)){
-            handleCommand("/wake", {}, "Starting Wake Mode&trade;.", -1);
-            setTimeout(function(){
-              commandReady = 1;
-              handleCommand("/weather", {}, "Fetching the weather..", -1)
-            }, 6*1000)
-            setTimeout(function(){
-              commandReady = 1;
-              handleCommand("/cal", {}, "Fetching today's schedule..", 8)
-            }, 14*1000)
+            socket.emit("wake mode")
           }
           else{
             console.log("Could not activate the mode:", tag)

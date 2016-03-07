@@ -12,7 +12,9 @@ domoActuate.runSysCommand = function(command, opts, cb){
     if (error !== null) {
       console.log('exec error: ' + error);
     }
-    cb();
+    if (typeof cb === 'function') {
+      cb();
+    }
   });
 }
 domoActuate.speak = function(phrase, cb){
@@ -21,7 +23,7 @@ domoActuate.speak = function(phrase, cb){
     actuate.now_speaking=1;
     actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){
       if (typeof cb === 'function') {
-        cb();
+        setTimeout(cb, 400);
       }
       actuate.now_speaking=0;
     });
