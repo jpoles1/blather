@@ -86,6 +86,9 @@ io.on('connection', function(socket){
   socket.on("sleep mode", function(){
     domoModes.sleepMode(io);
   })
+  socket.on("kill music", function(){
+    domoModes.killMusic();
+  })
   console.log('A user connected!');
 });
 //Used to send commands from pebble (legacy), will eventually try and convert to https

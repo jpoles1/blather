@@ -185,6 +185,9 @@ $(function(){
       'enable keyword': function(name) {
         keyword_active = 1;
       },
+      'kill music': function(){
+        socket.emit("kill music")
+      }
     };
     annyang.debug();
 

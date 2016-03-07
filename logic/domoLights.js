@@ -21,7 +21,7 @@ module.exports = function(domoValidate, domoActuate){
       var options = {
         args: command_list
       };
-      domoActuate.speak("Setting LED Strip to "+command, function(){
+      domoActuate.speak("Setting Lights to "+command, function(){
         socket.emit("ready")
       })
       domoActuate.runPyCommand("plugins/ardlights.py", options);
