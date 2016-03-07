@@ -17,7 +17,6 @@ $(function(){
     var beep_hi = new Audio('res/sound/beep_hi.wav');
     var beep_lo = new Audio('res/sound/beep_lo.wav');
     function allowRecognition(ready_time){
-      beep_hi.play();
       commandReady = 1;
       clearTimeout(ready_timer);
       if(ready_time!=-1){
@@ -25,6 +24,7 @@ $(function(){
           endRecognition()
         }, ready_time*1000);
       }
+      beep_hi.play();
     }
     function displayMsg(msg){
       $("#notify").html(msg);
