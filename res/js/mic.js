@@ -233,4 +233,7 @@ $(function(){
       }
     })
   }
+  else{
+    alert("Cannot perform speech recognition! :(")
+  }
 });
