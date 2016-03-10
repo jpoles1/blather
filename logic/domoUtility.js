@@ -23,6 +23,10 @@ module.exports = function(app, domoActuate){
     });
     socket.emit("msg", "You're welcome sir.");
   }
+  domoUtility.shutup = function(socket){
+    domoActuate.runSysCommand("pkill", "espeak")
+    socket.emit("msg", "Killed Espeak")
+  }
   domoUtility.getTime = function(socket){
     var datetime = new Date();
     var time_str = "It is: "+datetime.toTimeString().substring(0,5);

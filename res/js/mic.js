@@ -9,7 +9,7 @@ Array.prototype.contains = function(obj) {
 }
 var commandReady = 0;
 var ready_time = 15; //In seconds
-var keyword_active = 0;
+var keyword_active = 1;
 var ready_timer;
 $(function(){
   if (annyang) {
@@ -161,6 +161,12 @@ $(function(){
           commandReady = 0;
         }
       },
+      "(what's) (what) (is) (on) (my) todo list": function() {
+        if(commandReady || !keyword_active){
+          socket.emit("todo");
+          commandReady = 0;
+        }
+      },
       "(what's) (what) (is) (the) time (is it)": function(){
         if(commandReady || !keyword_active){
           socket.emit("time");
@@ -182,8 +188,14 @@ $(function(){
           socket.emit("thanks");
         }
       },
+      'all off': function(){
+        socket.emit("all off")
+      },
       '(off) (kill)': function(){
         stopListening()
+      },
+      '(shut up) (shutup)': function(){
+        socket.emit("shutup")
       },
       'disable keyword': function(name) {
         if(commandReady || !keyword_active){

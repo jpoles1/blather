@@ -59,6 +59,9 @@ io.on('connection', function(socket){
   socket.on("thanks", function(){
     domoUtility.thanks(socket)
   })
+  socket.on("shutup", function(){
+    domoUtility.shutup(socket)
+  })
   socket.on("confused", function(){
     confused(socket)
   })
@@ -76,6 +79,9 @@ io.on('connection', function(socket){
   })
   socket.on("love mode", function(){
     domoModes.loveMode(io);
+  })
+  socket.on("all off", function(){
+    domoModes.allOff(socket);
   })
   socket.on("party mode", function(){
     domoModes.partyMode(io);

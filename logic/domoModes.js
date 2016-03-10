@@ -4,10 +4,7 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     io.emit("msg", "Good Morning. Starting wake mode!");
     io.emit("start_listen")
     domoActuate.speak("Good Morning. Starting wake mode!", function(){
-      var options = {
-        args: ["on", "green", "bright"]
-      };
-      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      domoLights.setStrip("on green bright", socket);
       domoActuate.speak("Turning lights on. Setting to bright green.", function(){
         domoWeather("today", socket, function(){
           domoGCal("today", socket);
@@ -18,13 +15,11 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
   domoModes.sleepMode = function(io){
     io.emit("msg", "Good night. Entering sleep mode.");
     domoActuate.speak("Good night. Entering sleep mode.", function(){
-      var options = {
-        args: ["off"]
-      };
       domoActuate.speak("Turning lights off.", function(){
         io.emit("stop_listen")
       })
-      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      domoLights.setStrip("off", socket);
+      domoLights.setLamp("off", socket);
     });
   }
   domoModes.loveMode = function(io){
@@ -52,6 +47,11 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
   domoModes.killMusic = function(socket){
     domoActuate.runSysCommand("pkill", "mplayer")
     socket.emit("msg", "Killed Music")
+  }
+  domoModes.allOff = function(socket){
+    domoLights.setStrip("off", socket);
+    domoLights.setLamp("off", socket);
+    socket.emit("msg", "All appliances off.")
   }
   return domoModes;
 }
