@@ -71,6 +71,9 @@ io.on('connection', function(socket){
   socket.on("cal", function(time){
     domoGCal(time, socket);
   })
+  socket.on("todo", function(){
+    domoGCal("todo", socket);
+  })
   socket.on("lights", function(command){
     domoLights.setStrip(command, socket)
   })
@@ -82,6 +85,9 @@ io.on('connection', function(socket){
   })
   socket.on("all off", function(){
     domoModes.allOff(socket);
+  })
+  socket.on("all on", function(){
+    domoModes.allOn(socket);
   })
   socket.on("party mode", function(){
     domoModes.partyMode(io);

@@ -4,22 +4,18 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     io.emit("msg", "Good Morning. Starting wake mode!");
     io.emit("start_listen")
     domoActuate.speak("Good Morning. Starting wake mode!", function(){
-      domoLights.setStrip("on green bright", socket);
-      domoActuate.speak("Turning lights on. Setting to bright green.", function(){
-        domoWeather("today", socket, function(){
-          domoGCal("today", socket);
-        })
+      domoWeather("today", socket, function(){
+        domoGCal("today", socket);
       })
     });
+    domoLights.setStrip("on green bright", socket);
   }
   domoModes.sleepMode = function(io){
     io.emit("msg", "Good night. Entering sleep mode.");
     domoActuate.speak("Good night. Entering sleep mode.", function(){
-      domoActuate.speak("Turning lights off.", function(){
-        io.emit("stop_listen")
-      })
-      domoLights.setStrip("off", socket);
-      domoLights.setLamp("off", socket);
+      io.emit("stop_listen")
+      domoLights.setStrip("off", io);
+      domoLights.setLamp("off", io);
     });
   }
   domoModes.loveMode = function(io){
@@ -49,6 +45,11 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     socket.emit("msg", "Killed Music")
   }
   domoModes.allOff = function(socket){
+    domoLights.setStrip("off", socket);
+    domoLights.setLamp("off", socket);
+    socket.emit("msg", "All appliances off.")
+  }
+  domoModes.allOn = function(socket){
     domoLights.setStrip("off", socket);
     domoLights.setLamp("off", socket);
     socket.emit("msg", "All appliances off.")

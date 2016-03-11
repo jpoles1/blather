@@ -153,7 +153,13 @@ module.exports = function(domoActuate){
       }
       // Authorize a client with the loaded credentials, then call the
       // Google Calendar API.
-      return authorize(JSON.parse(content), listEvents(time, socket));
+      if(time == "todo"){
+        return "Need to create this routine."
+        //return authorize(JSON.parse(content), listTodo(socket));
+      }
+      else{
+        return authorize(JSON.parse(content), listEvents(time, socket));
+      }
     });
   }
 }

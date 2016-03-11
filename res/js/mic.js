@@ -191,6 +191,9 @@ $(function(){
       'all off': function(){
         socket.emit("all off")
       },
+      'all on': function(){
+        socket.emit("all on")
+      },
       '(off) (kill)': function(){
         stopListening()
       },
