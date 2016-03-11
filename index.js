@@ -114,7 +114,7 @@ serialPort.list(function (err, ports) {
             domoLights.setStrip(command, socket)
           })
           socket.on("lamp", function(command){
-            domoActuate.speak("Setting lights to "+command,function(){
+            domoActuate.speak("Setting lamp to "+command,function(){
               socket.emit("ready")
             })
             domoLights.setLamp(command, socket)
@@ -123,10 +123,10 @@ serialPort.list(function (err, ports) {
             domoModes.loveMode(io);
           })
           socket.on("all off", function(){
-            domoModes.allOff(socket);
+            domoSerial.allOff();
           })
           socket.on("all on", function(){
-            domoModes.allOn(socket);
+            domoSerial.allOn();
           })
           socket.on("party mode", function(){
             domoModes.partyMode(io);

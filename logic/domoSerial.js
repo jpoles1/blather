@@ -59,5 +59,11 @@ module.exports = function(ser){
     console.log(typeof comm_list)
     ser.write(comm_list+"\r")
   }
+  domoSerial.allOff = function(){
+    ser.write("b40100000000110101000011000/a10xFF02FD")
+  }
+  domoSerial.allOn = function(){
+    ser.write("b40100000000110101000000110/a10xFF02FD")
+  }
   return domoSerial
 }
