@@ -5,7 +5,7 @@ var googleAuth = require('google-auth-library');
 var moment = require('moment')
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly', 'https://www.googleapis.com/auth/tasks.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'domo_gcal_cred.json';
@@ -115,7 +115,9 @@ module.exports = function(domoActuate){
       calendar.events.list(req_conf, function(err, response) {
         if (err) {
           console.log('The API returned an error: ' + err);
-          domoActuate.speak("Sorry could not fetch "+time+"'s schedule")
+          domoActuate.speak("Sorry could not fetch "+time+"'s schedule", function(){
+            socket.emit("ready")
+          });
           return;
         }
         var events = response.items;
@@ -123,7 +125,9 @@ module.exports = function(domoActuate){
         var event_string = "On "+time+"'s schedule you have...";
         var msg_string = "On "+time+"'s schedule you have:<div style='margin: 15px 0 15px ; display: flex; justify-content: space-around; align-items: center;'>";
         if (events.length == 0) {
-          domoActuate.speak('No events left for '+time);
+          domoActuate.speak('No events left for '+time, function(){
+            socket.emit("ready")
+          });
         } else {
           for (var i = 0; i < events.length; i++) {
             if(i!=0){event_string +=breakphrase}
@@ -134,6 +138,52 @@ module.exports = function(domoActuate){
             msg_string += "<div style='border: 1px solid #555; padding: 10px;'>"+event.summary+" at "+moment(start).format("HH:mm")+"</div>"
           }
           socket.emit("msg", msg_string+"</div>")
+          domoActuate.speak(event_string, function(){
+            socket.emit("ready")
+          });
+        }
+      });
+    }
+  }
+  function listTodo(socket){
+    return function(auth){
+      var service = google.tasks('v1');
+      var req_conf = {
+        auth: auth,
+        tasklist: "@default",
+        maxResults: 5,
+        showCompleted: false
+      };
+      service.tasks.list(req_conf, function(err, response) {
+        if (err) {
+          console.log('The API returned an error: ' + err);
+          domoActuate.speak("Sorry could not fetch your todo list.", function(){
+            socket.emit("ready")
+          });
+          return;
+        }
+        var items = response.items;
+        if (items.length == 0) {
+          domoActuate.speak('Nothing left on your todo list', function(){
+            socket.emit("ready")
+          });
+        }
+        else {
+          var event_string = ""
+          console.log('Task lists:');
+          for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(item.title.replace(" ","")!=""){
+              if(event_string == ""){
+                event_string = "Your todo list includes... "+item.title
+              }
+              else{
+                var phrase_list = ["and", "as well as", "you also have to"]
+                var phrase = phrase_list[Math.floor(Math.random() * phrase_list.length)]
+                event_string+= "... "+phrase+" "+item.title
+              }
+            }
+          }
           domoActuate.speak(event_string, function(){
             socket.emit("ready")
           });
@@ -154,8 +204,7 @@ module.exports = function(domoActuate){
       // Authorize a client with the loaded credentials, then call the
       // Google Calendar API.
       if(time == "todo"){
-        return "Need to create this routine."
-        //return authorize(JSON.parse(content), listTodo(socket));
+        return authorize(JSON.parse(content), listTodo(socket));
       }
       else{
         return authorize(JSON.parse(content), listEvents(time, socket));

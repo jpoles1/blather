@@ -8,7 +8,7 @@ Array.prototype.contains = function(obj) {
     return false;
 }
 var commandReady = 0;
-var ready_time = 15; //In seconds
+var ready_time = 30; //In seconds
 var keyword_active = 1;
 var ready_timer;
 $(function(){
@@ -160,7 +160,7 @@ $(function(){
           commandReady = 0;
         }
       },
-      "(what's) (what) (is) (on) (my) todo list": function() {
+      "(what's) (what) (is) (on) (my) to-do list": function() {
         if(commandReady || !keyword_active){
           socket.emit("todo");
           commandReady = 0;
