@@ -51,8 +51,8 @@ $(function(){
       SpeechKITT.startRecognition()
     })
     socket.on("ready", function(){
-      SpeechKITT.toggleRecognition();
-      SpeechKITT.toggleRecognition();
+      SpeechKITT.abortRecognition();
+      SpeechKITT.startRecognition();
       if(keyword_active){
         $("#notify").html("Listening for Commands!");
         allowRecognition(ready_time)
@@ -87,7 +87,6 @@ $(function(){
             socket.emit("lights", tag)
           }
           else{
-            socket.emit(msg, "Did not recognize light command!");
             socket.emit("confused");
           }
         }

@@ -17,12 +17,14 @@ void setup() {
   Serial.println("ready");
 }
 void loop() {
-  // print the string when there is data:
-  if(serdat != "") {
-    char command_type = serdat[0];
+  delay(100);
+}
+void sendIR(String serdat){
+  char command_type = serdat[0];
     int retry = serdat[1] - '0';
     String command = serdat.substring(2);
     if(command_type == 'a'){
+      
       unsigned long color = strtol(command.c_str(), NULL, 16);
       Serial.println("IR Blasting: "+command+"; "+color);     
       int i = 0;
@@ -40,8 +42,6 @@ void loop() {
 
     }
     serdat = "";
-  }
-  delay(100);
 }
 /*
   SerialEvent occurs whenever a new data comes in the
@@ -50,8 +50,10 @@ void loop() {
  response.  Multiple bytes of data may be available.
  */
 void serialEvent() {
-  if(Serial.available()) {
-    serdat = Serial.readString();
+  while(Serial.available()) {
+    serdat = Serial.readStringUntil('/');
+    sendIR(serdat);
+    delay(50);
     //serdat.trim();
   }
 }

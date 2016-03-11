@@ -12,7 +12,7 @@ Array.prototype.contains = function(obj) {
 }
 exports.checkName = function(name){
   if(["rrad", "red", "brad", "rad", "rod", "ram", "fred", "brother", "bro", "bread", "grab"].contains(name)){name = "RRAD";}
-  if(["domo", "dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number"].contains(name)){name = "Domo";}
+  if(["domo", "dummy", "don't know", "dumbo", "don't", "donna", "demo", "mama", "there", "number", "toma"].contains(name)){name = "Domo";}
   return name;
 }
 exports.correctLEDCommand = function(tag){
