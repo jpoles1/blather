@@ -52,20 +52,20 @@ serialPort.list(function (err, ports) {
         app.use(bodyParser.urlencoded({ extended: true }));
         //Serves all files in the res folder as static resources
         app.use('/res', express.static('res'));
-        var domoSerial = require("./logic/domoSerial")(ser);
-        var domoActuate = require("./logic/domoActuate");
-        var domoValidate = require("./res/js/domoValidate");
-        var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial);
-        var domoWeather = require("./logic/domoWeather")(domoActuate);
-        var domoGCal = require("./logic/domoGCal")(domoActuate)
-        var domoUtility = require("./logic/domoUtility")(app, domoActuate);
-        var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
         var confused = function(socket){
           var phrase_list = ["Sorry, I don't understand", "I'm a bit confused", "Pardon? I didn't catch that."]
           var phrase = phrase_list[Math.floor(Math.random() * phrase_list.length)]
           domoActuate.speak(phrase);
           socket.emit("msg", phrase);
         }
+        var domoSerial = require("./logic/domoSerial")(ser);
+        var domoActuate = require("./logic/domoActuate");
+        var domoValidate = require("./res/js/domoValidate");
+        var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, confused);
+        var domoWeather = require("./logic/domoWeather")(domoActuate);
+        var domoGCal = require("./logic/domoGCal")(domoActuate)
+        var domoUtility = require("./logic/domoUtility")(app, domoActuate);
+        var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;

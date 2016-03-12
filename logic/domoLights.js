@@ -1,4 +1,4 @@
-module.exports = function(app, domoValidate, domoActuate, domoSerial){
+module.exports = function(app, domoValidate, domoActuate, domoSerial, confused){
   var domoLights = {};
   domoLights.setLamp = function(command, socket){
     if(domoValidate.checkLampTag(command)){
