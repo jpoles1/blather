@@ -55,7 +55,7 @@ serialPort.list(function (err, ports) {
         var domoSerial = require("./logic/domoSerial")(ser);
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
-        var domoLights = require("./logic/domoLights")(domoValidate, domoActuate, domoSerial);
+        var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial);
         var domoWeather = require("./logic/domoWeather")(domoActuate);
         var domoGCal = require("./logic/domoGCal")(domoActuate)
         var domoUtility = require("./logic/domoUtility")(app, domoActuate);

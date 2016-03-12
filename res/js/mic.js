@@ -193,7 +193,7 @@ $(function(){
       'all on': function(){
         socket.emit("all on")
       },
-      '(off) (kill)': function(){
+      'kill': function(){
         stopListening()
       },
       '(shut up) (shutup)': function(){
