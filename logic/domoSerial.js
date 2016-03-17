@@ -19,8 +19,20 @@ module.exports = function(ser){
     }
   }
   domoSerial.setOutlet = function(outlet, comm){
-    outlet_states[outlet] = comm;
-    ser.write("b4"+outlet_commands[comm][outlet]+"\r")
+    if(comm=="toggle"){
+      if(outlet_states[outlet]=="on"){
+        outlet_states[outlet] = "off";
+        ser.write("b4"+outlet_commands["off"][outlet]+"\r")
+      }
+      else{
+        outlet_states[outlet] = "on";
+        ser.write("b4"+outlet_commands["on"][outlet]+"\r")
+      }
+    }
+    else if(["off", "on"].contains(comm)){
+      outlet_states[outlet] = comm;
+      ser.write("b4"+outlet_commands[comm][outlet]+"\r")
+    }
   }
   domoSerial.setStrip = function(comms){
     var comm_list = "";
