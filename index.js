@@ -124,9 +124,15 @@ serialPort.list(function (err, ports) {
           })
           socket.on("all off", function(){
             domoSerial.allOff();
+            domoActuate.speak("All off",function(){
+              socket.emit("ready")
+            })
           })
           socket.on("all on", function(){
             domoSerial.allOn();
+            domoActuate.speak("All on",function(){
+              socket.emit("ready")
+            })
           })
           socket.on("party mode", function(){
             domoModes.partyMode(io);
