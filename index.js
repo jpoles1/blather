@@ -22,13 +22,19 @@ serialPort.list(function (err, ports) {
   else{
     ser = new serialPort.SerialPort(myPort.comName, {
      baudRate: 9600,
-     parser: serialPort.parsers.readline("\r")
+     parser: serialPort.parsers.readline("\r\n")
     }, false);
     ser.open(function (err) {
       if(err) console.log('err ' + err);
       else{
-        ser.on('data', function(data) {
-          console.log('data received: ' + data);
+        ser.on('data', function(rawdata) {
+          var keywords = rawdata.toLowerCase().split(":");
+          if(["pir", "temp", "humid"].contains(keywords[0])){
+            domoMonitor.logSensors(rawdata)
+          }
+          else{
+            console.log('data received: ' + rawdata);
+          }
         });
         ser.on('close', function(){
           process.exit()
@@ -67,6 +73,14 @@ serialPort.list(function (err, ports) {
         var domoUtility = require("./logic/domoUtility")(app, domoActuate);
         var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
         var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
+        var domoMonitor = require("./logic/domoMonitor")();
+        //Set Lights Timeout
+        setInterval(function(){
+          if(domoMonitor.room_status["pirct"]<1){
+            domoSerial.allOff();
+          }
+          domoMonitor.room_status["pirct"] = 0;
+        }, 15*60*1000)
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;

@@ -26,6 +26,7 @@
     "googleapis": "^2.1.7",
     "hbs": "^4.0.0",
     "moment": "^2.11.2",
+    "mongoose": "^4.4.8",
     "python-shell": "^0.3.0",
     "serialport": "^2.0.6",
     "serve-favicon": "^2.3.0",
