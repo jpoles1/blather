@@ -66,6 +66,7 @@ serialPort.list(function (err, ports) {
         var domoGCal = require("./logic/domoGCal")(domoActuate)
         var domoUtility = require("./logic/domoUtility")(app, domoActuate);
         var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
+        var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;

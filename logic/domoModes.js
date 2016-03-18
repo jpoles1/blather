@@ -42,7 +42,9 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
   }
   domoModes.killMusic = function(socket){
     domoActuate.runSysCommand("pkill", "mplayer")
-    socket.emit("msg", "Killed Music")
+    if(typeof socket != "undefined"){
+      socket.emit("msg", "Killed Music")
+    }
   }
   domoModes.allOff = function(socket){
     domoLights.setStrip("off", socket);
