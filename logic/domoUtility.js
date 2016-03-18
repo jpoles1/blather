@@ -4,13 +4,6 @@ module.exports = function(app, domoActuate){
   app.get("/", function(req, res){
     res.render("mic.hbs", {})
   })
-  app.get("/voice", function(req, res){
-    heard_command = req.query.command.toLowerCase().split(" ");
-    console.log(heard_command);
-    if(heard_command.contains("weather") || heard_command.contains("whether")){
-      getWeather(res, "77005");
-    }
-  });
   domoUtility.getDate = function(socket){
     var datetime = new Date();
     var date_str = "Today is "+moment().format('dddd MMMM Do YYYY');

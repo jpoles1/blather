@@ -1,11 +1,7 @@
 var Annyang = require('annyang');
 
-var annyang = new Annyang();
-
-
 module.exports = function(app, domoLights, domoSerial, domoModes){
-  annyang.init(commands);
-
+  var annyang = new Annyang();
   var commands = {
     '(set) (change) light(s) (to) *tag': function(tag) {
       domoLights.setStrip(tag);
@@ -23,7 +19,14 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
       domoModes.killMusic();
     }
   };
-  app.get("voice_command", function(req, res){
-    annyang.trigger(req.query.cmd);
+  annyang.init(commands);
+  app.get("/voice_command", function(req, res){
+    var cmd = req.query.cmd;
+    if(annyang.trigger(cmd)){
+      res.send("Command Received: "+cmd)
+    }
+    else{
+      res.send("Command Failed: "+cmd)
+    }
   })
 }
