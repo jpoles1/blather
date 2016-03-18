@@ -20,13 +20,18 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
     }
   };
   annyang.init(commands);
-  app.get("/voice_command", function(req, res){
-    var cmd = req.query.cmd;
-    if(annyang.trigger(cmd)){
-      res.send("Command Received: "+cmd)
+  app.get("/voice", function(req, res){
+    try{
+      var cmd = req.query.cmd;
+      if(annyang.trigger(cmd)){
+        res.send("Command Received: "+cmd)
+      }
+      else{
+        res.send("Command Failed: "+cmd)
+      }
     }
-    else{
-      res.send("Command Failed: "+cmd)
+    catch(e){
+      res.send("No Command")
     }
   })
 }
