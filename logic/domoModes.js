@@ -14,17 +14,14 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     io.emit("msg", "Good night. Entering sleep mode.");
     domoActuate.speak("Good night. Entering sleep mode.", function(){
       io.emit("stop_listen")
-      domoLights.setStrip("off", io);
+      domoLights.setStrip("dark red", io);
       domoLights.setLamp("off", io);
     });
   }
   domoModes.loveMode = function(io){
     io.emit("stop_listen")
     domoActuate.speak("Activating Love Mode... ... Have fun!", function(){
-      var options = {
-        args: ["fade", "slow"]
-      };
-      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      domoLights.setStrip("fade slow", io);
       domoActuate.runSysCommand("mplayer -shuffle", __dirname+"/../res/music/love/*.mp3")
     });
     io.emit("msg", "LOVE MODE&trade; ACTIVATE");
@@ -32,10 +29,7 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
   domoModes.partyMode = function(io){
     io.emit("stop_listen")
     domoActuate.speak("Activating Party Mode... ... Have fun!", function(){
-      var options = {
-        args: ["jump", "slow"]
-      };
-      domoActuate.runPyCommand("plugins/ardlights.py", options);
+      domoLights.setStrip("fade fast", io);
       domoActuate.runSysCommand("mplayer -shuffle", __dirname+"/../res/music/party/*.mp3")
     });
     io.emit("msg", "PARTY MODE&trade; ACTIVATE");
