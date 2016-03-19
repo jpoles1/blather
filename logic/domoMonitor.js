@@ -13,12 +13,12 @@ module.exports = function(app, room_status, domoSerial){
   });
   domoMonitor.mongoLog = function(){
     RoomLog({
-      "time": new Date(),
+      "time": Date.now(),
       "pir": room_status["pir"],
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
       "temp": room_status["temp"],
       "humid": room_status["humid"],
-      "outlets_on": Object.keys(room_status["outlets"]).filter(function(x){return x=="on"}).length
+      "outlets_on": Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
     }).save();
   }
   domoMonitor.logSensors = function(rawdata){

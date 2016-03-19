@@ -1,4 +1,17 @@
 window.onload = function(){
+  function syncExtremes(e) {
+      var thisChart = this.chart;
+
+      if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+          Highcharts.each(Highcharts.charts, function (chart) {
+              if (chart !== thisChart) {
+                  if (chart.xAxis[0].setExtremes) { // It is null while updating
+                      chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: 'syncExtremes' });
+                  }
+              }
+          });
+      }
+  }
   logData = JSON.parse(rawData)
   var tempoptions = {
     chart: {
@@ -10,7 +23,8 @@ window.onload = function(){
       text: 'Room Temperature and Humidity'
     },
     xAxis: {
-      type: 'datetime'
+      type: 'datetime',
+      events: {setExtremes: syncExtremes}
     },
     yAxis: [{
       labels: {
@@ -45,7 +59,8 @@ window.onload = function(){
       text: 'Room Activity'
     },
     xAxis: {
-      type: 'datetime'
+      type: 'datetime',
+      events: {setExtremes: syncExtremes}
     },
     yAxis: [{
       title: {
