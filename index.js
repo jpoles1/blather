@@ -89,7 +89,9 @@ serialPort.list(function (err, ports) {
         //Set Lights Timeout
         setInterval(function(){
           if(room_status["pirct"]<1){
-            domoMonitor.logEvent("Inactive")
+            if(Object.keys(room_status.outlets).some(function(x){return(room_status.outlets[x]=="on")})){
+              domoMonitor.logEvent("Inactive")
+            }
             domoSerial.allOff();
             setTimeout(function(){
               if(room_status["pirct"]>0){
