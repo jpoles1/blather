@@ -1,4 +1,4 @@
-module.exports = function(ser, domoMonitor){
+module.exports = function(ser, room_status){
   var domoSerial = {};
   var serial_active = 0;
   var outlet_states = {};
@@ -20,20 +20,27 @@ module.exports = function(ser, domoMonitor){
   }
   domoSerial.setOutlet = function(outlet, comm){
     if(comm=="toggle"){
-      if(domoMonitor.room_status.outlets[outlet]=="on"){
-        domoMonitor.room_status.outlets[outlet] = "off";
-        ser.write("b4"+outlet_commands["off"][outlet]+"\r")
+      if(room_status.outlets[outlet]=="on"){
+        comm = "off";
+        ser.write("b4"+outlet_commands["off"][outlet])
       }
       else{
-        domoMonitor.room_status.outlets[outlet] = "on";
-        ser.write("b4"+outlet_commands["on"][outlet]+"\r")
+        comm = "on";
+        ser.write("b4"+outlet_commands["on"][outlet])
       }
     }
     else if(["off", "on"].contains(comm)){
-      domoMonitor.room_status.outlets[outlet] = comm;
-      ser.write("b4"+outlet_commands[comm][outlet]+"\r")
-      console.log(domoMonitor.room_status)
+      ser.write("b4"+outlet_commands[comm][outlet])
     }
+    if(outlet=="all"){
+      for(outlet in room_status["outlets"]){
+        room_status.outlets[outlet] = comm;
+      };
+    }
+    else{
+      room_status.outlets[outlet] = comm;
+    }
+    console.log(room_status)
   }
   domoSerial.setStrip = function(comms){
     var comm_list = "";
@@ -74,7 +81,7 @@ module.exports = function(ser, domoMonitor){
       }
     })
     console.log(typeof comm_list)
-    ser.write(comm_list+"\r")
+    ser.write(comm_list)
   }
   domoSerial.allOff = function(){
     domoSerial.setOutlet("all", "off")

@@ -64,8 +64,19 @@ serialPort.list(function (err, ports) {
           domoActuate.speak(phrase);
           socket.emit("msg", phrase);
         }
-        var domoMonitor = require("./logic/domoMonitor")();
-        var domoSerial = require("./logic/domoSerial")(ser, domoMonitor);
+        var room_status = {
+          "pir": undefined,
+          "lastpir": undefined,
+          "pirct": 0, //Variable used to store the number of PIR trips in the past X minutes.
+          "temp": undefined,
+          "humid": undefined,
+          "outlets": {
+            "1": undefined,
+            "2": undefined
+          }
+        }
+        var domoSerial = require("./logic/domoSerial")(ser, room_status);
+        var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
         var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, confused);

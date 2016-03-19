@@ -17,7 +17,7 @@ int tempState = -1;
 int humState = -1;
 //Where we store serial data
 String serdat = "";
-
+int loopstate = 0;
 void setup() {
   //Start serial comms
   Serial.begin(9600);
@@ -59,13 +59,18 @@ String checkTemp(){
   return resp;
 }
 void loop() {
-  String resp = "";
-  resp = resp+checkPIR();
-  resp = resp+checkTemp();
-  if(resp!=""){
-    Serial.println(resp);
+  int wait_time = 10; //In second
+  if(loopstate>wait_time*2){
+    String resp = "";
+    resp = resp+checkPIR();
+    resp = resp+checkTemp();
+    if(resp!=""){
+      Serial.println(resp);
+    }
+    loopstate = 0;
   }
-  delay(10*1000);
+  loopstate = loopstate+1;
+  delay(500);
 }
 void sendIR(String serdat){
   char command_type = serdat[0];
