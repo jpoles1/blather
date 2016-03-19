@@ -90,6 +90,11 @@ serialPort.list(function (err, ports) {
         setInterval(function(){
           if(domoMonitor.room_status["pirct"]<1){
             domoSerial.allOff();
+            setTimeout(function(){
+              if(domoMonitor.room_status["pirct"]>0){
+                domoSerial.allOn();
+              }
+            }, 8*1000)
           }
           domoMonitor.room_status["pirct"] = 0;
         }, 30*60*1000)

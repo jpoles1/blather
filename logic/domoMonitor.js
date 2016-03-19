@@ -27,14 +27,11 @@ module.exports = function(app, room_status, domoSerial){
       var keywords = elem.split(":")
       console.log(keywords)
       if(keywords[0]=="pir" && keywords[1]=="1"){
-        clearTimeout(domoMonitor.lightTimeout)
+        /*clearTimeout(domoMonitor.lightTimeout)
         domoMonitor.lightTimeout = setTimeout(function(){
 
-        })
+        })*/
         var now = new Date();
-        /*if(){
-
-        }*/
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
         console.log("Detected Motion")
@@ -46,7 +43,6 @@ module.exports = function(app, room_status, domoSerial){
   domoMonitor.fetchMongoLogs = function(res){
     RoomLog.find(function (err, logs) {
       if (err) return console.error(err);
-      console.log(logs)
       if(typeof res != "undefined"){
         res.render("charts.hbs", {logdata: JSON.stringify(logs)})
       }
@@ -55,7 +51,6 @@ module.exports = function(app, room_status, domoSerial){
   app.get("/charts", function(req, res){
     domoMonitor.fetchMongoLogs(res)
   })
-  domoMonitor.fetchMongoLogs()
   setInterval(domoMonitor.mongoLog, 60*1000)
   return domoMonitor;
 }
