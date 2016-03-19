@@ -88,16 +88,16 @@ serialPort.list(function (err, ports) {
 
         //Set Lights Timeout
         setInterval(function(){
-          if(domoMonitor.room_status["pirct"]<1){
+          if(room_status["pirct"]<1){
             domoMonitor.logEvent("Inactive")
             domoSerial.allOff();
             setTimeout(function(){
-              if(domoMonitor.room_status["pirct"]>0){
+              if(room_status["pirct"]>0){
                 domoSerial.allOn();
               }
             }, 8*1000)
           }
-          domoMonitor.room_status["pirct"] = 0;
+          room_status["pirct"] = 0;
         }, 15*60*1000)
         //Set the port for the server
         http_port = 3030;
