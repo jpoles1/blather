@@ -129,7 +129,12 @@ window.onload = function(){
     console.log(entry)
     //lightoptions.series[0].data.push([i.time, i.light]);
     timept = Date.parse(entry.time);
-    activity_options.xAxis["plotLines"].push({color: 'red', value: timept, width: .5})
+    if(entry["event"] == "Restarted"){
+      activity_options.xAxis["plotLines"].push({color: 'red', value: timept, width: .5})
+    }
+    if(entry["event"] == "Inactive"){
+      activity_options.xAxis["plotLines"].push({color: 'blue', value: timept, width: .5})
+    }
   }
   var chart1 = new Highcharts.StockChart(tempoptions);
   var chart2 = new Highcharts.Chart(activity_options);
