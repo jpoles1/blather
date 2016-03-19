@@ -110,7 +110,8 @@ serialPort.list(function (err, ports) {
         }
         var https_server = https.createServer(https_opts, app).listen(https_port, function(){
           console.log("HTTPS server started on port:",https_port)
-          console.log("https://127.0.0.1:"+https_port)
+          console.log("Voice Input at: https://127.0.0.1:"+https_port)
+          console.log("Monitoring at: https://127.0.0.1:"+https_port+"/charts")
         });
         //Socket.io
         var io = require("socket.io")(https_server)
