@@ -51,7 +51,7 @@ String checkTemp(){
     resp = resp+"temp:"+String(temp)+";";
     tempState = temp;
   }
-  int bounds = 3; //Range to be exceeded for new value to be reported
+  int bounds = 1; //Range to be exceeded for new value to be reported
   if(humState+bounds < hum || humState-bounds > hum){
     resp = resp+"humid:"+String(hum)+";";
     humState = hum;
