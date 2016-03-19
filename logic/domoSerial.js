@@ -1,4 +1,4 @@
-module.exports = function(ser){
+module.exports = function(ser, domoMonitor){
   var domoSerial = {};
   var serial_active = 0;
   var outlet_states = {};
@@ -20,18 +20,19 @@ module.exports = function(ser){
   }
   domoSerial.setOutlet = function(outlet, comm){
     if(comm=="toggle"){
-      if(outlet_states[outlet]=="on"){
-        outlet_states[outlet] = "off";
+      if(domoMonitor.room_status.outlets[outlet]=="on"){
+        domoMonitor.room_status.outlets[outlet] = "off";
         ser.write("b4"+outlet_commands["off"][outlet]+"\r")
       }
       else{
-        outlet_states[outlet] = "on";
+        domoMonitor.room_status.outlets[outlet] = "on";
         ser.write("b4"+outlet_commands["on"][outlet]+"\r")
       }
     }
     else if(["off", "on"].contains(comm)){
-      outlet_states[outlet] = comm;
+      domoMonitor.room_status.outlets[outlet] = comm;
       ser.write("b4"+outlet_commands[comm][outlet]+"\r")
+      console.log(domoMonitor.room_status)
     }
   }
   domoSerial.setStrip = function(comms){

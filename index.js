@@ -64,23 +64,24 @@ serialPort.list(function (err, ports) {
           domoActuate.speak(phrase);
           socket.emit("msg", phrase);
         }
-        var domoSerial = require("./logic/domoSerial")(ser);
+        var domoMonitor = require("./logic/domoMonitor")();
+        var domoSerial = require("./logic/domoSerial")(ser, domoMonitor);
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
         var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, confused);
         var domoWeather = require("./logic/domoWeather")(domoActuate);
         var domoGCal = require("./logic/domoGCal")(domoActuate)
-        var domoUtility = require("./logic/domoUtility")(app, domoActuate);
-        var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
         var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
-        var domoMonitor = require("./logic/domoMonitor")();
+        var domoUtility = require("./logic/domoUtility")(app, domoActuate, domoMonitor);
+        var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
+
         //Set Lights Timeout
         setInterval(function(){
           if(domoMonitor.room_status["pirct"]<1){
             domoSerial.allOff();
           }
           domoMonitor.room_status["pirct"] = 0;
-        }, 15*60*1000)
+        }, 30*60*1000)
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;
@@ -115,6 +116,9 @@ serialPort.list(function (err, ports) {
           })
           socket.on("weather", function(day){
             domoWeather(day, socket);
+          })
+          socket.on("room temp", function(day){
+            domoUtility.getRoomTemp(socket);
           })
           socket.on("cal", function(time){
             domoGCal(time, socket);

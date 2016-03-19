@@ -1,12 +1,17 @@
 var mongoose = require("mongoose")
 module.exports = function(domoSerial){
   domoMonitor = {};
+  domoMonitor.lightTimeout = undefined;
   domoMonitor.room_status = {
     "pir": undefined,
     "lastpir": undefined,
     "pirct": 0, //Variable used to store the number of PIR trips in the past X minutes.
     "temp": undefined,
-    "humid": undefined
+    "humid": undefined,
+    "outlets": {
+      "1": undefined,
+      "2": undefined
+    }
   }
   domoMonitor.logSensors = function(rawdata){
     var room_status = this.room_status;
@@ -15,8 +20,12 @@ module.exports = function(domoSerial){
       var keywords = elem.split(":")
       console.log(keywords)
       if(keywords[0]=="pir" && keywords[1]=="1"){
+        var now = new Date();
+        /*if(){
+
+        }*/
         room_status["pirct"]+=1;
-        room_status["lastpir"]=new Date();
+        room_status["lastpir"]= now;
         console.log("Detected Motion")
       }
       room_status[keywords[0]] = parseInt(keywords[1]);
