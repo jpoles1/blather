@@ -34,15 +34,44 @@ window.onload = function(){
         }			}
     },
     series: [{name: "Temperature", data: [], tooltip: {valueSuffix: ' °F'}}, {name: "Humidity", data: [], yAxis: 1, tooltip: {valueSuffix: ' %'}}]
-
+  };
+  var activity_options = {
+    chart: {
+      renderTo: 'activity',
+      type: 'spline',
+      zoomType: 'x'
+    },
+    title: {
+      text: 'Room Activity'
+    },
+    xAxis: {
+      type: 'datetime'
+    },
+    yAxis: [{
+      title: {
+        text: 'Count'
+      }
+    }],
+    plotOptions: {
+      spline: {
+        marker: {
+          enabled: false
+        }			}
+    },
+    series: [
+      {name: "PIR Count", data: [], tooltip: {valueSuffix: ' PIR Events'}},
+      {name: "Outlets On", data: [], tooltip: {valueSuffix: ' Outlets On'}}
+    ]
   };
   for(entry_index in logData){
     entry = logData[entry_index]
     //lightoptions.series[0].data.push([i.time, i.light]);
-    tempoptions.series[0].data.push([entry.time, entry.temp]);
-    tempoptions.series[1].data.push([entry.time, entry.humid]);
+    timept = Date.parse(entry.time);
+    tempoptions.series[0].data.push([timept, entry.temp]);
+    tempoptions.series[1].data.push([timept, entry.humid]);
+    activity_options.series[0].data.push([timept, entry.pirct]);
+    activity_options.series[1].data.push([timept, entry.outlets_on]);
   }
-  console.log(tempoptions.series[0])
-  var chart1 = new Highcharts.Chart(tempoptions);
-  //var chart2 = new Highcharts.Chart(lightoptions);
+  var chart1 = new Highcharts.StockChart(tempoptions);
+  var chart2 = new Highcharts.Chart(activity_options);
 };
