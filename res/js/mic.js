@@ -91,7 +91,7 @@ $(function(){
           }
         }
       },
-      '(set) (change) lamp (to) *tag': function(tag) {
+      '(set) (change) (desk) lamp (to) *tag': function(tag) {
         if(commandReady || !keyword_active){
           if(domoValidate.checkLampTag(tag)){
             socket.emit("lamp", tag)

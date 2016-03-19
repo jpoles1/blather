@@ -6,7 +6,7 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
     '(set) (change) light(s) (to) *tag': function(tag) {
       domoLights.setStrip(tag);
     },
-    '(set) (change) lamp (to) *tag': function(tag) {
+    '(set) (change) (desk) lamp (to) *tag': function(tag) {
       domoLights.setLamp(tag);
     },
     'all off': function(){
