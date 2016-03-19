@@ -30,7 +30,7 @@ serialPort.list(function (err, ports) {
         ser.on('data', function(rawdata) {
           var keywords = rawdata.toLowerCase().split(":");
           if(["pir", "temp", "humid"].contains(keywords[0])){
-            domoMonitor.logSensors(rawdata)
+            domoMonitor.parseSensors(rawdata)
           }
           else{
             console.log('data received: ' + rawdata);

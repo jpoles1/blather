@@ -11,7 +11,12 @@ module.exports = function(app, room_status, domoSerial){
     "humid": Number,
     "outlets_on": Number
   });
-  domoMonitor.mongoLog = function(){
+  var DomoStatus = mongoose.model("DomoStatus", {
+    "time": Date,
+    "event": String,
+    "msg": String
+  })
+  domoMonitor.logRoom = function(){
     RoomLog({
       "time": Date.now(),
       "pir": room_status["pir"],
@@ -21,7 +26,7 @@ module.exports = function(app, room_status, domoSerial){
       "outlets_on": Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
     }).save();
   }
-  domoMonitor.logSensors = function(rawdata){
+  domoMonitor.parseSensors = function(rawdata){
     var sensors = rawdata.toLowerCase().substring(0, rawdata.length-1).split(";");
     sensors.forEach(function(elem){
       var keywords = elem.split(":")
@@ -40,17 +45,27 @@ module.exports = function(app, room_status, domoSerial){
     })
     console.log(room_status)
   }
+  domoMonitor.logEvent = function(event_name, msg){
+    DomoStatus({
+      "time": Date.now(),
+      "event": event_name,
+      "msg": msg
+    }).save();
+  }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find().sort('time').exec(function (err, logs) {
+    RoomLog.find().sort('time').exec(function (err, roomdata) {
       if (err) return console.error(err);
-      if(typeof res != "undefined"){
-        res.render("charts.hbs", {logdata: JSON.stringify(logs)})
-      }
+      DomoStatus.find().sort('time').exec(function (err, eventdata) {
+        if(typeof res != "undefined"){
+          res.render("charts.hbs", {roomdata: JSON.stringify(roomdata), eventdata: JSON.stringify(eventdata)})
+        }
+      });
     })
   }
   app.get("/charts", function(req, res){
     domoMonitor.fetchMongoLogs(res)
   })
-  setInterval(domoMonitor.mongoLog, 60*1000)
+  domoMonitor.logEvent("Restarted")
+  setInterval(domoMonitor.logRoom, 60*1000)
   return domoMonitor;
 }

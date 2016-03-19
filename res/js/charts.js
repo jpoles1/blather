@@ -12,7 +12,8 @@ window.onload = function(){
           });
       }
   }
-  logData = JSON.parse(rawData)
+  roomData = JSON.parse(rawRoomData)
+  eventData = JSON.parse(rawEventData)
   var tempoptions = {
     chart: {
       renderTo: 'temp',
@@ -91,7 +92,8 @@ window.onload = function(){
     },
     xAxis: {
       type: 'datetime',
-      events: {setExtremes: syncExtremes}
+      events: {setExtremes: syncExtremes},
+      plotLines: []
     },
     yAxis: [{
       title: {
@@ -112,14 +114,22 @@ window.onload = function(){
       {name: "Outlets On", data: []}
     ]
   };
-  for(entry_index in logData){
-    entry = logData[entry_index]
+  for(entry_index in roomData){
+    entry = roomData[entry_index]
     //lightoptions.series[0].data.push([i.time, i.light]);
     timept = Date.parse(entry.time);
     tempoptions.series[0].data.push([timept, entry.temp]);
     tempoptions.series[1].data.push([timept, entry.humid]);
     activity_options.series[0].data.push([timept, entry.pirct]);
     activity_options.series[1].data.push([timept, entry.outlets_on]);
+  }
+  console.log(eventData)
+  for(entry_index in eventData){
+    entry = eventData[entry_index]
+    console.log(entry)
+    //lightoptions.series[0].data.push([i.time, i.light]);
+    timept = Date.parse(entry.time);
+    activity_options.xAxis["plotLines"].push({color: 'red', value: timept, width: .5})
   }
   var chart1 = new Highcharts.StockChart(tempoptions);
   var chart2 = new Highcharts.Chart(activity_options);
