@@ -26,6 +26,31 @@ window.onload = function(){
       type: 'datetime',
       events: {setExtremes: syncExtremes}
     },
+    rangeSelector : {
+      buttons : [{
+          type : 'hour',
+          count : 1,
+          text : '1h'
+      }, {
+          type : 'day',
+          count : 1,
+          text : '1D'
+      },{
+          type : 'day',
+          count : 2,
+          text : '2D'
+      },{
+          type : 'day',
+          count : 7,
+          text : 'Wk'
+      },{
+          type : 'all',
+          count : 1,
+          text : 'All'
+      }],
+      selected : 1,
+      inputEnabled : false
+    },
     yAxis: [{
       labels: {
         format: '{value}°F'
@@ -41,13 +66,19 @@ window.onload = function(){
         text: 'Humidity'
       }, opposite: true
     }],
+    tooltip: {
+      shared: true
+    },
     plotOptions: {
       spline: {
         marker: {
           enabled: false
         }			}
     },
-    series: [{name: "Temperature", data: [], tooltip: {valueSuffix: ' °F'}}, {name: "Humidity", data: [], yAxis: 1, tooltip: {valueSuffix: ' %'}}]
+    series: [
+      {name: "Temperature", data: [], tooltip: {valueSuffix: ' °F'}},
+      {name: "Humidity", data: [], yAxis: 1, tooltip: {valueSuffix: ' %'}}
+    ]
   };
   var activity_options = {
     chart: {
@@ -67,6 +98,9 @@ window.onload = function(){
         text: 'Count'
       }
     }],
+    tooltip: {
+      shared: true
+    },
     plotOptions: {
       spline: {
         marker: {
@@ -74,8 +108,8 @@ window.onload = function(){
         }			}
     },
     series: [
-      {name: "PIR Count", data: [], tooltip: {valueSuffix: ' PIR Events'}},
-      {name: "Outlets On", data: [], tooltip: {valueSuffix: ' Outlets On'}}
+      {name: "PIR Count", data: []},
+      {name: "Outlets On", data: []}
     ]
   };
   for(entry_index in logData){

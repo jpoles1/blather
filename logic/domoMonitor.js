@@ -31,7 +31,7 @@ module.exports = function(app, room_status, domoSerial){
         domoMonitor.lightTimeout = setTimeout(function(){
 
         })*/
-        var now = new Date();
+        var now = Date.now();
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
         console.log("Detected Motion")
@@ -41,7 +41,7 @@ module.exports = function(app, room_status, domoSerial){
     console.log(room_status)
   }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find(function (err, logs) {
+    RoomLog.find().sort('time').exec(function (err, logs) {
       if (err) return console.error(err);
       if(typeof res != "undefined"){
         res.render("charts.hbs", {logdata: JSON.stringify(logs)})
