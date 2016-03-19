@@ -16,6 +16,7 @@ exports.checkName = function(name){
   return name;
 }
 exports.correctLEDCommand = function(tag){
+  if(["weight"].contains(tag)){tag = "white";}
   if(["read"].contains(tag)){tag = "red";}
   if(["blew"].contains(tag)){tag = "blue";}
   if(["screen", "creen"].contains(tag)){tag = "green";}
@@ -41,13 +42,13 @@ exports.correctLEDCommand = function(tag){
 }
 exports.checkLEDTag = function(tag){
   var tagwords = [];
-  tag.split(" ").forEach(function(elem){
+  tag.toLowerCase().split(" ").forEach(function(elem){
     var validated = exports.correctLEDCommand(elem);
     if(validated!=""){tagwords.push(validated)}
   });
   return tagwords;
 }
 exports.checkLampTag = function(tag){
-  return ["on", "off"].contains(tag);
+  return ["on", "off"].contains(tag.toLowerCase());
 }
 })(typeof exports === 'undefined'? this['domoValidate']={}: exports);
