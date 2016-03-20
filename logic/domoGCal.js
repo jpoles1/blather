@@ -174,6 +174,7 @@ module.exports = function(domoActuate){
           for (var i = 0; i < items.length; i++) {
             var item = items[i];
             if(item.title.replace(" ","")!=""){
+              item.title = item.title.replace(/http(s)?:\/\/.+/, "")
               if(event_string == ""){
                 event_string = "Your todo list includes... "+item.title
               }
