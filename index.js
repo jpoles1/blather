@@ -73,7 +73,8 @@ serialPort.list(function (err, ports) {
           "outlets": {
             "1": undefined,
             "2": undefined
-          }
+          },
+          "inactive": undefined
         }
         var domoSerial = require("./logic/domoSerial")(ser, room_status);
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
@@ -91,6 +92,10 @@ serialPort.list(function (err, ports) {
           if(room_status["pirct"]<1){
             if(Object.keys(room_status.outlets).some(function(x){return(room_status.outlets[x]=="on")})){
               domoMonitor.logEvent("Inactive")
+              room_status.inactive = {
+                "start": Date.now(),
+                "outletct": domoMonitor.countOutlets()
+              }
             }
             domoSerial.allOff();
             setTimeout(function(){

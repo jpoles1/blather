@@ -16,6 +16,9 @@ module.exports = function(app, room_status, domoSerial){
     "event": String,
     "msg": String
   })
+  domoMonitor.countOutlets = function(){
+    return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
+  }
   domoMonitor.logRoom = function(){
     RoomLog({
       "time": Date.now(),
@@ -23,7 +26,7 @@ module.exports = function(app, room_status, domoSerial){
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
       "temp": room_status["temp"],
       "humid": room_status["humid"],
-      "outlets_on": Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
+      "outlets_on": this.countOutlets()
     }).save();
   }
   domoMonitor.parseSensors = function(rawdata){
@@ -36,6 +39,14 @@ module.exports = function(app, room_status, domoSerial){
         domoMonitor.lightTimeout = setTimeout(function(){
 
         })*/
+        if(typeof room_status.inactive != "undefined"){
+          var powerSaver = (Date.Now()-room_status.inactive["start"])*60*room_status.inactive["outletct"] //Time in millis x 60 watts x # outlets left on
+          var powerSaver = powerSaver/(1000*60*60) // Divide millis to get hours
+          var msg = "Saved: "+String(powerSaver)+" Watts";
+          console.log(msg)
+          this.logEvent("PowerSaver", msg)
+          room_status.inactive = undefined;
+        }
         var now = Date.now();
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
