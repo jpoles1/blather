@@ -1,16 +1,23 @@
-<div class="jumbotron container-fluid" id="container">
-  <b>Chart:</b>
-  </br>
-  <div id="temp"></div>
-  <div id="activity"></div>
-  <div id="sleepsec"></div>
-  <div id="other"></div>
-</div>
-<script>
-  var rawRoomData = '{{{roomdata}}}'
-  var rawEventData = '{{{eventdata}}}'
-  setTimeout(function(){window.location.reload()}, 5*60*1000)
-</script>
-<script src="res/js/jquery-2.2.1.min.js"></script>
-<script src="res/js/highstock.js"></script>
-<script src="res/js/charts.js"></script>
+<html>
+  <head>
+    <link rel="shortcut icon" type="image/png" href="res/home.ico"/>
+  </head>
+  <body>
+    <div class="jumbotron container-fluid" id="container">
+      <b>Chart:</b>
+      </br>
+      <div id="temp"></div>
+      <div id="activity"></div>
+      <div id="sleepsec"></div>
+      <div id="other"></div>
+    </div>
+    <script>
+      var rawRoomData = '{{{roomdata}}}'
+      var rawEventData = '{{{eventdata}}}'
+      setTimeout(function(){window.location.reload()}, 5*60*1000)
+    </script>
+    <script src="res/js/jquery-2.2.1.min.js"></script>
+    <script src="res/js/highstock.js"></script>
+    <script src="res/js/charts.js"></script>
+  </body>
+</html>
