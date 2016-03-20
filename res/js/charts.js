@@ -33,6 +33,10 @@ window.onload = function(){
           count : 1,
           text : '1h'
       }, {
+          type : 'hour',
+          count : 12,
+          text : '12h'
+      }, {
           type : 'day',
           count : 1,
           text : '1D'
