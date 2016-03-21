@@ -83,11 +83,5 @@ module.exports = function(ser, room_status){
     console.log(typeof comm_list)
     ser.write(comm_list)
   }
-  domoSerial.allOff = function(){
-    domoSerial.setOutlet("all", "off")
-  }
-  domoSerial.allOn = function(){
-    domoSerial.setOutlet("all", "on")
-  }
   return domoSerial
 }

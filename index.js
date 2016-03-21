@@ -80,7 +80,7 @@ serialPort.list(function (err, ports) {
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
-        var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, confused);
+        var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, domoMonitor, confused);
         var domoWeather = require("./logic/domoWeather")(domoActuate);
         var domoGCal = require("./logic/domoGCal")(domoActuate)
         var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
@@ -101,6 +101,7 @@ serialPort.list(function (err, ports) {
             setTimeout(function(){
               if(room_status["pirct"]>0){
                 domoSerial.allOn();
+                room_status.inactive = undefined;
               }
             }, 8*1000)
           }
@@ -167,13 +168,13 @@ serialPort.list(function (err, ports) {
             domoModes.loveMode(io);
           })
           socket.on("all off", function(){
-            domoSerial.allOff();
+            domoLights.allOff();
             domoActuate.speak("All off",function(){
               socket.emit("ready")
             })
           })
           socket.on("all on", function(){
-            domoSerial.allOn();
+            domoLights.allOn();
             domoActuate.speak("All on",function(){
               socket.emit("ready")
             })

@@ -1,4 +1,4 @@
-module.exports = function(app, domoValidate, domoActuate, domoSerial, confused){
+module.exports = function(app, domoValidate, domoActuate, domoSerial, domoMonitor, confused){
   var domoLights = {};
   domoLights.setLamp = function(command, socket){
     if(domoValidate.checkLampTag(command)){
@@ -7,6 +7,7 @@ module.exports = function(app, domoValidate, domoActuate, domoSerial, confused){
       if(typeof socket != "undefined"){
         socket.emit("msg", "Sent Lamp command: "+ command)
       }
+      domoMonitor.logUserInput(command, "lamp")
     }
     else{
       confused(socket)
@@ -19,10 +20,19 @@ module.exports = function(app, domoValidate, domoActuate, domoSerial, confused){
       if(typeof socket != "undefined"){
         socket.emit("msg", "Sent LED Strip command: "+ command)
       }
+      domoMonitor.logUserInput(command, "led_strip")
     }
     else{
       confused(socket)
     }
+  }
+  domoLights.allOff = function(){
+    domoSerial.setOutlet("all", "off")
+    domoMonitor.logUserInput("all off", "all")
+  }
+  domoLights.allOn = function(){
+    domoSerial.setOutlet("all", "on")
+    domoMonitor.logUserInput("all on", "all")
   }
   app.get("/lights", function(req,res){
     command = req.query.command;

@@ -10,10 +10,10 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
       domoLights.setLamp(tag);
     },
     'all off': function(){
-      domoSerial.allOff();
+      domoLights.allOff();
     },
     'all on': function(){
-      domoSerial.allOn();
+      domoLights.allOn();
     },
     'kill music': function(){
       domoModes.killMusic();

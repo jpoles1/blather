@@ -2,11 +2,16 @@ window.onload = function(){
   function syncExtremes(e) {
       var thisChart = this.chart;
 
-      if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+      if (typeof e === "undefined" || e["trigger"] !== 'syncExtremes') { // Prevent feedback loop
           Highcharts.each(Highcharts.charts, function (chart) {
               if (chart !== thisChart) {
                   if (chart.xAxis[0].setExtremes) { // It is null while updating
+                    if (typeof e === "undefined"){
+                      chart.xAxis[0].setExtremes(chart1.min, chart1.max, undefined, false, { trigger: 'syncExtremes' });
+                    }
+                    else{
                       chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: 'syncExtremes' });
+                    }
                   }
               }
           });
@@ -142,4 +147,5 @@ window.onload = function(){
   }
   var chart1 = new Highcharts.StockChart(tempoptions);
   var chart2 = new Highcharts.Chart(activity_options);
+  syncExtremes()
 };

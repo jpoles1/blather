@@ -1,7 +1,7 @@
 var mongoose = require("mongoose")
 module.exports = function(app, room_status, domoSerial){
   mongoose.connect(process.env.MONGO_URI);
-  domoMonitor = {};
+  var domoMonitor = {};
   domoMonitor.lightTimeout = undefined;
   var RoomLog = mongoose.model("RoomLog", {
     "time": Date,
@@ -14,19 +14,21 @@ module.exports = function(app, room_status, domoSerial){
   var DomoStatus = mongoose.model("DomoStatus", {
     "time": Date,
     "event": String,
-    "msg": String
+    "msg": String,
+    "info": mongoose.Schema.Types.Mixed
   })
   domoMonitor.countOutlets = function(){
     return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
   }
   domoMonitor.logRoom = function(){
+    var numoutlets = domoMonitor.countOutlets();
     RoomLog({
       "time": Date.now(),
       "pir": room_status["pir"],
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
       "temp": room_status["temp"],
       "humid": room_status["humid"],
-      "outlets_on": this.countOutlets()
+      "outlets_on": numoutlets
     }).save();
   }
   domoMonitor.parseSensors = function(rawdata){
@@ -50,21 +52,26 @@ module.exports = function(app, room_status, domoSerial){
         var now = Date.now();
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
-        console.log("Detected Motion")
       }
       room_status[keywords[0]] = parseInt(keywords[1]);
     })
-    console.log(room_status)
   }
-  domoMonitor.logEvent = function(event_name, msg){
+  domoMonitor.logEvent = function(event_name, msg, info){
     DomoStatus({
       "time": Date.now(),
       "event": event_name,
-      "msg": msg
+      "msg": msg,
+      "info": info
     }).save();
   }
+  domoMonitor.logUserInput = function(command, hardware_type){
+    domoMonitor.logEvent("User Input", "Command: "+command, {
+      "hardware": hardware_type,
+      "command": command
+    })
+  }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find().sort('time').exec(function (err, roomdata) {
+    RoomLog.find().limit(1400).sort('time').exec(function (err, roomdata) {
       if (err) return console.error(err);
       DomoStatus.find().sort('time').exec(function (err, eventdata) {
         if(typeof res != "undefined"){
