@@ -42,7 +42,7 @@ module.exports = function(app, room_status, domoSerial){
 
         })*/
         if(typeof room_status.inactive != "undefined"){
-          var powerSaver = (Date.Now()-room_status.inactive["start"])*60*room_status.inactive["outletct"] //Time in millis x 60 watts x # outlets left on
+          var powerSaver = (Date.now()-room_status.inactive["start"])*60*room_status.inactive["outletct"] //Time in millis x 60 watts x # outlets left on
           var powerSaver = powerSaver/(1000*60*60) // Divide millis to get hours
           var msg = "Saved: "+String(powerSaver)+" Watts";
           console.log(msg)
