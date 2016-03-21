@@ -46,7 +46,7 @@ module.exports = function(app, room_status, domoSerial){
           var powerSaver = powerSaver/(1000*60*60) // Divide millis to get hours
           var msg = "Saved: "+String(powerSaver)+" Watts";
           console.log(msg)
-          this.logEvent("PowerSaver", msg)
+          domoMonitor.logEvent("PowerSaver", msg)
           room_status.inactive = undefined;
         }
         var now = Date.now();
