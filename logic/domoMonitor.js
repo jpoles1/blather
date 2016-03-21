@@ -23,7 +23,7 @@ module.exports = function(app, room_status, domoSerial){
   domoMonitor.logRoom = function(){
     var numoutlets = domoMonitor.countOutlets();
     RoomLog({
-      "time": Date.now(),
+      "time": new Date(),
       "pir": room_status["pir"],
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
       "temp": room_status["temp"],
@@ -48,6 +48,7 @@ module.exports = function(app, room_status, domoSerial){
           console.log(msg)
           domoMonitor.logEvent("PowerSaver", msg)
           room_status.inactive = undefined;
+          domoLights.setStrip("on"); //Turn led strip on when person re-enters the room.
         }
         var now = Date.now();
         room_status["pirct"]+=1;
@@ -58,7 +59,7 @@ module.exports = function(app, room_status, domoSerial){
   }
   domoMonitor.logEvent = function(event_name, msg, info){
     DomoStatus({
-      "time": Date.now(),
+      "time": new Date(),
       "event": event_name,
       "msg": msg,
       "info": info
