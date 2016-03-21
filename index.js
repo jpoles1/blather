@@ -97,10 +97,10 @@ serialPort.list(function (err, ports) {
                 "outletct": domoMonitor.countOutlets()
               }
             }
-            domoSerial.allOff();
+            domoLights.allOff();
             setTimeout(function(){
               if(room_status["pirct"]>0){
-                domoSerial.allOn();
+                domoLights.allOn();
                 room_status.inactive = undefined;
               }
             }, 8*1000)
