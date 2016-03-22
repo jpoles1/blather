@@ -144,6 +144,9 @@ window.onload = function(){
     if(entry["event"] == "Inactive"){
       activity_options.xAxis["plotLines"].push({color: 'blue', value: timept, width: .5})
     }
+    if(entry["event"] == "Auto On Mistake"){
+      activity_options.xAxis["plotLines"].push({color: 'black', value: timept, width: .5})
+    }
   }
   var chart1 = new Highcharts.StockChart(tempoptions);
   var chart2 = new Highcharts.Chart(activity_options);
