@@ -95,16 +95,19 @@ serialPort.list(function (err, ports) {
               domoMonitor.logEvent("Inactive")
               room_status.inactive = {
                 "start": Date.now(),
-                "outletct": domoMonitor.countOutlets()
+                "outletct": domoMonitor.countOutlets(),
+                "outlets": room_status["outlets"]
               }
             }
             if(typeof room_status["auto_on"] != "undefined" && room_status["auto_on"] == 1){
               domoMonitor.logEvent("Auto On Mistake") //Report a mistaken activation of lights if there is no more movement after 15 min.
             }
-            domoLights.allOff();
+            domoLights.allOff("domo");
             setTimeout(function(){
               if(room_status["pirct"]>0){
-                domoLights.allOn();
+                for(outlet in room_status.inactive["outlets"]){
+                  domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo")
+                }
                 room_status.inactive = undefined;
               }
             }, 8*1000)

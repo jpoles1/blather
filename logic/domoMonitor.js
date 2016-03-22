@@ -17,6 +17,13 @@ module.exports = function(app, room_status, domoSerial){
     "msg": String,
     "info": mongoose.Schema.Types.Mixed
   })
+  var DomoBehaviour = mongoose.model("domo-behaviour", {
+    "time": Date,
+    "actor": String,
+    "actuator": String
+    "command_string": String,
+    "info": mongoose.Schema.Types.Mixed
+  })
   domoMonitor.countOutlets = function(){
     return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
   }
@@ -49,7 +56,7 @@ module.exports = function(app, room_status, domoSerial){
           domoMonitor.logEvent("PowerSaver", msg)
           room_status.inactive = undefined;
           room_status["auto_on"] = 1; //Log set in status that lights have been automatically enabled.
-          domoSerial.setStrip("on"); //Turn led strip on when person re-enters the room.
+          domoSerial.setStrip("on", "domo"); //Turn led strip on when person re-enters the room.
         }
         var now = Date.now();
         room_status["pirct"]+=1;
@@ -66,11 +73,14 @@ module.exports = function(app, room_status, domoSerial){
       "info": info
     }).save();
   }
-  domoMonitor.logUserInput = function(command, hardware_type){
-    domoMonitor.logEvent("User Input", "Command: "+command, {
-      "hardware": hardware_type,
-      "command": command
-    })
+  domoMonitor.logBehaviour = function(actor, actuator, command, info){
+    DomoBehaviour({
+      "time": new Date(),
+      "actor": actor,
+      "actuator": actuator
+      "command_string": command,
+      "info": info
+    }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
     RoomLog.find().limit(1400).sort('time').exec(function (err, roomdata) {
