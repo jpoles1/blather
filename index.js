@@ -74,7 +74,8 @@ serialPort.list(function (err, ports) {
             "1": undefined,
             "2": undefined
           },
-          "inactive": undefined
+          "inactive": undefined,
+          "auto_on": undefined
         }
         var domoSerial = require("./logic/domoSerial")(ser, room_status);
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
@@ -97,6 +98,9 @@ serialPort.list(function (err, ports) {
                 "outletct": domoMonitor.countOutlets()
               }
             }
+            if(typeof room_status["auto_on"] != "undefined" && room_status["auto_on"] == 1){
+              domoMonitor.logEvent("Auto On Mistake") //Report a mistaken activation of lights if there is no more movement after 15 min.
+            }
             domoLights.allOff();
             setTimeout(function(){
               if(room_status["pirct"]>0){
@@ -105,6 +109,7 @@ serialPort.list(function (err, ports) {
               }
             }, 8*1000)
           }
+          room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;
         }, 15*60*1000)
         //Set the port for the server
