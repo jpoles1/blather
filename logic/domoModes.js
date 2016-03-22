@@ -18,8 +18,8 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
       io.emit("stop_listen")
     }
     domoActuate.speak("Good night. Entering sleep mode.", function(){
-      domoLights.setStrip("dark red", io);
       domoLights.setLamp("off", io);
+      domoLights.setStrip("dark red", io);
     });
   }
   domoModes.loveMode = function(io){

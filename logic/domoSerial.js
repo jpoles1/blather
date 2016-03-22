@@ -22,15 +22,15 @@ module.exports = function(ser, room_status){
     if(comm=="toggle"){
       if(room_status.outlets[outlet]=="on"){
         comm = "off";
-        ser.write("b4"+outlet_commands["off"][outlet])
+        ser.write("b4"+outlet_commands["off"][outlet]+"/")
       }
       else{
         comm = "on";
-        ser.write("b4"+outlet_commands["on"][outlet])
+        ser.write("b4"+outlet_commands["on"][outlet]+"/")
       }
     }
     else if(["off", "on"].contains(comm)){
-      ser.write("b4"+outlet_commands[comm][outlet])
+      ser.write("b4"+outlet_commands[comm][outlet]+"/")
     }
     if(outlet=="all"){
       for(outlet in room_status["outlets"]){
@@ -80,8 +80,9 @@ module.exports = function(ser, room_status){
         }
       }
     })
-    console.log(typeof comm_list)
-    ser.write(comm_list)
+    if(comm_list != ""){
+      ser.write(comm_list+"/")
+    }
   }
   return domoSerial
 }
