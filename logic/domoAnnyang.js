@@ -17,6 +17,24 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
     },
     'kill music': function(){
       domoModes.killMusic();
+    },
+    '(enter) (activate) (start) :tag mode': function(tag){
+      tag = tag.toLowerCase();
+      if(["love", "sex", "sexy", "sexytime"].contains(tag)){
+        domoModes.loveMode();
+      }
+      else if(["sleep"].contains(tag)){
+        domoModes.sleepMode();
+      }
+      else if(["party"].contains(tag)){
+        domoModes.partyMode();
+      }
+      else if(["wake", "week", "with"].contains(tag)){
+        domoModes.wakeMode();
+      }
+      else{
+        console.log("Could not activate the mode:", tag)
+      }
     }
   };
   annyang.init(commands);

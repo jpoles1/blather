@@ -84,9 +84,9 @@ serialPort.list(function (err, ports) {
         var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, domoMonitor, confused);
         var domoWeather = require("./logic/domoWeather")(domoActuate);
         var domoGCal = require("./logic/domoGCal")(domoActuate)
-        var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
         var domoUtility = require("./logic/domoUtility")(app, domoActuate, domoMonitor);
         var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
+        var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
 
         //Set Lights Timeout
         setInterval(function(){
