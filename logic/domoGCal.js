@@ -116,7 +116,10 @@ module.exports = function(domoActuate){
         if (err) {
           console.log('The API returned an error: ' + err);
           domoActuate.speak("Sorry could not fetch "+time+"'s schedule", function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
           return;
         }
@@ -126,7 +129,10 @@ module.exports = function(domoActuate){
         var msg_string = "On "+time+"'s schedule you have:<div style='margin: 15px 0 15px ; display: flex; justify-content: space-around; align-items: center;'>";
         if (events.length == 0) {
           domoActuate.speak('No events left for '+time, function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
         } else {
           for (var i = 0; i < events.length; i++) {
@@ -137,9 +143,15 @@ module.exports = function(domoActuate){
             event_string += event.summary+" at "+moment(start).format("HH:mm")
             msg_string += "<div style='border: 1px solid #555; padding: 10px;'>"+event.summary+" at "+moment(start).format("HH:mm")+"</div>"
           }
-          socket.emit("msg", msg_string+"</div>")
+          try{
+            socket.emit("msg", msg_string+"</div>")
+          }
+          catch(e){}
           domoActuate.speak(event_string, function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
         }
       });
@@ -158,14 +170,20 @@ module.exports = function(domoActuate){
         if (err) {
           console.log('The API returned an error: ' + err);
           domoActuate.speak("Sorry could not fetch your todo list.", function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
           return;
         }
         var items = response.items;
         if (items.length == 0) {
           domoActuate.speak('Nothing left on your todo list', function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
         }
         else {
@@ -186,7 +204,10 @@ module.exports = function(domoActuate){
             }
           }
           domoActuate.speak(event_string, function(){
-            socket.emit("ready")
+            try{
+              socket.emit("ready")
+            }
+            catch(e){}
           });
         }
       });

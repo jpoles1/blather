@@ -20,7 +20,7 @@ module.exports = function(app, room_status, domoSerial){
   var DomoBehaviour = mongoose.model("domo-behaviour", {
     "time": Date,
     "actor": String,
-    "actuator": String
+    "actuator": String,
     "command_string": String,
     "info": mongoose.Schema.Types.Mixed
   })
@@ -77,7 +77,7 @@ module.exports = function(app, room_status, domoSerial){
     DomoBehaviour({
       "time": new Date(),
       "actor": actor,
-      "actuator": actuator
+      "actuator": actuator,
       "command_string": command,
       "info": info
     }).save();
