@@ -49,7 +49,7 @@ module.exports = function(app, room_status, domoSerial){
           domoMonitor.logEvent("PowerSaver", msg)
           room_status.inactive = undefined;
           room_status["auto_on"] = 1; //Log set in status that lights have been automatically enabled.
-          domoLights.setStrip("on"); //Turn led strip on when person re-enters the room.
+          domoSerial.setStrip("on"); //Turn led strip on when person re-enters the room.
         }
         var now = Date.now();
         room_status["pirct"]+=1;
