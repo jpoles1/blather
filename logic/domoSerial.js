@@ -1,3 +1,4 @@
+var mongoose = require("mongoose")
 module.exports = function(ser, room_status){
   var domoSerial = {};
   var serial_active = 0;
@@ -17,6 +18,22 @@ module.exports = function(ser, room_status){
       "4": "0100000000011101000011000",
       "all": "0100000000110101000011000"
     }
+  }
+  var DomoBehaviour = mongoose.model("domo-behaviour", {
+    "time": Date,
+    "actor": String,
+    "actuator": String,
+    "command_string": String,
+    "info": mongoose.Schema.Types.Mixed
+  })
+  domoSerial.logBehaviour = function(actor, actuator, command, info){
+    DomoBehaviour({
+      "time": new Date(),
+      "actor": actor,
+      "actuator": actuator,
+      "command_string": command,
+      "info": info
+    }).save();
   }
   domoSerial.setOutlet = function(outlet, comm, actor){
     if(comm=="toggle"){
@@ -44,7 +61,7 @@ module.exports = function(ser, room_status){
     if(typeof actor === "undefined"){
       actor = "user"
     }
-    domoMonitor.logBehaviour(actor, "outlet "+outet, comm)
+    domoSerial.logBehaviour(actor, "outlet "+outlet, comm)
   }
   domoSerial.setStrip = function(comms, actor){
     var comm_list = "";
@@ -85,7 +102,7 @@ module.exports = function(ser, room_status){
         if(typeof actor === "undefined"){
           actor = "user"
         }
-        domoMonitor.logBehaviour(actor, "led strip via IR", color)
+        domoSerial.logBehaviour(actor, "led strip via IR", color)
       }
     })
     if(comm_list != ""){

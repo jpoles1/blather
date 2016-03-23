@@ -17,13 +17,6 @@ module.exports = function(app, room_status, domoSerial){
     "msg": String,
     "info": mongoose.Schema.Types.Mixed
   })
-  var DomoBehaviour = mongoose.model("domo-behaviour", {
-    "time": Date,
-    "actor": String,
-    "actuator": String,
-    "command_string": String,
-    "info": mongoose.Schema.Types.Mixed
-  })
   domoMonitor.countOutlets = function(){
     return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
   }
@@ -70,15 +63,6 @@ module.exports = function(app, room_status, domoSerial){
       "time": new Date(),
       "event": event_name,
       "msg": msg,
-      "info": info
-    }).save();
-  }
-  domoMonitor.logBehaviour = function(actor, actuator, command, info){
-    DomoBehaviour({
-      "time": new Date(),
-      "actor": actor,
-      "actuator": actuator,
-      "command_string": command,
       "info": info
     }).save();
   }
