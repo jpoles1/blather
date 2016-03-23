@@ -11,19 +11,31 @@ Array.prototype.contains = function(obj) {
 require('dotenv').config();
 //Setup Serial Protocols
 var serialPort = require("serialport");
+var devMode = 0;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);
     return portName == "ttyUSB"
   })
-  if(typeof myPort === 'undefined'){
-    throw new Error("Could not connect to Arduino peripheral.")
+  if(typeof myPort === 'undefined' && devMode != 0){
+    throw new Error("Could not connect to Arduino peripheral.");
   }
   else{
-    ser = new serialPort.SerialPort(myPort.comName, {
-     baudRate: 9600,
-     parser: serialPort.parsers.readline("\r\n")
-    }, false);
+    if(typeof myPort === 'undefined'){
+      ser = {};
+      ser.open = function(fun){
+        fun();
+      }
+      ser.on = function(param, fun){
+        fun("");
+      }
+    }
+    else{
+      ser = new serialPort.SerialPort(myPort.comName, {
+       baudRate: 9600,
+       parser: serialPort.parsers.readline("\r\n")
+      }, false);
+    }
     ser.open(function (err) {
       if(err) console.log('err ' + err);
       else{
