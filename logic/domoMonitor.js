@@ -31,25 +31,28 @@ module.exports = function(app, room_status, domoSerial){
       "outlets_on": numoutlets
     }).save();
   }
+  domoMonitor.endInactive = function(){
+    var powerTime = (Date.now()-room_status.inactive["start"])/(1000*60*60) // Divide millis to get hours
+    var powerSaver = powerTime *60*room_status.inactive["outletct"] //Time x 60 watts x # outlets left on
+    var msg = "Saved: "+String(powerSaver)+" Watts; Over";
+    console.log(msg)
+    domoMonitor.logEvent("PowerSaver", msg)
+    if(typeof room_status["inactive"]["outlets"] != "undefined"){
+      for(outlet in room_status.inactive["outlets"]){
+        domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo");
+      }
+    }
+    room_status.inactive = undefined;
+    room_status["auto_on"] = 1; //Log set in status that lights have been automatically enabled.
+  }
   domoMonitor.parseSensors = function(rawdata){
     var sensors = rawdata.toLowerCase().substring(0, rawdata.length-1).split(";");
     sensors.forEach(function(elem){
       var keywords = elem.split(":")
       console.log(keywords)
       if(keywords[0]=="pir" && keywords[1]=="1"){
-        /*clearTimeout(domoMonitor.lightTimeout)
-        domoMonitor.lightTimeout = setTimeout(function(){
-
-        })*/
         if(typeof room_status.inactive != "undefined"){
-          var powerSaver = (Date.now()-room_status.inactive["start"])*60*room_status.inactive["outletct"] //Time in millis x 60 watts x # outlets left on
-          var powerSaver = powerSaver/(1000*60*60) // Divide millis to get hours
-          var msg = "Saved: "+String(powerSaver)+" Watts";
-          console.log(msg)
-          domoMonitor.logEvent("PowerSaver", msg)
-          room_status.inactive = undefined;
-          room_status["auto_on"] = 1; //Log set in status that lights have been automatically enabled.
-          domoSerial.setStrip("on", "domo"); //Turn led strip on when person re-enters the room.
+          domoMonitor.endInactive();
         }
         var now = Date.now();
         room_status["pirct"]+=1;

@@ -107,7 +107,6 @@ serialPort.list(function (err, ports) {
         setInterval(function(){
           if(room_status["pirct"]<1){
             if(Object.keys(room_status.outlets).some(function(x){return(room_status.outlets[x]=="on")})){
-              console.log("Lights Off: Inactivity")
               room_status.inactive = {
                 "start": Date.now(),
                 "outletct": domoMonitor.countOutlets(),
@@ -121,15 +120,9 @@ serialPort.list(function (err, ports) {
             domoLights.allOff("domo");
             setTimeout(function(){
               if(room_status["pirct"]>0){
-                if(typeof room_status["inactive"]["outlets"] != "undefined"){
-                  console.log(room_status["inactive"]["outlets"])
-                  for(outlet in room_status.inactive["outlets"]){
-                    domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo");
-                  }
-                }
-                room_status.inactive = undefined;
+                domoMonitor.endInactive();
               }
-            }, 15*1000)
+            }, 12*1000)
           }
           room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;
