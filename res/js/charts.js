@@ -1,4 +1,9 @@
 window.onload = function(){
+  Highcharts.setOptions({
+    global: {
+        timezoneOffset: 6*60
+    }
+  })
   function syncExtremes(e) {
       var thisChart = this.chart;
 
@@ -132,10 +137,8 @@ window.onload = function(){
     activity_options.series[0].data.push([timept, entry.pirct]);
     activity_options.series[1].data.push([timept, entry.outlets_on]);
   }
-  console.log(eventData)
   for(entry_index in eventData){
     entry = eventData[entry_index]
-    console.log(entry)
     //lightoptions.series[0].data.push([i.time, i.light]);
     timept = Date.parse(entry.time);
     if(entry["event"] == "Restarted"){

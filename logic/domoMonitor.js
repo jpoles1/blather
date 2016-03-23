@@ -67,11 +67,11 @@ module.exports = function(app, room_status, domoSerial){
     }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find().sort('time').limit(1400).exec(function (err, roomdata) {
+      RoomLog.find({}, null, {sort: '-time'}).limit(1400).exec(function (err, roomdata) {
       if (err) return console.error(err);
-      DomoStatus.find().sort('time').exec(function (err, eventdata) {
+      DomoStatus.find({}, null, {sort: '-time'}).limit(1400).exec(function (err, eventdata) {
         if(typeof res != "undefined"){
-          res.render("charts.hbs", {roomdata: JSON.stringify(roomdata), eventdata: JSON.stringify(eventdata)})
+          res.render("charts.hbs", {roomdata: JSON.stringify(roomdata.reverse()), eventdata: JSON.stringify(eventdata.reverse())})
         }
       });
     })
@@ -79,7 +79,6 @@ module.exports = function(app, room_status, domoSerial){
   app.get("/charts", function(req, res){
     domoMonitor.fetchMongoLogs(res)
   })
-  domoMonitor.logEvent("Restarted")
   setInterval(domoMonitor.logRoom, 60*1000)
   return domoMonitor;
 }

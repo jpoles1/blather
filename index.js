@@ -10,6 +10,7 @@ Array.prototype.contains = function(obj) {
 }
 require('dotenv').config();
 //Setup Serial Protocols
+var ser;
 var serialPort = require("serialport");
 var devMode = 0;
 serialPort.list(function (err, ports) {
@@ -17,7 +18,7 @@ serialPort.list(function (err, ports) {
     var portName = port.comName.split("/")[2].slice(0, -1);
     return portName == "ttyUSB"
   })
-  if(typeof myPort === 'undefined' && devMode != 0){
+  if(typeof myPort === 'undefined' && devMode == 0){
     throw new Error("Could not connect to Arduino peripheral.");
   }
   else{
@@ -26,9 +27,8 @@ serialPort.list(function (err, ports) {
       ser.open = function(fun){
         fun();
       }
-      ser.on = function(param, fun){
-        fun("");
-      }
+      ser.on = function(param, fun){}
+      ser.write = function(t){}
     }
     else{
       ser = new serialPort.SerialPort(myPort.comName, {
@@ -91,6 +91,9 @@ serialPort.list(function (err, ports) {
         }
         var domoSerial = require("./logic/domoSerial")(ser, room_status);
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
+        if(devMode==0){
+          domoMonitor.logEvent("Restarted");
+        }
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
         var domoLights = require("./logic/domoLights")(app, domoValidate, domoActuate, domoSerial, domoMonitor, confused);
