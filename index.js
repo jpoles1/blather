@@ -107,6 +107,7 @@ serialPort.list(function (err, ports) {
         setInterval(function(){
           if(room_status["pirct"]<1){
             if(Object.keys(room_status.outlets).some(function(x){return(room_status.outlets[x]=="on")})){
+              console.log("Lights Off: Inactivity")
               domoMonitor.logEvent("Inactive")
               room_status.inactive = {
                 "start": Date.now(),
@@ -121,8 +122,9 @@ serialPort.list(function (err, ports) {
             setTimeout(function(){
               if(room_status["pirct"]>0){
                 if(typeof room_status["inactive"]["outlets"] != "undefined"){
+                  console.log(room_status["inactive"]["outlets"])
                   for(outlet in room_status.inactive["outlets"]){
-                    domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo")
+                    domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo");
                   }
                 }
                 room_status.inactive = undefined;
@@ -131,7 +133,7 @@ serialPort.list(function (err, ports) {
           }
           room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;
-        }, 15*60*1000)
+        }, 1*60*1000);
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;
