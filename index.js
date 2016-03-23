@@ -110,7 +110,7 @@ serialPort.list(function (err, ports) {
                 }
                 room_status.inactive = undefined;
               }
-            }, 8*1000)
+            }, 15*1000)
           }
           room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;

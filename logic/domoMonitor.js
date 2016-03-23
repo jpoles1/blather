@@ -67,7 +67,7 @@ module.exports = function(app, room_status, domoSerial){
     }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find().limit(1400).sort('time').exec(function (err, roomdata) {
+    RoomLog.find().sort('time').limit(1400).exec(function (err, roomdata) {
       if (err) return console.error(err);
       DomoStatus.find().sort('time').exec(function (err, eventdata) {
         if(typeof res != "undefined"){
