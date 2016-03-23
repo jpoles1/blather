@@ -124,11 +124,11 @@ serialPort.list(function (err, ports) {
                   domoMonitor.endInactive();
                 }
               }
-            }, 12*1000)
+            }, 15*1000)
           }
           room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;
-        }, 1*60*1000);
+        }, 15*60*1000);
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;
