@@ -120,7 +120,7 @@ serialPort.list(function (err, ports) {
             domoLights.allOff("domo");
             setTimeout(function(){
               if(room_status["pirct"]>0){
-                if(typeof room_status.inactive.outlets != "undefined"){
+                if(typeof room_status["inactive"]["outlets"] != "undefined"){
                   for(outlet in room_status.inactive["outlets"]){
                     domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo")
                   }
