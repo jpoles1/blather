@@ -120,7 +120,9 @@ serialPort.list(function (err, ports) {
             domoLights.allOff("domo");
             setTimeout(function(){
               if(room_status["pirct"]>0){
-                domoMonitor.endInactive();
+                if(typeof room_status.inactive != "undefined"){
+                  domoMonitor.endInactive();
+                }
               }
             }, 12*1000)
           }
