@@ -61,7 +61,7 @@ module.exports = function(ser, room_status){
     if(typeof actor === "undefined"){
       actor = "user"
     }
-    domoSerial.logBehaviour(actor, "outlet "+outet, comm)
+    domoSerial.logBehaviour(actor, "outlet "+outlet, comm)
   }
   domoSerial.setStrip = function(comms, actor){
     var comm_list = "";
