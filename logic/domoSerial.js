@@ -19,7 +19,7 @@ module.exports = function(ser, room_status){
       "all": "0100000000110101000011000"
     }
   }
-  var DomoBehaviour = mongoose.model("domo-behaviour", {
+  domoSerial.DomoBehaviour = mongoose.model("domo-behaviour", {
     "time": Date,
     "actor": String,
     "actuator": String,
@@ -27,7 +27,7 @@ module.exports = function(ser, room_status){
     "info": mongoose.Schema.Types.Mixed
   })
   domoSerial.logBehaviour = function(actor, actuator, command, info){
-    DomoBehaviour({
+    domoSerial.DomoBehaviour({
       "time": new Date(),
       "actor": actor,
       "actuator": actuator,

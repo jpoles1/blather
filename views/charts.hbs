@@ -3,13 +3,21 @@
     <link rel="shortcut icon" type="image/png" href="res/home.ico"/>
   </head>
   <body>
-    <div class="jumbotron container-fluid" id="container">
+    <div class="jumbotron container-fluid" id="container" style="width: 70%; display: inline-block; margin: 2%;">
       <b>Chart:</b>
       </br>
       <div id="temp"></div>
       <div id="activity"></div>
       <div id="sleepsec"></div>
       <div id="other"></div>
+    </div>
+    <div style="width: 20%; display: inline-block; margin: 2%;" id="action-log">
+      {{#each behaviourdata}}
+        {{time}}
+        <br>
+        {{actor}} sent "{{command_string}}" to {{actuator}}
+        <br><br>
+      {{/each}}
     </div>
     <script>
       var rawRoomData = '{{{roomdata}}}'

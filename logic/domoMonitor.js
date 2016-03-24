@@ -70,12 +70,17 @@ module.exports = function(app, room_status, domoSerial){
     }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
-      RoomLog.find({}, null, {sort: '-time'}).limit(1400).exec(function (err, roomdata) {
-      if (err) return console.error(err);
-      DomoStatus.find({}, null, {sort: '-time'}).limit(1400).exec(function (err, eventdata) {
-        if(typeof res != "undefined"){
-          res.render("charts.hbs", {roomdata: JSON.stringify(roomdata.reverse()), eventdata: JSON.stringify(eventdata.reverse())})
-        }
+    RoomLog.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
+      DomoStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
+        domoSerial.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
+          if(typeof res != "undefined"){
+            res.render("charts.hbs", {
+              behaviourdata: behaviourdata,
+              roomdata: JSON.stringify(roomdata.reverse()),
+              eventdata: JSON.stringify(eventdata.reverse())
+            })
+          }
+        })
       });
     })
   }

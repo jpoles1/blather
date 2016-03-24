@@ -62,7 +62,8 @@ serialPort.list(function (err, ports) {
         //Create express server
         var app = express()
         //Sets the template engine to be handlebars
-        app.engine('handlebars', exphbs({defaultLayout: 'main.hbs'}));
+        var hbs = exphbs.create({defaultLayout: 'main.hbs'})
+        app.engine('handlebars', hbs.engine);
         app.set('view engine', 'handlebars');
         //Set server favicon
         app.use(favicon(__dirname + '/res/favicon.ico'));
