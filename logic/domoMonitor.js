@@ -75,7 +75,7 @@ module.exports = function(app, room_status, domoSerial){
         domoSerial.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
             res.render("charts.hbs", {
-              last_on: room_stats["lastpir"],
+              last_on: room_status["lastpir"],
               behaviourdata: behaviourdata,
               roomdata: JSON.stringify(roomdata.reverse()),
               eventdata: JSON.stringify(eventdata.reverse())
