@@ -25,6 +25,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     domoMonitor.logEvent("PowerSaver", msg)
     if(typeof room_status["inactive"]["outlets"] != "undefined"){
       for(outlet in room_status.inactive["outlets"]){
+        if(room_status.inactive["outlets"][outlet] != room_status["outlets"][outlet])
         domoSerial.setOutlet(outlet, room_status.inactive["outlets"][outlet], "domo");
       }
     }
