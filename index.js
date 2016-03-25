@@ -78,6 +78,7 @@ serialPort.list(function (err, ports) {
           socket.emit("msg", phrase);
         }
         var room_status = {
+          "dev_mode": devMode,
           "pir": undefined,
           "lastpir": undefined,
           "pirct": 0, //Variable used to store the number of PIR trips in the past X minutes.

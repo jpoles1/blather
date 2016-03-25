@@ -75,6 +75,8 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
   app.get("/charts", function(req, res){
     domoMonitor.fetchMongoLogs(res)
   })
-  setInterval(domoMonitor.logRoom, 60*1000)
+  if(room_status["dev_mode"]==0){
+    setInterval(domoMonitor.logRoom, 60*1000)
+  }
   return domoMonitor;
 }
