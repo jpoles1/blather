@@ -1,28 +1,14 @@
 var mongoose = require("mongoose")
-module.exports = function(app, room_status, domoSerial){
+module.exports = function(app, room_status, domoSerial, domoMongo){
   mongoose.connect(process.env.MONGO_URI);
   var domoMonitor = {};
   domoMonitor.lightTimeout = undefined;
-  var RoomLog = mongoose.model("RoomLog", {
-    "time": Date,
-    "pir": Number,
-    "pirct": Number, //Variable used to store the number of PIR trips in the past X minutes.
-    "temp": Number,
-    "humid": Number,
-    "outlets_on": Number
-  });
-  var DomoStatus = mongoose.model("DomoStatus", {
-    "time": Date,
-    "event": String,
-    "msg": String,
-    "info": mongoose.Schema.Types.Mixed
-  })
   domoMonitor.countOutlets = function(){
     return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
   }
   domoMonitor.logRoom = function(){
     var numoutlets = domoMonitor.countOutlets();
-    RoomLog({
+    domoMongo.RoomLog({
       "time": new Date(),
       "pir": room_status["pir"],
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
@@ -49,20 +35,19 @@ module.exports = function(app, room_status, domoSerial){
     var sensors = rawdata.toLowerCase().substring(0, rawdata.length-1).split(";");
     sensors.forEach(function(elem){
       var keywords = elem.split(":")
-      console.log(keywords)
       if(keywords[0]=="pir" && keywords[1]=="1"){
-        if(typeof room_status.inactive != "undefined"){
-          domoMonitor.endInactive();
-        }
         var now = Date.now();
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
+        if(typeof room_status.inactive != "undefined"){
+          domoMonitor.endInactive();
+        }
       }
       room_status[keywords[0]] = parseInt(keywords[1]);
     })
   }
   domoMonitor.logEvent = function(event_name, msg, info){
-    DomoStatus({
+    domoMongo.DomoStatus({
       "time": new Date(),
       "event": event_name,
       "msg": msg,
@@ -70,9 +55,9 @@ module.exports = function(app, room_status, domoSerial){
     }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
-    RoomLog.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
-      DomoStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
-        domoSerial.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
+    domoMongo.RoomLog.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
+      domoMongo.DomoStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
+        domoMongo.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
             res.render("charts.hbs", {
               last_on: room_status["lastpir"],

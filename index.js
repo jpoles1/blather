@@ -12,7 +12,7 @@ require('dotenv').config();
 //Setup Serial Protocols
 var ser;
 var serialPort = require("serialport");
-var devMode = 0;
+var devMode = 1;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);
@@ -90,8 +90,9 @@ serialPort.list(function (err, ports) {
           "inactive": undefined,
           "auto_on": undefined
         }
-        var domoSerial = require("./logic/domoSerial")(ser, room_status);
-        var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial);
+        var domoMongo = require("./logic/domoMongo");
+        var domoSerial = require("./logic/domoSerial")(ser, room_status, domoMongo);
+        var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial, domoMongo);
         if(devMode==0){
           domoMonitor.logEvent("Restarted");
         }

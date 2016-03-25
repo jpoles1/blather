@@ -1,5 +1,4 @@
-var mongoose = require("mongoose")
-module.exports = function(ser, room_status){
+module.exports = function(ser, room_status, domoMongo){
   var domoSerial = {};
   var serial_active = 0;
   var outlet_states = {};
@@ -19,15 +18,8 @@ module.exports = function(ser, room_status){
       "all": "0100000000110101000011000"
     }
   }
-  domoSerial.DomoBehaviour = mongoose.model("domo-behaviour", {
-    "time": Date,
-    "actor": String,
-    "actuator": String,
-    "command_string": String,
-    "info": mongoose.Schema.Types.Mixed
-  })
   domoSerial.logBehaviour = function(actor, actuator, command, info){
-    domoSerial.DomoBehaviour({
+    domoMongo.DomoBehaviour({
       "time": new Date(),
       "actor": actor,
       "actuator": actuator,
