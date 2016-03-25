@@ -38,7 +38,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     sensors.forEach(function(elem){
       var keywords = elem.split(":")
       if(keywords[0]=="pir" && keywords[1]=="1"){
-        var now = Date.now();
+        var now = new Date();
         room_status["pirct"]+=1;
         room_status["lastpir"]= now;
         if(typeof room_status.inactive != "undefined"){
@@ -61,8 +61,12 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
       domoMongo.DomoStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
         domoMongo.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
+            var last = new Date().toLocaleString();
+            if(typeof room_status["lastpir"] != "undefined"){
+              last = room_status["lastpir"].toLocaleString()
+            }
             res.render("charts.hbs", {
-              last_on: room_status["lastpir"].toLocaleString(),
+              last_on: last,
               behaviourdata: behaviourdata,
               roomdata: JSON.stringify(roomdata.reverse()),
               eventdata: JSON.stringify(eventdata.reverse())
