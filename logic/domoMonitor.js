@@ -20,7 +20,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
   domoMonitor.endInactive = function(){
     var powerTime = (Date.now()-room_status.inactive["start"])/(1000*60*60) // Divide millis to get hours
     var powerSaver = powerTime *60*room_status.inactive["outletct"] //Time x 60 watts x # outlets left on
-    var msg = "Saved: "+String(powerSaver)+" Watts; Over";
+    var msg = "You saved an estimated: "+String(powerSaver)+" Watts";
     console.log(msg)
     domoMonitor.logEvent("PowerSaver", msg)
     if(typeof room_status["inactive"]["outlets"] != "undefined"){

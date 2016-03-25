@@ -59,7 +59,7 @@ String checkTemp(){
   return resp;
 }
 void loop() {
-  int wait_time = 10; //In second
+  int wait_time = 4; //In second
   if(loopstate>wait_time*2){
     String resp = "";
     resp = resp+checkPIR();
@@ -77,9 +77,9 @@ void sendIR(String serdat){
     int retry = serdat[1] - '0';
     String command = serdat.substring(2);
     if(command_type == 'a'){
-      
+
       unsigned long color = strtol(command.c_str(), NULL, 16);
-      Serial.println("IR Blasting: "+command+"; "+color);     
+      Serial.println("IR Blasting: "+command+"; "+color);
       int i = 0;
       while(i<retry){
         irsend.sendNEC(color, 32);
@@ -91,7 +91,7 @@ void sendIR(String serdat){
       char com[25];
       command.toCharArray(com, 25);
       mySwitch.send(com);
-      Serial.println("RC Blasting: "+command);     
+      Serial.println("RC Blasting: "+command);
 
     }
     serdat = "";
@@ -110,5 +110,3 @@ void serialEvent() {
     //serdat.trim();
   }
 }
-
-
