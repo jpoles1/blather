@@ -91,7 +91,7 @@ serialPort.list(function (err, ports) {
           "inactive": undefined,
           "auto_on": undefined
         }
-        var domoMongo = require("./logic/domoMongo");
+        var domoMongo = require("./logic/domoMongo")(room_status);
         var domoSerial = require("./logic/domoSerial")(ser, room_status, domoMongo);
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial, domoMongo);
         if(devMode==0){
