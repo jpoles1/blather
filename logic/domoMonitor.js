@@ -22,7 +22,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     var powerSaver = powerTime *60*room_status.inactive["outletct"] //Time x 60 watts x # outlets left on
     var msg = "You saved an estimated: "+String(powerSaver)+" Watts";
     console.log(msg)
-    domoMonitor.logEvent("PowerSaver", msg)
+    domoMongo.logEvent("PowerSaver", msg)
     if(typeof room_status["inactive"]["outlets"] != "undefined"){
       for(outlet in room_status.inactive["outlets"]){
         if(room_status.inactive["outlets"][outlet] != room_status["outlets"][outlet]){
@@ -47,14 +47,6 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
       }
       room_status[keywords[0]] = parseInt(keywords[1]);
     })
-  }
-  domoMonitor.logEvent = function(event_name, msg, info){
-    domoMongo.DomoStatus({
-      "time": new Date(),
-      "event": event_name,
-      "msg": msg,
-      "info": info
-    }).save();
   }
   domoMonitor.fetchMongoLogs = function(res){
     domoMongo.RoomLog.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {

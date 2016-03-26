@@ -12,7 +12,7 @@ require('dotenv').config();
 //Setup Serial Protocols
 var ser;
 var serialPort = require("serialport");
-var devMode = 0;
+var devMode = 1;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);
@@ -95,7 +95,7 @@ serialPort.list(function (err, ports) {
         var domoSerial = require("./logic/domoSerial")(ser, room_status, domoMongo);
         var domoMonitor = require("./logic/domoMonitor")(app, room_status, domoSerial, domoMongo);
         if(devMode==0){
-          domoMonitor.logEvent("Restarted");
+          domoMongo.logEvent("Restarted");
         }
         var domoActuate = require("./logic/domoActuate");
         var domoValidate = require("./res/js/domoValidate");
@@ -103,7 +103,7 @@ serialPort.list(function (err, ports) {
         var domoWeather = require("./logic/domoWeather")(domoActuate);
         var domoGCal = require("./logic/domoGCal")(domoActuate)
         var domoUtility = require("./logic/domoUtility")(app, domoActuate, domoMonitor);
-        var domoModes = require("./logic/domoModes")(domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
+        var domoModes = require("./logic/domoModes")(domoMongo, domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
         var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
 
         //Set Lights Timeout
@@ -115,10 +115,10 @@ serialPort.list(function (err, ports) {
                 "outletct": domoMonitor.countOutlets(),
                 "outlets": Object.assign({}, room_status["outlets"])
               }
-              domoMonitor.logEvent("Inactive")
+              domoMongo.logEvent("Inactive")
             }
             if(typeof room_status["auto_on"] != "undefined" && room_status["auto_on"] == 1){
-              domoMonitor.logEvent("Auto On Mistake") //Report a mistaken activation of lights if there is no more movement after 15 min.
+              domoMongo.logEvent("Auto On Mistake") //Report a mistaken activation of lights if there is no more movement after 15 min.
             }
             domoLights.allOff("domo");
             setTimeout(function(){
@@ -208,10 +208,10 @@ serialPort.list(function (err, ports) {
             domoModes.partyMode(io);
           })
           socket.on("wake mode", function(){
-            domoModes.wakeMode(io, socket);
+            domoModes.wakeMode("user", io, socket);
           })
           socket.on("sleep mode", function(){
-            domoModes.sleepMode(io);
+            domoModes.sleepMode("user", io);
           })
           socket.on("kill music", function(){
             domoModes.killMusic(socket);

@@ -14,6 +14,14 @@ domoMongo.DomoStatus = mongoose.model("DomoStatus", {
   "msg": String,
   "info": mongoose.Schema.Types.Mixed
 })
+domoMongo.logEvent = function(event_name, msg, info){
+  domoMongo.DomoStatus({
+    "time": new Date(),
+    "event": event_name,
+    "msg": msg,
+    "info": info
+  }).save();
+}
 domoMongo.DomoBehaviour = mongoose.model("domo-behaviour", {
   "time": Date,
   "actor": String,
@@ -21,4 +29,13 @@ domoMongo.DomoBehaviour = mongoose.model("domo-behaviour", {
   "command_string": String,
   "info": mongoose.Schema.Types.Mixed
 })
+domoMongo.logBehaviour = function(actor, actuator, command, info){
+  domoMongo.DomoBehaviour({
+    "time": new Date(),
+    "actor": actor,
+    "actuator": actuator,
+    "command_string": command,
+    "info": info
+  }).save();
+}
 module.exports = domoMongo;

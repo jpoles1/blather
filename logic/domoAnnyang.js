@@ -24,13 +24,13 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
         domoModes.loveMode();
       }
       else if(["sleep"].contains(tag)){
-        domoModes.sleepMode();
+        domoModes.sleepMode("user");
       }
       else if(["party"].contains(tag)){
         domoModes.partyMode();
       }
       else if(["wake", "week", "with"].contains(tag)){
-        domoModes.wakeMode();
+        domoModes.wakeMode("user");
       }
       else{
         console.log("Could not activate the mode:", tag)

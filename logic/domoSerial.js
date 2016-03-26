@@ -18,15 +18,6 @@ module.exports = function(ser, room_status, domoMongo){
       "all": "0100000000110101000011000"
     }
   }
-  domoSerial.logBehaviour = function(actor, actuator, command, info){
-    domoMongo.DomoBehaviour({
-      "time": new Date(),
-      "actor": actor,
-      "actuator": actuator,
-      "command_string": command,
-      "info": info
-    }).save();
-  }
   domoSerial.setOutlet = function(outlet, comm, actor){
     if(comm=="toggle"){
       if(room_status.outlets[outlet]=="on"){
@@ -53,7 +44,7 @@ module.exports = function(ser, room_status, domoMongo){
     if(typeof actor === "undefined"){
       actor = "user"
     }
-    domoSerial.logBehaviour(actor, "outlet "+outlet, comm)
+    domoMongo.logBehaviour(actor, "outlet "+outlet, comm)
   }
   domoSerial.setStrip = function(comms, actor){
     var comm_list = "";
@@ -94,7 +85,7 @@ module.exports = function(ser, room_status, domoMongo){
         if(typeof actor === "undefined"){
           actor = "user"
         }
-        domoSerial.logBehaviour(actor, "led strip via IR", color)
+        domoMongo.logBehaviour(actor, "led strip via IR", color)
       }
     })
     if(comm_list != ""){

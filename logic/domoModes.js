@@ -1,6 +1,10 @@
-module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUtility){
+module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoGCal, domoUtility){
   domoModes = {};
-  domoModes.wakeMode = function(io, socket){
+  domoModes.wakeMode = function(actor, io, socket){
+    if(typeof actor === "undefined"){
+      actor = "domo"
+    }
+    domoMongo.logBehaviour(actor, "Room Mode", "wake mode")
     if(typeof io != "undefined"){
       io.emit("msg", "Good Morning. Starting wake mode!");
       io.emit("start_listen")
@@ -12,7 +16,11 @@ module.exports = function(domoActuate, domoLights, domoWeather, domoGCal, domoUt
     });
     domoLights.setStrip("on green bright", socket);
   }
-  domoModes.sleepMode = function(io){
+  domoModes.sleepMode = function(actor, io){
+    if(typeof actor === "undefined"){
+      actor = "domo"
+    }
+    domoMongo.logBehaviour(actor, "Room Mode", "sleep mode")
     if(typeof io != "undefined"){
       io.emit("msg", "Good night. Entering sleep mode.");
       io.emit("stop_listen")
