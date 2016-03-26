@@ -1,6 +1,6 @@
 var mongoose = require("mongoose")
 var domoMongo = {}
-domoMongo.RoomLog = mongoose.model("RoomLog", {
+domoMongo.RoomStatus = mongoose.model("domo-status", {
   "time": Date,
   "pir": Number,
   "pirct": Number, //Variable used to store the number of PIR trips in the past X minutes.
@@ -8,14 +8,14 @@ domoMongo.RoomLog = mongoose.model("RoomLog", {
   "humid": Number,
   "outlets_on": Number
 });
-domoMongo.DomoStatus = mongoose.model("DomoStatus", {
+domoMongo.DomoEvent = mongoose.model("domo-event", {
   "time": Date,
   "event": String,
   "msg": String,
   "info": mongoose.Schema.Types.Mixed
 })
 domoMongo.logEvent = function(event_name, msg, info){
-  domoMongo.DomoStatus({
+  domoMongo.DomoEvent({
     "time": new Date(),
     "event": event_name,
     "msg": msg,

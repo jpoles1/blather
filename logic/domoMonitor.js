@@ -6,9 +6,9 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
   domoMonitor.countOutlets = function(){
     return Object.keys(room_status["outlets"]).filter(function(x){return room_status["outlets"][x]=="on"}).length
   }
-  domoMonitor.logRoom = function(){
+  domoMonitor.logStatus = function(){
     var numoutlets = domoMonitor.countOutlets();
-    domoMongo.RoomLog({
+    domoMongo.RoomStatus({
       "time": new Date(),
       "pir": room_status["pir"],
       "pirct": room_status["pirct"], //Variable used to store the number of PIR trips in the past X minutes.
@@ -49,8 +49,8 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     })
   }
   domoMonitor.fetchMongoLogs = function(res){
-    domoMongo.RoomLog.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
-      domoMongo.DomoStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
+    domoMongo.RoomStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
+      domoMongo.DomoEvent.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
         domoMongo.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
             var last = new Date().toLocaleString();
@@ -72,7 +72,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     domoMonitor.fetchMongoLogs(res)
   })
   if(room_status["dev_mode"]==0){
-    setInterval(domoMonitor.logRoom, 60*1000)
+    setInterval(domoMonitor.logStatus, 60*1000)
   }
   return domoMonitor;
 }

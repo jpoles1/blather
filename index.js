@@ -12,7 +12,7 @@ require('dotenv').config();
 //Setup Serial Protocols
 var ser;
 var serialPort = require("serialport");
-var devMode = 1;
+var devMode = 0;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);

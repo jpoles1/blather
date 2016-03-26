@@ -25,13 +25,16 @@ var mongoToJSON = function(ws, mongoQuery, taskName){
   });
   dbStream.pipe(ws);
 }
-fs.createWriteStream('data/room_log.json');
 //Room Logs
-var mongoQuery = domoMongo.RoomLog.find()
-var room_stream = fs.createWriteStream('data/room_log.json');
-var room_log = mongoToJSON(room_stream, mongoQuery, "Room log");
+var mongoQuery = domoMongo.RoomStatus.find()
+var status_stream = fs.createWriteStream('data/status_log.json');
+var status_log = mongoToJSON(status_stream, mongoQuery, "Status log");
 //Behaviour logs
 var behaviour_stream = fs.createWriteStream('data/behaviour_log.json');
 mongoQuery = domoMongo.DomoBehaviour.find()
 var behaviour_log = mongoToJSON(behaviour_stream, mongoQuery, "Behaviour log");
+//Status logs
+var behaviour_stream = fs.createWriteStream('data/event_log.json');
+mongoQuery = domoMongo.DomoEvent.find()
+var behaviour_log = mongoToJSON(behaviour_stream, mongoQuery, "Event log");
 //Hand off Data to Python Processing Pipeline
