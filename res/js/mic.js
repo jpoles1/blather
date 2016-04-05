@@ -17,6 +17,7 @@ $(function(){
     var beep_hi = new Audio('res/sound/beep_hi.wav');
     var beep_lo = new Audio('res/sound/beep_lo.wav');
     function allowRecognition(ready_time){
+      SpeechKITT.startRecognition()
       commandReady = 1;
       clearTimeout(ready_timer);
       if(ready_time!=-1){
@@ -36,6 +37,7 @@ $(function(){
       }
       commandReady = 0;
       $("#notify").html("");
+      SpeechKITT.abortRecognition()
     }
     function stopListening(){
       beep_lo.play();
@@ -226,11 +228,21 @@ $(function(){
     // Define a stylesheet for KITT to use
     SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css');
 
-    SpeechKITT.startRecognition();
-
     // Render KITT's interface
     SpeechKITT.vroom();
-    prevScrollPos = 0;
+    var whistle_ct = 0;
+    var whistle_threshold = 5;
+    var whistle_timer;
+    whistlerr(function(result){
+      whistle_ct+=1;
+      console.log("Whistle #"+whistle_ct+" detected with data: ", result);
+      if(commandReady == 0 && whistle_ct > whistle_threshold){
+        allowRecognition(ready_time);
+      }
+      whistle_timer = setTimeout(function(){
+        whistle_ct = 0;
+      }, 2000);
+    }, 10);
     $(window).keypress(function (e) {
       console.log(e.keyCode)
       if (e.keyCode === 0 || e.keyCode === 32) {
