@@ -147,6 +147,9 @@ window.onload = function(){
     if(entry["event"] == "Inactive"){
       activity_options.xAxis["plotLines"].push({color: 'blue', value: timept, width: .5})
     }
+    if(entry["event"] == "PowerSaver"){
+      activity_options.xAxis["plotLines"].push({color: 'green', value: timept, width: .5})
+    }
     if(entry["event"] == "Auto On Mistake"){
       activity_options.xAxis["plotLines"].push({color: 'black', value: timept, width: .5})
     }
