@@ -241,8 +241,8 @@ $(function(){
       }
       whistle_timer = setTimeout(function(){
         whistle_ct = 0;
-      }, 2000);
-    }, 10);
+      }, 1000);
+    }, 15);
     $(window).keypress(function (e) {
       console.log(e.keyCode)
       if (e.keyCode === 0 || e.keyCode === 32) {

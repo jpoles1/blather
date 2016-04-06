@@ -37,6 +37,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
     }
     domoActuate.speak("Activating Love Mode... ... Have fun!", function(){
       domoLights.setStrip("fade slow", io);
+      domoLights.setLamp("off", io);
       domoActuate.runSysCommand("mplayer -shuffle", __dirname+"/../res/music/love/*.mp3")
     });
   }
