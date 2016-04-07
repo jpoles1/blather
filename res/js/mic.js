@@ -231,7 +231,7 @@ $(function(){
     // Render KITT's interface
     SpeechKITT.vroom();
     var whistle_ct = 0;
-    var whistle_threshold = 5;
+    var whistle_threshold = 3;
     var whistle_timer;
     whistlerr(function(result){
       whistle_ct+=1;
@@ -248,13 +248,14 @@ $(function(){
       if (e.keyCode === 0 || e.keyCode === 32) {
         e.preventDefault()
         console.log('Space pressed')
-        SpeechKITT.toggleRecognition();
         if(SpeechKITT.isListening()){
-          $("#notify").html("Starting Listening!");
-          allowRecognition(ready_time);
+          $("#notify").html("");
+          commandReady = 0;
+          SpeechKITT.abortRecognition();
         }
         else{
-          $("#notify").html("");
+          $("#notify").html("Starting Listening!");
+          allowRecognition(ready_time);
         }
       }
     })
