@@ -48,9 +48,14 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
       room_status[keywords[0]] = parseInt(keywords[1]);
     })
   }
-  domoMonitor.fetchMongoLogs = function(res){
-    domoMongo.RoomStatus.find({}, null, {sort: '-time'}).limit(750).exec(function (err, roomdata) {
-      domoMongo.DomoEvent.find({}, null, {sort: '-time'}).limit(750).exec(function (err, eventdata) {
+  domoMonitor.fetchMongoLogs = function(res, limit){
+    if(typeof limit != "number" || isNaN(limit)){
+      limit = 750;
+    }
+    var maxlim = 2500;
+    if(limit>maxlim){limit=maxlim};
+    domoMongo.RoomStatus.find({}, null, {sort: '-time'}).limit(limit).exec(function (err, roomdata) {
+      domoMongo.DomoEvent.find({}, null, {sort: '-time'}).limit(limit).exec(function (err, eventdata) {
         domoMongo.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
             var last = new Date().toLocaleString();
@@ -69,10 +74,10 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     })
   }
   app.get("/charts", function(req, res){
-    domoMonitor.fetchMongoLogs(res)
+    domoMonitor.fetchMongoLogs(res, parseInt(req.query.ct))
   })
   if(room_status["dev_mode"]==0){
-    setInterval(domoMonitor.logStatus, 60*1000)
+    setInterval(domoMonitor.logStatus, 2*60*1000)
   }
   return domoMonitor;
 }
