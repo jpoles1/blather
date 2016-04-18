@@ -1,0 +1,64 @@
+<script type="text/javascript" src="../res/js/jquery-2.2.1.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../res/js/fft.js"></script>
+<script type="text/javascript" src="../res/js/whistle.js"></script>
+<script>
+$(function(){
+  var h = 800;
+  var whistle_ct = 0;
+  var whistle_log = [];
+  var whistle_timer = undefined;
+  var y_axis = d3.scale.linear().domain([0, 50]).range([h, 0]);
+  var y_labels = d3.svg.axis().scale(y_axis).ticks(4).orient("left");
+  var plotArea = d3.select("#whistle_plot").append("svg");
+  plotArea.attr("width", 1000).attr("height", h)
+  plotArea.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(25,0)")
+    .call(y_labels);
+  var clearPlot = function(){
+    plotArea.selectAll("circle").remove();
+    plotArea.selectAll("path").remove();  
+  }
+  var redrawPlot = function(){
+    var coord_space = plotArea.append("g").attr("transform", "translate(25,0)");
+    circles = coord_space.selectAll("circle").data(whistle_log).enter().append("circle")
+    circles.attr("cx", function(d, i){console.log(i);return i*15;}).attr("cy", function(d,i){return y_axis(d.ratio)});
+    circles.attr("r", 10)
+    var line = d3.svg.line().x(function(d,i) {
+      return i*15;
+    })
+    .y(function(d) {
+      return y_axis(d.ratio)
+    })
+    coord_space.append("path").attr("d", line(whistle_log)).attr("fill", "none").attr("stroke", "black" );
+  }
+  whistlerr(function(result){
+    whistle_ct+=1;
+    whistle_log.push(result);
+    if(whistle_ct % 4 == 0){
+      redrawPlot();
+    }
+    clearTimeout(whistle_timer);
+    whistle_timer = setTimeout(function(){
+      whistle_ct = 0;
+      whistle_log = [];
+      clearPlot();
+    }, 5000);
+  }, 15);
+  //Spacebar for reset
+  $(window).keypress(function (e) {
+    console.log(e.keyCode)
+    if (e.keyCode === 0 || e.keyCode === 32) {
+      e.preventDefault()
+      console.log('Space pressed')
+      whistle_ct = 0;
+      whistle_log = [];
+      clearPlot();
+    }
+  })
+})
+</script>
+Whistle Testing Suite:
+<div id="whistle_plot">
+</div>
