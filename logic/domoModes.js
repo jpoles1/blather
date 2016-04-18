@@ -57,6 +57,16 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
       socket.emit("msg", "Killed Music")
     }
   }
+  domoModes.whiteNoise = function(actor){
+    if(typeof actor === "undefined"){
+      actor = "domo"
+    }
+    domoActuate.runSysCommand("mplayer -loop 0", __dirname+"/../res/music/white_noise.mp3")
+    var duration = 15; //in minutes
+    setTimeout(function(){
+      domoModes.killMusic();
+    }, duration*60*1000)
+  }
   domoModes.allOff = function(socket){
     domoLights.setStrip("off", socket);
     domoLights.setLamp("off", socket);

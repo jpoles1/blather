@@ -213,6 +213,9 @@ serialPort.list(function (err, ports) {
           socket.on("sleep mode", function(){
             domoModes.sleepMode("user", io);
           })
+          socket.on("static mode", function(){
+            domoModes.whiteNoise("user");
+          })
           socket.on("kill music", function(){
             domoModes.killMusic(socket);
           })

@@ -121,6 +121,10 @@ $(function(){
           else if(["wake", "week", "with"].contains(tag)){
             socket.emit("wake mode")
           }
+          else if(["static"].contains(tag)){
+            socket.emit("static mode");
+            stopListening();
+          }
           else{
             console.log("Could not activate the mode:", tag)
           }
@@ -213,7 +217,7 @@ $(function(){
         }
         displayMsg("Keyword Enabled")
       },
-      'kill music': function(){
+      '(kill music) (end music) (stop music)': function(){
         socket.emit("kill music")
       }
     };
@@ -231,17 +235,18 @@ $(function(){
     // Render KITT's interface
     SpeechKITT.vroom();
     var whistle_ct = 0;
-    var whistle_threshold = 3;
-    var whistle_timer;
+    var whistle_threshold = 5;
+    var whistle_timer = undefined;
     whistlerr(function(result){
       whistle_ct+=1;
       console.log("Whistle #"+whistle_ct+" detected with data: ", result);
       if(commandReady == 0 && whistle_ct > whistle_threshold){
         allowRecognition(ready_time);
       }
+      clearTimeout(whistle_timer);
       whistle_timer = setTimeout(function(){
         whistle_ct = 0;
-      }, 1000);
+      }, 500);
     }, 15);
     $(window).keypress(function (e) {
       console.log(e.keyCode)
