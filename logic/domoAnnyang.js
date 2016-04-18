@@ -15,7 +15,7 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
     'all on': function(){
       domoLights.allOn();
     },
-    'kill music': function(){
+    '(kill music) (end music) (stop music)': function(){
       domoModes.killMusic();
     },
     '(enter) (activate) (start) :tag mode': function(tag){
@@ -31,6 +31,9 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
       }
       else if(["wake", "week", "with"].contains(tag)){
         domoModes.wakeMode("user");
+      }
+      else if(["static"]){
+        domoModes.whiteNoise("user");
       }
       else{
         console.log("Could not activate the mode:", tag)

@@ -121,6 +121,10 @@ $(function(){
           else if(["wake", "week", "with"].contains(tag)){
             socket.emit("wake mode")
           }
+          else if(["static"].contains(tag)){
+            socket.emit("static mode");
+            stopListening();
+          }
           else{
             console.log("Could not activate the mode:", tag)
           }
@@ -213,7 +217,7 @@ $(function(){
         }
         displayMsg("Keyword Enabled")
       },
-      'kill music': function(){
+      '(kill music) (end music) (stop music)': function(){
         socket.emit("kill music")
       }
     };
