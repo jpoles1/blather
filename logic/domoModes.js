@@ -4,6 +4,8 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
     if(typeof actor === "undefined"){
       actor = "domo"
     }
+    domoLights.setStrip("on green bright", socket);
+    domoLights.setLamp("on", socket);
     domoMongo.logBehaviour(actor, "Room Mode", "wake mode")
     if(typeof io != "undefined"){
       io.emit("msg", "Good Morning. Starting wake mode!");
@@ -14,7 +16,6 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
         domoGCal("today", socket);
       })
     });
-    domoLights.setStrip("on green bright", socket);
   }
   domoModes.sleepMode = function(actor, io){
     if(typeof actor === "undefined"){
@@ -28,6 +29,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
     domoActuate.speak("Good night. Entering sleep mode.", function(){
       domoLights.setLamp("off", io);
       domoLights.setStrip("dark red", io);
+      domoModes.whiteNoise()
     });
   }
   domoModes.loveMode = function(io){
@@ -62,7 +64,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
       actor = "domo"
     }
     domoActuate.runSysCommand("mplayer -loop 0", __dirname+"/../res/music/white_noise.mp3")
-    var duration = 15; //in minutes
+    var duration = 30; //in minutes
     setTimeout(function(){
       domoModes.killMusic();
     }, duration*60*1000)
