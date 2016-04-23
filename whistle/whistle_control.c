@@ -4,13 +4,16 @@
 #include <alsa/asoundlib.h>
 #include <fftw3.h>
 #include <sys/time.h>
+#include  <sys/types.h>
+#include <sys/wait.h>
 #include <math.h>
 
-#define UNIQUENESS 8
-
+#define UNIQUENESS 7
+//Used to define the gap in pitch for whistle detection.
+#define SENSITIVITY_COEEF 2
+static int recognizing = 0;
 fftw_complex *in, *out;
 fftw_plan p;
-
 void fft_init(int N)
 {
 	in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
@@ -20,32 +23,39 @@ void fft_init(int N)
 
 
 //this function is called whenever an action has to be taken. the argument determines the action
-void remote_action(unsigned char *str)
+void whistleHeard(unsigned char *str)
 {
 	printf("%s\n", str);
-	/*unsigned char buf[128];
-	sprintf(buf, "echo %s > /dev/ttyUSB0", str);
-	system(buf);*/
+	printf("Recognizing: %d\n", recognizing);
+	int res = -10;
+	if(recognizing<=0){
+		recognizing = 40;
+		while(res==-10){
+			res = system("python3 rec.py");
+		}
+		printf("Recognizing: %d\n", recognizing);
+	}
 }
-
-
-
 
 void lowHigh(int newcommand, int n)
 {
 	static int lastpeak;
+	//This static variable is used to indicate the status of this pattern
+	//(it can be used to simply switch things on and off)
 	static int lastaction = 0;
 
 	if(newcommand)
 		lastpeak = n;
 	else
 	{
-		if(n > lastpeak + 3)
+		if(n > lastpeak + SENSITIVITY_COEEF)
 		{
+			/*This block is to use the above switching functionality
 			if(lastaction == 1)
 				remote_action("Low-High (Off)");
 			else
-				remote_action("Low-High (On)");
+				remote_action("Low-High (On)");*/
+			whistleHeard("Low-High");
 			lastaction = 1 - lastaction;
 		}
 
@@ -64,13 +74,14 @@ void highLow(int newcommand, int n)
 		lastpeak = n;
 	else
 	{
-		if(n < lastpeak - 3)
+		if(n < lastpeak - SENSITIVITY_COEEF)
 		{
+			/*see above
 			if(lastaction == 1)
 				remote_action("High-Low (Off)");
 			else
-				remote_action("High-low (On)");
-
+				remote_action("High-low (On)");*/
+			whistleHeard("High-low");
 			lastaction = 1 - lastaction;
 		}
 
@@ -93,8 +104,13 @@ void fft_peak_analyze(int n)
 		newcommand = 1;
 	else
 		newcommand = 0;
-	highLow(newcommand, n);
-	lowHigh(newcommand, n);
+	if(recognizing<=0){
+		highLow(newcommand, n);
+		lowHigh(newcommand, n);
+	}
+	else{
+		recognizing=recognizing-1;
+	}
 	//Store current time as "last-heard" time
 	gettimeofday(&lasttimeofpeak, NULL);
 }
@@ -144,7 +160,7 @@ void fft_analyze(unsigned char *buf, int length)
 
 
 
-main (int argc, char *argv[])
+void main (int argc, char *argv[])
 {
 	int i;
 	int err;
@@ -226,7 +242,6 @@ main (int argc, char *argv[])
 				 snd_strerror (err));
 			exit (1);
 		}
-
 		fft_analyze(buf, sizeof(buf));
 	}
 
