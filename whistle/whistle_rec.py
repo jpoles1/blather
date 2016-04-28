@@ -39,8 +39,11 @@ def commandListen():
         print("Wit.ai thinks you said..\n" + output)
         url_output = output.replace(" ", "%20")
         print(url_output)
-        resp = urllib.request.urlopen("http://192.168.1.100:3030/voice?cmd="+url_output).read().decode('utf-8')
-        print("Automation server says...\n" + resp)
+        try:
+            resp = urllib.request.urlopen("http://192.168.1.100:3030/voice?cmd="+url_output).read().decode('utf-8')
+            print("Automation server says...\n" + resp)
+        except:
+            print("No response from automation server!")
     except sr.UnknownValueError:
         print("Wit.ai could not understand audio")
     except sr.RequestError as e:

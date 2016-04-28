@@ -1,7 +1,7 @@
 var Annyang = require('annyang');
 module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
   var annyang = new Annyang();
-  function parseModes = function(tag){
+  parseModes = function(tag){
     tag = tag.toLowerCase();
     if(["love", "sex", "sexy", "sexytime"].contains(tag)){
       domoModes.loveMode();
@@ -79,8 +79,8 @@ module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
     '(kill music) (end music) (stop music)': function(){
       domoModes.killMusic();
     },
-    'get ready for :tag (time)': parseModes(tag),
-    '(enter) (activate) (start) :tag mode': parseModes(tag)
+    'get ready for :tag (time)': parseModes,
+    '(enter) (activate) (start) :tag mode': parseModes
   };
   annyang.init(commands);
   app.get("/voice", function(req, res){
