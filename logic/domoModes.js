@@ -17,6 +17,20 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
       })
     });
   }
+  domoModes.dayMode = function(actor, io){
+    if(typeof actor === "undefined"){
+      actor = "domo"
+    }
+    domoMongo.logBehaviour(actor, "Room Mode", "day mode")
+    if(typeof io != "undefined"){
+      io.emit("msg", "Waking room up.");
+    }
+    domoActuate.speak("Waking room up.", function(){
+      domoLights.setLamp("on", io);
+      domoLights.setStrip("on bright green", io);
+    });
+  }
+
   domoModes.bedtimeMode = function(actor, io){
     if(typeof actor === "undefined"){
       actor = "domo"

@@ -9,6 +9,9 @@ module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
     else if(["bed", "bedtime", "bed time", "serpentine"].contains(tag)){
       domoModes.bedtimeMode("user");
     }
+    else if(["day"].contains(tag)){
+      domoModes.dayMode("user")
+    }
     else if(["sleep"].contains(tag)){
       domoModes.sleepMode("user");
     }
