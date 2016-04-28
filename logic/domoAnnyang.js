@@ -9,7 +9,7 @@ module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
     else if(["bed", "bedtime", "bed time", "serpentine"].contains(tag)){
       domoModes.bedtimeMode("user");
     }
-    else if(["day"].contains(tag)){
+    else if(["day", "daytime", "day time"].contains(tag)){
       domoModes.dayMode("user")
     }
     else if(["sleep"].contains(tag)){
@@ -82,7 +82,7 @@ module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
     '(kill music) (end music) (stop music)': function(){
       domoModes.killMusic();
     },
-    'get ready for :tag (time)': parseModes,
+    'get ready for (the) :tag (time)': parseModes,
     '(enter) (activate) (start) :tag mode': parseModes
   };
   annyang.init(commands);

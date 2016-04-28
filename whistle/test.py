@@ -1,3 +1,7 @@
-import subprocess
-result = subprocess.Popen("./whistle_rec", stdout=subprocess.PIPE)
-out = result.stdout.read()
+import re
+
+resp = "Command failed: test"
+mat = re.compile(r"^Command failed").match(resp);
+print(mat)
+if(mat != None):
+    print("YES")

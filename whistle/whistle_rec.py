@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # NOTE: this example requires PyAudio because it uses the Microphone class
-
+import re
 import subprocess
 import shlex
 import speech_recognition as sr
@@ -20,10 +20,12 @@ WIT_AI_KEY = environ["WIT_AI_KEY"]
 sound_dir = getcwd()+"/../res/sound/"
 def playWAV(filename):
     system("aplay "+sound_dir+filename)
-listening = 0
+global listening, misunderstood;
+misunderstood = 0;
+listening = 0;
 # obtain audio from the microphone
 def commandListen():
-    listening = 1;
+    global listening, misunderstood;
     r = sr.Recognizer()
     with sr.Microphone() as source:
         playWAV("beep_hi.wav")
@@ -39,11 +41,16 @@ def commandListen():
         print("Wit.ai thinks you said..\n" + output)
         url_output = output.replace(" ", "%20")
         print(url_output)
-        try:
-            resp = urllib.request.urlopen("http://192.168.1.100:3030/voice?cmd="+url_output).read().decode('utf-8')
-            print("Automation server says...\n" + resp)
-        except:
-            print("No response from automation server!")
+        resp = urllib.request.urlopen("http://192.168.1.100:3030/voice?cmd="+url_output).read().decode('utf-8')
+        print("Automation server says...\n" + resp)
+        if(re.compile(r"^Command Failed").match(resp) != None):
+            misunderstood+=1
+            if misunderstood<2:
+                system("espeak 'I do not understand'")
+                sleep(.5)
+                commandListen()
+        else:
+            misunderstood=0
     except sr.UnknownValueError:
         print("Wit.ai could not understand audio")
     except sr.RequestError as e:
@@ -51,6 +58,7 @@ def commandListen():
     listening = 0
     sleep(1)
 while True:
+    misunderstood=0
     subprocess.Popen(["./whistle_rec"]).wait()
     commandListen();
     sleep(.7)
