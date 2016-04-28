@@ -5,7 +5,7 @@ module.exports = function(app, domoValidate, domoActuate, domoSerial, domoMonito
       domoSerial.setOutlet("1", command, actor)
       //domoActuate.runPyCommand("plugins/ardlights.py", options);
       if(typeof socket != "undefined"){
-        socket.emit("msg", "Sent Lamp command: "+ command)
+        domoActuate.socketReply(socket, "msg", "Sent Lamp command: "+ command)
       }
     }
     else{
@@ -17,7 +17,7 @@ module.exports = function(app, domoValidate, domoActuate, domoSerial, domoMonito
     if(command_list.length>0){
       domoSerial.setStrip(command_list.join(" "))
       if(typeof socket != "undefined"){
-        socket.emit("msg", "Sent LED Strip command: "+ command)
+        domoActuate.socketReply(socket, "msg", "Sent LED Strip command: "+ command)
       }
     }
     else{

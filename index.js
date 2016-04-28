@@ -12,7 +12,7 @@ require('dotenv').config();
 //Setup Serial Protocols
 var ser;
 var serialPort = require("serialport");
-var devMode = 0;
+var devMode = 1;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);
@@ -104,7 +104,7 @@ serialPort.list(function (err, ports) {
         var domoGCal = require("./logic/domoGCal")(domoActuate)
         var domoUtility = require("./logic/domoUtility")(app, domoActuate, domoMonitor);
         var domoModes = require("./logic/domoModes")(domoMongo, domoActuate, domoLights, domoWeather, domoGCal, domoUtility);
-        var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes);
+        var domoAnnyang = require("./logic/domoAnnyang")(app, domoLights, domoSerial, domoModes, domoUtility);
 
         //Set Lights Timeout
         setInterval(function(){

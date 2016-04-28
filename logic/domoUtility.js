@@ -7,29 +7,29 @@ module.exports = function(app, domoActuate, domoMonitor){
   domoUtility.getDate = function(socket){
     var datetime = new Date();
     var date_str = "Today is "+moment().format('dddd MMMM Do YYYY');
-    domoActuate.speak(date_str, function(){socket.emit("ready")} );
-    socket.emit("msg", date_str);
+    domoActuate.speak(date_str, function(){domoActuate.socketReply(socket, "ready")} );
+    domoActuate.socketReply(socket, "msg", date_str);
   }
   domoUtility.thanks = function(socket){
     domoActuate.speak("You're welcome sir.", function(){
-      socket.emit("unready")
+      domoActuate.socketReply(socket, "unready")
     });
-    socket.emit("msg", "You're welcome sir.");
+    domoActuate.socketReply(socket, "msg", "You're welcome sir.");
   }
   domoUtility.shutup = function(socket){
     domoActuate.runSysCommand("pkill", "espeak")
-    socket.emit("msg", "Killed Espeak")
+    domoActuate.socketReply(socket, "msg", "Killed Espeak")
   }
   domoUtility.getTime = function(socket){
     var datetime = new Date();
     var time_str = "It is: "+datetime.toTimeString().substring(0,5);
-    domoActuate.speak(time_str, function(){socket.emit("ready")});
-    socket.emit("msg", time_str);
+    domoActuate.speak(time_str, function(){domoActuate.socketReply(socket, "ready")});
+    domoActuate.socketReply(socket, "msg", time_str);
   }
   domoUtility.getRoomTemp = function(socket){
     var temp_str = "It is: "+domoMonitor.room_status["temp"]+" degrees with "+domoMonitor.room_status["humid"]+" percent humidity.";
-    domoActuate.speak(temp_str, function(){socket.emit("ready")});
-    socket.emit("msg", temp_str);
+    domoActuate.speak(temp_str, function(){domoActuate.socketReply(socket, "ready")});
+    domoActuate.socketReply(socket, "msg", temp_str);
   }
   return domoUtility;
 }

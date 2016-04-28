@@ -45,8 +45,8 @@ module.exports = function(domoActuate){
     if(typeof cb === 'undefined'){
       cb = function(msg){
         if(socket != 'undefined'){
-          socket.emit("ready")
-          socket.emit("msg", msg)
+          domoActuate.socketReply(socket, "ready")
+          domoActuate.socketReply(socket, "msg", msg)
         }
       }
     }

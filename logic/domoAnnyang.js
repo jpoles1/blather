@@ -1,8 +1,46 @@
 var Annyang = require('annyang');
 
-module.exports = function(app, domoLights, domoSerial, domoModes){
+module.exports = function(app, domoLights, domoSerial, domoModes, domoUtility){
   var annyang = new Annyang();
   var commands = {
+    "(what's) (what) (is) (on) (my) schedule (for) (on) :time": function(time) {
+      domoGCal(time);
+    },
+    "(what's) (what) (is) (on) :time schedule": function(time) {
+      time = time.split("'")[0]
+      domoGCal(time);
+    },
+    "(what's) (what) (is) (on) (my) (today's) schedule (for) (today)": function() {
+      domoGCal("today");
+    },
+    "(what's) (what) (is) (the) weather": function(){
+      domoWeather("today");
+    },
+    "(what's) (what) (is) (the) weather (on) :day": function(day) {
+      if(day == "in"){day="today"}
+      domoWeather(day);
+    },
+    "(what's) (what) (is) (on) (my) to-do list": function() {
+      domoGCal("todo");
+    },
+    "(what's) (what) (is) (the) time (is it)": function(){
+      domoUtility.getTime()
+    },
+    "(what's) (what is) (the) (today's) date": function(){
+      domoActuate.socketReply(socket, "date");
+    },
+    'thank(s) (you)': function(){
+      domoActuate.socketReply(socket, "thanks");
+    },
+    'all off': function(){
+      domoActuate.socketReply(socket, "all off")
+    },
+    'all on': function(){
+      domoActuate.socketReply(socket, "all on")
+    },
+    '(shut up) (shutup)': function(){
+      domoActuate.socketReply(socket, "shutup")
+    },
     '(set) (change) light(s) (to) *tag': function(tag) {
       domoLights.setStrip(tag);
     },
@@ -18,10 +56,16 @@ module.exports = function(app, domoLights, domoSerial, domoModes){
     '(kill music) (end music) (stop music)': function(){
       domoModes.killMusic();
     },
+    '(start) (get ready for) bed(time)': function(){
+      domoModes.bedtimeMode("user");
+    },
     '(enter) (activate) (start) :tag mode': function(tag){
       tag = tag.toLowerCase();
       if(["love", "sex", "sexy", "sexytime"].contains(tag)){
         domoModes.loveMode();
+      }
+      else if(["bedtime", "bed time", "serpentine"].contains(tag)){
+        domoModes.bedtimeMode("user");
       }
       else if(["sleep"].contains(tag)){
         domoModes.sleepMode("user");

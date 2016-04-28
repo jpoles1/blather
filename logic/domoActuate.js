@@ -17,11 +17,17 @@ domoActuate.runSysCommand = function(command, opts, cb){
     }
   });
 }
+domoActuate.socketReply = function(soc, msg, details){
+  if(typeof socket != "undefined"){
+    socket.emit(msg, details)
+  }
+}
 domoActuate.speak = function(phrase, cb){
   var actuate = this;
   if(actuate.now_speaking==0){
     actuate.now_speaking=1;
-    actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){
+    //actuate.runSysCommand("espeak -vmb-en1 -p40 -s140 -a180", "\""+phrase+"\"", function(){
+    actuate.runSysCommand("espeak -p40 -s140 -a180", "\""+phrase+"\"", function(){
       if (typeof cb === 'function') {
         setTimeout(cb, 400);
       }

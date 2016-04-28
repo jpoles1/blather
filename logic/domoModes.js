@@ -17,6 +17,19 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
       })
     });
   }
+  domoModes.bedtimeMode = function(actor, io){
+    if(typeof actor === "undefined"){
+      actor = "domo"
+    }
+    domoMongo.logBehaviour(actor, "Room Mode", "bedtime")
+    if(typeof io != "undefined"){
+      io.emit("msg", "Getting ready for bedtime.");
+    }
+    domoActuate.speak("Getting ready for bedtime.", function(){
+      domoLights.setLamp("off", io);
+      domoLights.setStrip("dark red", io);
+    });
+  }
   domoModes.sleepMode = function(actor, io){
     if(typeof actor === "undefined"){
       actor = "domo"
@@ -28,7 +41,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
     }
     domoActuate.speak("Good night. Entering sleep mode.", function(){
       domoLights.setLamp("off", io);
-      domoLights.setStrip("dark red", io);
+      domoLights.setStrip("off", io);
       domoModes.whiteNoise()
     });
   }
@@ -56,7 +69,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
   domoModes.killMusic = function(socket){
     domoActuate.runSysCommand("pkill", "mplayer")
     if(typeof socket != "undefined"){
-      socket.emit("msg", "Killed Music")
+      domoActuate.socketReply(socket, "msg", "Killed Music")
     }
   }
   domoModes.whiteNoise = function(actor){
@@ -76,7 +89,7 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
   domoModes.allOn = function(socket){
     domoLights.setStrip("off", socket);
     domoLights.setLamp("off", socket);
-    socket.emit("msg", "All appliances off.")
+    domoActuate.socketReply(socket, "msg", "All appliances off.")
   }
   return domoModes;
 }

@@ -117,7 +117,7 @@ module.exports = function(domoActuate){
           console.log('The API returned an error: ' + err);
           domoActuate.speak("Sorry could not fetch "+time+"'s schedule", function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
@@ -130,7 +130,7 @@ module.exports = function(domoActuate){
         if (events.length == 0) {
           domoActuate.speak('No events left for '+time, function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
@@ -144,12 +144,12 @@ module.exports = function(domoActuate){
             msg_string += "<div style='border: 1px solid #555; padding: 10px;'>"+event.summary+" at "+moment(start).format("HH:mm")+"</div>"
           }
           try{
-            socket.emit("msg", msg_string+"</div>")
+            domoActuate.socketReply(socket, "msg", msg_string+"</div>")
           }
           catch(e){}
           domoActuate.speak(event_string, function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
@@ -171,7 +171,7 @@ module.exports = function(domoActuate){
           console.log('The API returned an error: ' + err);
           domoActuate.speak("Sorry could not fetch your todo list.", function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
@@ -181,7 +181,7 @@ module.exports = function(domoActuate){
         if (items.length == 0) {
           domoActuate.speak('Nothing left on your todo list', function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
@@ -205,7 +205,7 @@ module.exports = function(domoActuate){
           }
           domoActuate.speak(event_string, function(){
             try{
-              socket.emit("ready")
+              domoActuate.socketReply(socket, "ready")
             }
             catch(e){}
           });
