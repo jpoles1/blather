@@ -24,17 +24,19 @@ global listening, misunderstood;
 misunderstood = 0;
 listening = 0;
 # obtain audio from the microphone
-def commandListen():
+def commandListen(beep=1):
     global listening, misunderstood;
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        playWAV("beep_hi.wav")
-        sleep(.2)
+        if beep==1:
+            playWAV("beep_hi.wav")
+            sleep(.2)
         print("Say something!")
         audio = r.listen(source)
         print("Processing audio...")
-        playWAV("beep_lo.wav")
-        sleep(.5)
+        if beep==1:
+            playWAV("beep_lo.wav")
+            sleep(.5)
     # recognize speech using Wit.ai
     try:
         output = r.recognize_wit(audio, key=WIT_AI_KEY);
@@ -46,9 +48,9 @@ def commandListen():
         if(re.compile(r"^Command Failed").match(resp) != None):
             misunderstood+=1
             if misunderstood<2:
-                system("espeak 'I do not understand'")
+                system("espeak 'Say again?'")
                 sleep(.5)
-                commandListen()
+                commandListen(0)
         else:
             misunderstood=0
     except sr.UnknownValueError:
