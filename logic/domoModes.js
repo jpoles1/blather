@@ -26,8 +26,9 @@ module.exports = function(domoMongo, domoActuate, domoLights, domoWeather, domoG
       io.emit("msg", "Waking room up.");
     }
     domoActuate.speak("Waking room up.", function(){
+      domoLights.setStrip("on", io);
       domoLights.setLamp("on", io);
-      domoLights.setStrip("on bright green", io);
+      domoLights.setStrip("bright green", io);
     });
   }
 
