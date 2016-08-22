@@ -56,7 +56,7 @@ module.exports = function(app, room_status, domoSerial, domoMongo){
     if(limit>maxlim){limit=maxlim};
     domoMongo.RoomStatus.find({}, null, {sort: '-time'}).limit(limit).exec(function (err, roomdata) {
       domoMongo.DomoEvent.find({}, null, {sort: '-time'}).limit(limit).exec(function (err, eventdata) {
-        domoMongo.DomoBehaviour.find().sort("-time").limit(100).exec(function(err, behaviourdata){
+        domoMongo.DomoBehaviour.find().sort("-time").limit(10).exec(function(err, behaviourdata){
           if(typeof res != "undefined"){
             var last = new Date().toLocaleString();
             if(typeof room_status["lastpir"] != "undefined"){

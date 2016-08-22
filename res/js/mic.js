@@ -202,6 +202,8 @@ $(function(){
       'thank(s) (you)': function(){
         if(commandReady || !keyword_active){
           socket.emit("thanks");
+          displayMsg("Ending Command Recognition")
+          endRecognition()
         }
       },
       'all off': function(){
