@@ -189,6 +189,12 @@ serialPort.list(function (err, ports) {
             })
             domoLights.setLamp(command, socket)
           })
+          socket.on("fan", function(command){
+            domoActuate.speak("Setting fan to "+command,function(){
+              socket.emit("ready")
+            })
+            domoTemp.setFan(command, socket)
+          })
           socket.on("love mode", function(){
             domoModes.loveMode(io);
           })
