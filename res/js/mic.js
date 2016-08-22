@@ -115,6 +115,17 @@ $(function(){
           }
         }
       },
+      '(set) (change) van (to) *tag': function(tag) {
+        if(commandReady || !keyword_active){
+          if(domoValidate.checkFanTag(tag)){
+            socket.emit("fan", tag)
+          }
+          else{
+            $("#notify").html("Did not recognize lamp command!");
+            socket.emit("confused");
+          }
+        }
+      },
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady || !keyword_active){
           tag = tag.toLowerCase();
