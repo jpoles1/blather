@@ -52,6 +52,8 @@ exports.checkLampTag = function(tag){
   return ["on", "off"].contains(tag.toLowerCase());
 }
 exports.checkFanTag = function(tag){
+  if(["nin"].contains(tag)){tag = "on";}
+  if(["oss"].contains(tag)){tag = "off";}
   return ["on", "off"].contains(tag.toLowerCase());
 }
 })(typeof exports === 'undefined'? this['domoValidate']={}: exports);
