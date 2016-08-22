@@ -109,10 +109,17 @@ window.onload = function(){
       events: {setExtremes: syncExtremes},
       plotLines: []
     },
+    rangeSelector : {
+      selected: 1
+    },
     yAxis: [{
       title: {
-        text: 'Count'
+        text: 'PIR Count'
       }
+    },{
+      title: {
+        text: 'Outlets On'
+      }, opposite: true
     }],
     tooltip: {
       shared: true
@@ -125,7 +132,7 @@ window.onload = function(){
     },
     series: [
       {name: "PIR Count", data: []},
-      {name: "Outlets On", data: []}
+      {name: "Outlets On", data: [], yAxis: 1}
     ]
   };
   for(entry_index in roomData){
