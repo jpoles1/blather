@@ -7,10 +7,10 @@ var domoActuate = {};
 domoActuate.now_speaking = 0;
 domoActuate.runSysCommand = function(command, opts, cb){
   child = exec(command+" "+opts, function (error, stdout, stderr) {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
     if (error !== null) {
       console.log('exec error: ' + error);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
     }
     if (typeof cb === 'function') {
       cb();
