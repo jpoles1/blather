@@ -54,6 +54,19 @@ exports.checkLampTag = function(tag){
 exports.checkFanTag = function(tag){
   if(["nin"].contains(tag)){tag = "on";}
   if(["oss"].contains(tag)){tag = "off";}
-  return ["on", "off"].contains(tag.toLowerCase());
+  return ["on", "off"].contains(tag.toLowerCase()) ? tag : undefined;
 }
+/*exports.checkDevice = function(device, tag){
+  var device_list = ["lamp", "lights", "fan"];
+  var out = {};
+  //correct device names
+  if(["van"].contains(device)){device = "fan";}
+  //ensure valid device
+  if(!device_list.contains(device)){device=undefined}
+  if(device){
+    if(["oss"].contains(tag)){tag = "off";}
+    if(["nin"].contains(tag)){tag = "on";}
+  }
+  return {device, tag}
+}*/
 })(typeof exports === 'undefined'? this['domoValidate']={}: exports);

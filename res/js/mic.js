@@ -106,26 +106,48 @@ $(function(){
       },
       '(set) (change) fan (to) *tag': function(tag) {
         if(commandReady || !keyword_active){
-          if(domoValidate.checkFanTag(tag)){
+          tag = domoValidate.checkFanTag(tag);
+          if(tag){
             socket.emit("fan", tag)
           }
           else{
-            $("#notify").html("Did not recognize lamp command!");
+            $("#notify").html("Did not recognize fan command!");
             socket.emit("confused");
           }
         }
       },
       '(set) (change) van (to) *tag': function(tag) {
         if(commandReady || !keyword_active){
-          if(domoValidate.checkFanTag(tag)){
+          tag = domoValidate.checkFanTag(tag);
+          if(tag){
             socket.emit("fan", tag)
           }
           else{
-            $("#notify").html("Did not recognize lamp command!");
+            $("#notify").html("Did not recognize fan command!");
             socket.emit("confused");
           }
         }
       },
+      /*
+      'set *device (to) *tag': function(device, tag) {
+        console.log(device, tag)
+        if(commandReady || !keyword_active){
+          validation = domoValidate.checkDevice(device, tag)
+          if(validation.device){
+            if(validation.tag){
+              socket.emit(validation.device, validation.tag)
+            }
+            else{
+              $("#notify").html("Did not recognize tag: "+validation.tag+"!");
+              socket.emit("confused");
+            }
+          }
+          else{
+            $("#notify").html("Did not recognize device: "+validation.device+"!");
+            socket.emit("confused");
+          }
+        }
+      },*/
       '(enter) (activate) (start) :tag mode': function(tag){
         if(commandReady || !keyword_active){
           tag = tag.toLowerCase();

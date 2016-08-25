@@ -11,7 +11,7 @@ RCSwitch mySwitch = RCSwitch();
 dht11 DHT11;
 #define DHT11PIN 8
 //Setup PIR Sensor
-int pirPin = 6;
+int pirPin = 5;
 int pirState = -1;
 int tempState = -1;
 int humState = -1;
