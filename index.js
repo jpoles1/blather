@@ -13,6 +13,8 @@ require('dotenv').config();
 var ser;
 var serialPort = require("serialport");
 var devMode = 0;
+var timeout_interval = 8; //min
+var pirct_threshold = 4;
 serialPort.list(function (err, ports) {
   var myPort = ports.find(function(port){
     var portName = port.comName.split("/")[2].slice(0, -1);
@@ -109,7 +111,7 @@ serialPort.list(function (err, ports) {
 
         //Set Lights Timeout
         setInterval(function(){
-          if(room_status["pirct"]<1){
+          if(room_status["pirct"] < pirct_threshold){
             if(Object.keys(room_status.outlets).some(function(x){return(room_status.outlets[x]=="on")})){
               room_status.inactive = {
                 "start": Date.now(),
@@ -128,11 +130,11 @@ serialPort.list(function (err, ports) {
                   domoMonitor.endInactive();
                 }
               }
-            }, 15*1000)
+            }, 20*1000)
           }
           room_status["auto_on"] = undefined; //Remove auto_on setting.
           room_status["pirct"] = 0;
-        }, 15*60*1000);
+        }, timeout_interval*60*1000);
         //Set the port for the server
         http_port = 3030;
         https_port = 4040;
