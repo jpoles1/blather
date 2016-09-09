@@ -11,10 +11,10 @@ module.exports = function(app, domoActuate, domoMonitor){
     domoActuate.socketReply(socket, "msg", date_str);
   }
   domoUtility.thanks = function(socket){
-    domoActuate.speak("You're welcome sir.", function(){
+    domoActuate.speak("You're welcome.", function(){
       domoActuate.socketReply(socket, "unready")
     });
-    domoActuate.socketReply(socket, "msg", "You're welcome sir.");
+    domoActuate.socketReply(socket, "msg", "You're welcome.");
   }
   domoUtility.shutup = function(socket){
     domoActuate.runSysCommand("pkill", "espeak")
